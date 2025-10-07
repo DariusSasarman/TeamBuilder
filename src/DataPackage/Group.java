@@ -2,7 +2,7 @@ package DataPackage;
 
 import java.util.ArrayList;
 
-public class Group {
+class Group {
     private int groupId;
 
     private  ArrayList<Integer> PersonIdList;
@@ -17,6 +17,14 @@ public class Group {
         this.PersonIdList = target;
     }
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int id)
+    {
+        this.groupId = id;
+    }
     public void addPersonToGroup(Integer targetId) {PersonIdList.add(targetId);}
 
     public void removePersonFromGroup(Integer targetId) {PersonIdList.remove(targetId);}

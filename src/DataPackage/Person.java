@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 //abstract
 //static
 
-public class Person {
+class Person {
     private int id;
     private BufferedImage image;
     private String name;

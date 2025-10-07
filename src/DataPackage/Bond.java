@@ -1,6 +1,6 @@
 package DataPackage;
 
-public class Bond {
+class Bond {
     private int id;
     private int headId;
     private int tailId;
