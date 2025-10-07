@@ -1,4 +1,4 @@
-package RegisterPackage;
+package DataPackage;
 
 public class Register {
 }

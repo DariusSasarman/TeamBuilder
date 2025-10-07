@@ -1,4 +1,4 @@
-package RegisterPackage;
+package DataPackage;
 
 import java.awt.image.BufferedImage;
 
