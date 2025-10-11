@@ -1,8 +1,6 @@
 package DataPackage;
 
 import UiPackage.Graph;
-
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Register {
@@ -16,60 +14,64 @@ public class Register {
     }
 
     public void setActiveGroupId(int activeGroupId) {
-        boolean exists = false; //groupList.contains()????
-        for(Group g : groupList)
-        {
-            if (g.getGroupId() == activeGroupId)
+            boolean exists = false;
+            /// Replace with binarySearch
+            for(Group g : groupList)
             {
-                exists = true;
+                if (g.getGroupId() == activeGroupId)
+                {
+                    exists = true;
+                }
             }
-        }
-        if (exists)
+            if (exists)
+            {
+                this.activeGroupId = activeGroupId;
+            }
+            else
+            {
+                throw new IllegalArgumentException("There's no such group");
+            }
+    }
+
+    class UiManager {
+
+        public ArrayList<Integer> getPeopleIdInActiveGroup()
         {
-            this.activeGroupId = activeGroupId;
+            ArrayList<Integer> ret = new ArrayList<Integer>();
+            for(Person p : Register.this.peopleList)
+            {
+                ret.add(p.getId());
+            }
+            return ret;
         }
-        else
+
+        private int generateNewId()
         {
-            /// Throw error if not existing
-        }
-    }
+            int a = 0;
 
-    /// UI handler Elements
-    public ArrayList<Integer> getPeopleIdInActiveGroup()
-    {
-        ArrayList<Integer> ret = new ArrayList<Integer>();
-        for(Person p : peopleList)
+            return a;
+        }
+
+        public String getNameById (int id)
         {
-            ret.add(p.getId());
+            return new String();
         }
-        return ret;
-    }
 
-    private int generateNewId()
-    {
-        int a = 0;
+        public String getPersonNotesById (int id)
+        {
+            return new String();
+        }
 
-        return a;
-    }
 
-    public String getNameById (int id)
-    {
-        /// Throw error if not in active group
-        return new String();
-    }
-
-    public String getPersonNotesById (int id)
-    {
-        /// Throw error if not in active group
-        return new String();
+        public Graph getOnDrawInformation()
+        {
+            return new Graph();
+        }
     }
 
 
-    public Graph getOnDrawInformation()
-    {
-        /// TODO
-        return new Graph();
+    class PersistenceManager {
+
     }
 
-    /// Persistence Elements
 }
