@@ -33,7 +33,7 @@ public class Register {
             }
     }
 
-    class UiManager {
+    public class UiManager {
 
         public ArrayList<Integer> getPeopleIdInActiveGroup()
         {
@@ -70,7 +70,7 @@ public class Register {
     }
 
 
-    class PersistenceManager {
+    public class PersistenceManager {
 
     }
 
