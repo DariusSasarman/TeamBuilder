@@ -1,7 +1,7 @@
-package DataPackage;
+package datapackage;
 
-import UiPackage.Graph;
 import java.util.ArrayList;
+import uipackage.Graph;
 
 public class Register {
     private ArrayList<Person> peopleList;
@@ -9,11 +9,11 @@ public class Register {
     private ArrayList<Bond> bondList;
     private int activeGroupId;
 
-    public int getActiveGroupId() {
+    private int getActiveGroupId() {
         return activeGroupId;
     }
 
-    public void setActiveGroupId(int activeGroupId) {
+    private void setActiveGroupId(int activeGroupId) {
             boolean exists = false;
             /// Replace with binarySearch
             for(Group g : groupList)
@@ -33,23 +33,23 @@ public class Register {
             }
     }
 
+    private int generateNewId()
+    {
+        int a = 0;
+
+        return a;
+    }
+
     public class UiManager {
 
         public ArrayList<Integer> getPeopleIdInActiveGroup()
         {
-            ArrayList<Integer> ret = new ArrayList<Integer>();
+            ArrayList<Integer> ret = new ArrayList<>();
             for(Person p : Register.this.peopleList)
             {
                 ret.add(p.getId());
             }
             return ret;
-        }
-
-        private int generateNewId()
-        {
-            int a = 0;
-
-            return a;
         }
 
         public String getNameById (int id)
@@ -61,7 +61,6 @@ public class Register {
         {
             return new String();
         }
-
 
         public Graph getOnDrawInformation()
         {

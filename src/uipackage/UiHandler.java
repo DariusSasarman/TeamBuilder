@@ -1,4 +1,4 @@
-package UiPackage;
+package uipackage;
 
 public class UiHandler {
 }

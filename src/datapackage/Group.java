@@ -1,4 +1,4 @@
-package DataPackage;
+package datapackage;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ class Group {
 
     public Group(int id) {
         this.groupId = id;
-        this.PersonIdList = new ArrayList<Integer>();
+        this.PersonIdList = new ArrayList<>();
     }
 
     public Group(int id, ArrayList<Integer> target) {

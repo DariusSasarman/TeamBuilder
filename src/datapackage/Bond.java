@@ -1,4 +1,4 @@
-package DataPackage;
+package datapackage;
 
 class Bond {
     private int id;

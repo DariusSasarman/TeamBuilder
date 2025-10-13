@@ -1,9 +1,6 @@
-package DataPackage;
+package datapackage;
 
 import java.awt.image.BufferedImage;
-
-//abstract
-//static
 
 class Person {
     private int id;
