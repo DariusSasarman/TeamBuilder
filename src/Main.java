@@ -1,4 +1,9 @@
+import uipackage.Ui;
+import uipackage.UiHandler;
 
-void main() {
-
+public class Main {
+    public static void main(String[] args) {
+        UiHandler handle = new UiHandler();
+        new Ui(handle);
+    }
 }
