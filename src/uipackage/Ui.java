@@ -17,8 +17,6 @@ public class Ui extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
 
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
@@ -47,6 +45,8 @@ public class Ui extends JFrame {
         gbc.gridy = 0;
         gbc.gridwidth = 5;
         gbc.gridheight = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0.25;
         add(generalSettings, gbc);
 
         // Left panel
@@ -54,6 +54,8 @@ public class Ui extends JFrame {
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.gridheight = 3;
+        gbc.weightx = 0.25;
+        gbc.weighty = 1;
         add(groupSettings, gbc);
 
         // Center panel
@@ -61,6 +63,8 @@ public class Ui extends JFrame {
         gbc.gridy = 1;
         gbc.gridwidth = 3;
         gbc.gridheight = 3;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
         add(graphSpace, gbc);
 
         // Right panel
@@ -68,6 +72,8 @@ public class Ui extends JFrame {
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.gridheight = 3;
+        gbc.weightx = 0.25;
+        gbc.weighty = 1;
         add(graphActions, gbc);
 
         setVisible(true);
