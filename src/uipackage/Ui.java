@@ -1,8 +1,6 @@
 package uipackage;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class Ui extends JFrame {
@@ -15,27 +13,64 @@ public class Ui extends JFrame {
     }
 
     private void draw()
-    {
-        setLayout(new BorderLayout());
-        setTitle("TeamBuilder");
+    {  
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+
+        setLayout(new GridBagLayout());
+        setBackground(Color.BLACK);
+        setTitle("TeamBuilder");
         setSize(screenSize);
-        
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("This is just testing out writing");
-        JButton button = new JButton("This is just testing out buttons");
-        JLabel label1 = new JLabel("The button has been pressed " + count + " times");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        button.addActionListener(e -> {
-            count++;
-            handle.increment(count, label1);
-        });
+        JPanel generalSettings = new JPanel();
 
-        panel.add(label, JPanel.TOP_ALIGNMENT);
-        panel.add(button,JPanel.CENTER_ALIGNMENT);
-        panel.add(label1,JPanel.BOTTOM_ALIGNMENT);
+        generalSettings.setBackground(Color.BLUE);
 
-        add(panel, BorderLayout.CENTER);
+        JPanel groupSettings = new JPanel();
+
+        groupSettings.setBackground(Color.green);
+
+        JPanel graphActions = new JPanel();
+
+        graphActions.setBackground(Color.red);
+
+        JPanel graphSpace = new JPanel();
+
+        graphSpace.setBackground(Color.yellow);
+
+        // Top panel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 5;
+        gbc.gridheight = 1;
+        add(generalSettings, gbc);
+
+        // Left panel
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 3;
+        add(groupSettings, gbc);
+
+        // Center panel
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.gridheight = 3;
+        add(graphSpace, gbc);
+
+        // Right panel
+        gbc.gridx = 4;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 3;
+        add(graphActions, gbc);
+
         setVisible(true);
     }
+
 }
