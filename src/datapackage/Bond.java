@@ -7,6 +7,15 @@ class Bond {
     private int rating;
     private String notes;
 
+    public Bond (int bondId, int headId, int tailId, int rating, String notes)
+    {
+        this.id = bondId;
+        this.headId = headId;
+        this.tailId = tailId;
+        this.rating = rating;
+        this.notes = notes;
+    }
+
     public Bond (int bondId, int headId, int tailId, int rating)
     {
         this.id = bondId;
@@ -50,4 +59,8 @@ class Bond {
         return notes;
     }
 
+    public int compareTo (Bond other)
+    {
+        return Integer.compare(this.id,other.id);
+    }
 }

@@ -16,6 +16,14 @@ class Person {
         this.notes = "";
     }
 
+    public Person (int id, BufferedImage image, String name, String notes)
+    {
+        this.id = id;
+        this.image = image;
+        this.name = name;
+        this.notes = notes;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -53,4 +61,6 @@ class Person {
     {
         return this.image;
     }
+
+    public int compareTo(Person other) {return Integer.compare(this.id, other.id);}
 }

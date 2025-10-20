@@ -1,82 +1,50 @@
 package uipackage;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
-public class Ui extends JFrame {
-    private UiHandler handle = new UiHandler();
-    private int count = 0;
-    public Ui(UiHandler handle)
+public class Ui {
+    private UiHandler handler;
+    private JPanel contentPanel;
+    private JPanel generalSettingsPanel;
+    private JPanel graphPanel;
+    private JPanel graphActionsPanel;
+    private JPanel groupSettingsPanel;
+    private JPanel GraphArea;
+    private JScrollPane generalSettingsScrollPane;
+    private JScrollPane groupSettingsScrollPane;
+    private JScrollPane graphActionsScrollPane;
+    private JPanel generalSettingsButtonPanel;
+    private JPanel graphActionsButtonPanel;
+    private JPanel groupSettingsButtonPanel;
+    private JButton ChangeCurrentGroupButton;
+
+    public Ui(UiHandler handler){
+        this.handler = handler;
+        setupButtonPanels();
+        setupButtons();
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("TeamBuilder");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setContentPane(this.contentPanel);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            frame.setVisible(true);
+        });
+    }
+
+    private void setupButtonPanels()
     {
-        this.handle = handle;
-        SwingUtilities.invokeLater(() -> draw());
+        generalSettingsButtonPanel.setBackground(new Color(0x2B2C30));
+        graphActionsButtonPanel.setBackground(new Color(0x2B2C30));
+        groupSettingsButtonPanel.setBackground(new Color(0x2B2C30));
     }
 
-    private void draw()
-    {  
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-
-        setLayout(new GridBagLayout());
-        setBackground(Color.BLACK);
-        setTitle("TeamBuilder");
-        setSize(screenSize);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel generalSettings = new JPanel();
-
-        generalSettings.setBackground(Color.BLUE);
-
-        JPanel groupSettings = new JPanel();
-
-        groupSettings.setBackground(Color.green);
-
-        JPanel graphActions = new JPanel();
-
-        graphActions.setBackground(Color.red);
-
-        JPanel graphSpace = new JPanel();
-
-        graphSpace.setBackground(Color.yellow);
-
-        // Top panel
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 5;
-        gbc.gridheight = 1;
-        gbc.weightx = 1;
-        gbc.weighty = 0.25;
-        add(generalSettings, gbc);
-
-        // Left panel
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.gridheight = 3;
-        gbc.weightx = 0.25;
-        gbc.weighty = 1;
-        add(groupSettings, gbc);
-
-        // Center panel
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.gridwidth = 3;
-        gbc.gridheight = 3;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        add(graphSpace, gbc);
-
-        // Right panel
-        gbc.gridx = 4;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.gridheight = 3;
-        gbc.weightx = 0.25;
-        gbc.weighty = 1;
-        add(graphActions, gbc);
-
-        setVisible(true);
+    private void setupButtons()
+    {
+        ChangeCurrentGroupButton.addActionListener( e -> {
+            handler.changeCurrentGroup();
+        });
     }
-
 }

@@ -1,10 +1,12 @@
 package uipackage;
 
+import datapackage.Register;
+
 import javax.swing.*;
 
 public class UiHandler {
-    public static void increment(Integer count, JLabel label)
+    public void changeCurrentGroup()
     {
-        label.setText("The button has been pressed " + count + " times");
+        JOptionPane.showMessageDialog(null, "Click Handled", "It works!", JOptionPane.PLAIN_MESSAGE);
     }
 }
