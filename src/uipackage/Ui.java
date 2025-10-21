@@ -17,15 +17,41 @@ public class Ui {
     private JPanel generalSettingsButtonPanel;
     private JPanel graphActionsButtonPanel;
     private JPanel groupSettingsButtonPanel;
-    private JButton ChangeCurrentGroupButton;
-    private JLabel Icon;
+
+    private JButton addPersonDataButton;
+    private JButton editPersonDataButton;
+    private JButton addBondDataButton;
+    private JButton editBondDataButton;
+    private JButton addGroupDataButton;
+    private JButton editGroupDataButton;
+    private JButton setSaveLocationButton;
+    private JButton getSaveLocationButton;
+
+    private JButton changeCurrentGroupButton;
+    private JButton addPersonToCurrentGroupButton;
+    private JButton removePersonFromCurrentGroupButton;
+    private JButton raiseBondFromCurrentGroupButton;
+    private JButton lowerBondFromCurrentGroupButton;
+    private JButton raiseAllBondsFromCurrentGroupButton;
+    private JButton lowerAllBondsFromCurrentGroup;
+
+    private JButton generatePartitionsBasedOnCurrentGroupButton;
+    private JButton getMaxDirectCentralityPersonButton;
+    private JButton getMaxIndirectCentralityPersonButton;
+    private JButton getMinDirectCentralityPersonButton;
+    private JButton getMinIndirectCentralityPersonButton;
+    private JButton getClusteringButton;
+    private JButton getDjikstraButton;
+    private JButton getClosenessCentralityButton;
+    private JButton getKCoreDecompositionButton;
 
     public Ui(UiHandler handler){
         this.handler = handler;
-        setupButtonPanels();
+        setupPanels();
         setupButtons();
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("TeamBuilder");
+            frame.setBackground(new Color(0x2B2C30));
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(this.contentPanel);
             frame.pack();
@@ -35,7 +61,7 @@ public class Ui {
         });
     }
 
-    private void setupButtonPanels()
+    private void setupPanels()
     {
         generalSettingsButtonPanel.setBackground(new Color(0x2B2C30));
         graphActionsButtonPanel.setBackground(new Color(0x2B2C30));
@@ -44,8 +70,37 @@ public class Ui {
 
     private void setupButtons()
     {
-        ChangeCurrentGroupButton.addActionListener( e -> {
-            handler.changeCurrentGroup();
-        });
+        setButtonStyle(addPersonDataButton);
+        setButtonStyle(editPersonDataButton);
+        setButtonStyle(addBondDataButton);
+        setButtonStyle(editBondDataButton);
+        setButtonStyle(addGroupDataButton);
+        setButtonStyle(editGroupDataButton);
+        setButtonStyle(setSaveLocationButton);
+        setButtonStyle(getSaveLocationButton);
+
+        setButtonStyle(changeCurrentGroupButton);
+        setButtonStyle(addPersonToCurrentGroupButton);
+        setButtonStyle(removePersonFromCurrentGroupButton);
+        setButtonStyle(raiseBondFromCurrentGroupButton);
+        setButtonStyle(lowerBondFromCurrentGroupButton);
+        setButtonStyle(raiseAllBondsFromCurrentGroupButton);
+        setButtonStyle(lowerAllBondsFromCurrentGroup);
+
+        setButtonStyle(generatePartitionsBasedOnCurrentGroupButton);
+        setButtonStyle(getMaxDirectCentralityPersonButton);
+        setButtonStyle(getMaxIndirectCentralityPersonButton);
+        setButtonStyle(getMinDirectCentralityPersonButton);
+        setButtonStyle(getMinIndirectCentralityPersonButton);
+        setButtonStyle(getClusteringButton);
+        setButtonStyle(getDjikstraButton);
+        setButtonStyle(getClosenessCentralityButton);
+        setButtonStyle(getKCoreDecompositionButton);
+    }
+    private void setButtonStyle(JButton b)
+    {
+        b.setBackground(new Color(0x2B2C30));
+        b.setForeground(new Color(223, 225, 229));
+        b.setFocusPainted(false);
     }
 }
