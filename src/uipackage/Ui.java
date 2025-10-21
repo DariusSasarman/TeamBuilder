@@ -18,6 +18,7 @@ public class Ui {
     private JPanel graphActionsButtonPanel;
     private JPanel groupSettingsButtonPanel;
     private JButton ChangeCurrentGroupButton;
+    private JLabel Icon;
 
     public Ui(UiHandler handler){
         this.handler = handler;
