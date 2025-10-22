@@ -10,7 +10,7 @@ public class Ui {
     private JPanel graphPanel;
     private JPanel graphActionsPanel;
     private JPanel groupSettingsPanel;
-    private JPanel GraphArea;
+    private JPanel graphArea;
     private JScrollPane generalSettingsScrollPane;
     private JScrollPane groupSettingsScrollPane;
     private JScrollPane graphActionsScrollPane;
@@ -102,5 +102,10 @@ public class Ui {
         b.setBackground(new Color(0x2B2C30));
         b.setForeground(new Color(223, 225, 229));
         b.setFocusPainted(false);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+        this.graphArea = new Graph();
     }
 }
