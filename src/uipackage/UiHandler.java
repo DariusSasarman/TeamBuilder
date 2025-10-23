@@ -3,10 +3,11 @@ package uipackage;
 import datapackage.Register;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 
 public class UiHandler {
-    public void changeCurrentGroup()
+    public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
-        JOptionPane.showMessageDialog(null, "Click Handled", "It works!", JOptionPane.PLAIN_MESSAGE);
+
     }
 }

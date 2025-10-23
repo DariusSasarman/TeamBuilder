@@ -111,22 +111,24 @@ public class Ui {
     private void addPersonUi()
     {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(10,10));
+        dialog.setLayout(new BorderLayout(0,0));
         dialog.setSize(500,300);
         dialog.setLocationRelativeTo(null);
 
         /// LEFT: Image Selection Panel
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.setPreferredSize(new Dimension(180, 180));
-        imagePanel.setBackground(Color.WHITE);
-        imagePanel.setBorder(BorderFactory.createTitledBorder("Selected Image"));
+        imagePanel.setBackground(new Color(0x2B2C30));
+        imagePanel.setForeground(new Color(255,255,255));
+        imagePanel.setBorder(BorderFactory.createTitledBorder( null,"Selected image",0,0,null,new Color(255,255,255)));
         JLabel imageLabel = new JLabel("No Image", SwingConstants.CENTER);
+        imageLabel.setForeground(new Color(255,255,255));
         imagePanel.add(imageLabel, BorderLayout.CENTER);
 
-        final BufferedImage[] selectedImage = new BufferedImage[1];
-
         /// Allows the user to pop-up the File-selection pannel
+        final BufferedImage[] selectedImage = new BufferedImage[1];
         JButton selectImageButton = new JButton("Select Image");
+        setButtonStyle(selectImageButton);
         selectImageButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(dialog);
@@ -147,24 +149,40 @@ public class Ui {
         // CENTER: Form Fields
         JPanel formPanel = new JPanel(new GridLayout(6, 2, 5, 5));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        formPanel.setBackground(new Color(0x2B2C30));
 
         JTextField nameField = new JTextField();
-        formPanel.add(new JLabel("Name:"));
+        JLabel textNameInput = new JLabel("Name:");
+        textNameInput.setForeground(new Color(255,255,255));
+        formPanel.add(textNameInput);
         formPanel.add(nameField);
+
         JTextField notesField = new JTextField();
-        formPanel.add(new JLabel("Initial notes:"));
+        JLabel textNotesInput = new JLabel("Initial notes:");
+        textNotesInput.setForeground(new Color(255,255,255));
+        formPanel.add(textNotesInput);
         formPanel.add(notesField);
 
         // SOUTH : Buttons Panel
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.setBackground(new Color(0x2B2C30));
         JButton cancelButton = new JButton("Cancel");
+        setButtonStyle(cancelButton);
         cancelButton.addActionListener(e -> {
             dialog.dispose();
         });
 
         JButton saveButton = new JButton("Save");
+        setButtonStyle(saveButton);
         saveButton.addActionListener(e -> {
-            /// TODO: Add save functionality.
+            try {
+                handler.handleAddPersonRequest(selectedImage[0],nameField.getText(),notesField.getText());
+            }
+            catch (Exception error)
+            {
+                JOptionPane.showMessageDialog(null,"An error occured :" + error.getMessage());
+            }
+            dialog.dispose();
         });
 
         bottomPanel.add(cancelButton);
@@ -178,6 +196,8 @@ public class Ui {
         dialog.setVisible(true);
         return;
     }
+
+
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
