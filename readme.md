@@ -18,7 +18,7 @@ Using this perspective, this software application employs several **algorithms**
   - The least influential person, using indirect minimum centrality
 
 ## How does it look like?
-Here's a sneak peek of what I'm currently working on. Note that this is **a work in progress** image:
+Here's a sneak peek of what I'm currently working on. Note that this is **a work in progress** screenshot:
 
 ## What technologies did I use?
 
@@ -27,4 +27,5 @@ For this project I decided to use **pure Java** for the inner workings of this s
 For the front-end (model), I'm making it using **the Swing library**. 
 
 For the persistence part of this **MVC** software, I'm currently planning on using **PostgreSQL**.
+
 
