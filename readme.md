@@ -19,6 +19,8 @@ Using this perspective, this software application employs several **algorithms**
 
 ## How does it look like?
 Here's a sneak peek of what I'm currently working on. Note that this is **a work in progress** screenshot:
+<img width="1534" height="868" alt="image" src="https://github.com/user-attachments/assets/22f55055-804d-42fb-93c5-059971aca88d" />
+
 
 ## What technologies did I use?
 
@@ -27,5 +29,6 @@ For this project I decided to use **pure Java** for the inner workings of this s
 For the front-end (model), I'm making it using **the Swing library**. 
 
 For the persistence part of this **MVC** software, I'm currently planning on using **PostgreSQL**.
+
 
 
