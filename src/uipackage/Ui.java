@@ -50,6 +50,7 @@ public class Ui {
     private JButton getDjikstraButton;
     private JButton getClosenessCentralityButton;
     private JButton getKCoreDecompositionButton;
+    private enum OPERAITON_TYPE { PERSON, BOND, GROUP}
 
     public Ui(UiHandler handler){
         this.handler = handler;
@@ -79,12 +80,24 @@ public class Ui {
         setButtonStyle(addPersonDataButton);
         addPersonDataButton.addActionListener(e -> addPersonUi());
         setButtonStyle(editPersonDataButton);
-        editPersonDataButton.addActionListener(e -> showPersonList());
+        editPersonDataButton.addActionListener(e -> {
+            Integer id = showList(handler.handleGetPersonList(),"Here's who you know?");
+            editPersonUi(id);
+        });
         setButtonStyle(addBondDataButton);
         addBondDataButton.addActionListener(e -> addBondUi());
         setButtonStyle(editBondDataButton);
+        editBondDataButton.addActionListener(e -> {
+            Integer id = showList(handler.handleGetBondList(),"Here's who knows who:");
+            editBondUi(id);
+        });
         setButtonStyle(addGroupDataButton);
+
         setButtonStyle(editGroupDataButton);
+        editGroupDataButton.addActionListener(e -> {
+            Integer id = showList(handler.handleGetGroupList(),"Here's who you're taking care of");
+            editGroupUi(id);
+        });
         setButtonStyle(setSaveLocationButton);
         setButtonStyle(getSaveLocationButton);
 
@@ -113,8 +126,7 @@ public class Ui {
         b.setFocusPainted(false);
     }
 
-    private void addPersonUi()
-    {
+    private void addPersonUi() {
         JDialog dialog = new JDialog();
         dialog.setLayout(new BorderLayout(0,0));
         dialog.setSize(500,300);
@@ -281,6 +293,7 @@ public class Ui {
 
                 Integer rating = (Integer) dropdown3.getSelectedItem();
                 handler.handleAddBondRequest(id1,id2,rating);
+                dialog.dispose();
             }
             catch (Exception ex)
             {
@@ -304,8 +317,7 @@ public class Ui {
         dialog.setVisible(true);
     }
 
-    private void editPersonUi(int id)
-    {
+    private void editPersonUi(int id) {
         JDialog dialog = new JDialog();
         dialog.setLayout(new BorderLayout(0,0));
         dialog.setSize(500,300);
@@ -396,74 +408,76 @@ public class Ui {
         return;
     }
 
-    private void showPersonList()
+    private void editBondUi(int id)
     {
-        JDialog dialog = new JDialog();
-        dialog.setTitle("Here's who you know:");
+        System.out.println("Edit Bond id " + id);
+    }
+
+    private void editGroupUi(int id)
+    {
+        System.out.println("Edit group id " + id);
+    }
+
+    private Integer showList(HashMap <Integer, String > dataList, String titleText)
+    {
+        JDialog dialog = new JDialog((Frame) null, titleText, true);
         dialog.setLayout(new BorderLayout(0,0));
         dialog.setSize(800,500);
         dialog.setLocationRelativeTo(null);
         dialog.setBackground(new Color(0x2B2C30));
         dialog.setForeground(new Color(255,255,255));
-        DefaultListModel<String> personList = new DefaultListModel<>();
-        HashMap <Integer, String > dataList= handler.handleGetPersonList();
+        DefaultListModel<String> stringList = new DefaultListModel<>();
 
         for(String name : dataList.values())
         {
-            personList.addElement(name);
+            stringList.addElement(name);
         }
 
-        JList<String> nameList = new JList<>(personList);
-        nameList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-        JLabel label = new JLabel(value); // 'value' is the actual String (not 'project' or 'value.getName()')
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setVerticalAlignment(JLabel.CENTER);
-        Font labelFont = label.getFont();
-        int fontSize = 50;
-        label.setFont(new Font(labelFont.getName(), Font.PLAIN,fontSize));
-        label.setOpaque(true);
+        JList<String> displayList = new JList<>(stringList);
+        displayList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+            JLabel label = new JLabel(value); // 'value' is the actual String (not 'project' or 'value.getName()')
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setVerticalAlignment(JLabel.CENTER);
+            Font labelFont = label.getFont();
+            int fontSize = 50;
+            label.setFont(new Font(labelFont.getName(), Font.PLAIN,fontSize));
+            label.setOpaque(true);
 
-        if (isSelected) {
-            label.setBackground(new Color(0x3E3F44));
-            label.setForeground(Color.WHITE);
-        } else {
-            label.setBackground(new Color(0x2B2C30));
-            label.setForeground(Color.LIGHT_GRAY);
-        }
-        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        return label;
-    });
-        nameList.addMouseListener(new MouseAdapter() {
+            if (isSelected) {
+                label.setBackground(new Color(0x3E3F44));
+                label.setForeground(Color.WHITE);
+            } else {
+                label.setBackground(new Color(0x2B2C30));
+                label.setForeground(Color.LIGHT_GRAY);
+            }
+            label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            return label;
+        });
+        Integer[] targetId = {null};
+        displayList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int index = nameList.locationToIndex(e.getPoint());
+                    int index = displayList.locationToIndex(e.getPoint());
                     if (index != -1) {
-                        String selectedValue = nameList.getModel().getElementAt(index);
-                        Integer personId = null;
+                        String selectedValue = displayList.getModel().getElementAt(index);
+
                         for (HashMap.Entry<Integer, String> entry : dataList.entrySet()) {
                             if (entry.getValue().equals(selectedValue)) {
-                                personId = entry.getKey();
+                                targetId[0] = entry.getKey();
                                 break;
                             }
                         }
-                        if (personId != null) {
-                            try {
-                                editPersonUi(personId);
-                            } catch (Exception ex) {
-                                JOptionPane.showMessageDialog(dialog, "Error: " + ex.getMessage());
-                            }
-                            dialog.dispose();
-                        }
+                        dialog.dispose();
                     }
                 }
             }
         });
-
-        JScrollPane scrollPane = new JScrollPane(nameList);
+        JScrollPane scrollPane = new JScrollPane(displayList);
         dialog.add(scrollPane, BorderLayout.CENTER);
 
         dialog.setVisible(true);
+        return targetId[0];
     }
 
 

@@ -50,4 +50,28 @@ public class UiHandler {
     {
         /// TODO: Register
     }
+
+    public HashMap<Integer,String> handleGetBondList()
+    {
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(13,"John" + " and " + "Steve");
+        list.put(12,"John2" + " and " + "Steve2");
+        list.put(11,"John3" + " and " + "Steve3");
+        list.put(10,"John4" + " and " + "Steve4");
+        list.put(9,"John5" + " and " + "Steve5");
+        list.put(8,"John6" + " and " + "Steve6");
+        return list;
+    }
+
+    public HashMap<Integer,String> handleGetGroupList()
+    {
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(13,"30415");
+        list.put(12,"30414");
+        list.put(11,"30412");
+        list.put(10,"30411");
+        list.put(9,"30410");
+        list.put(8,"3041-1");
+        return list;
+    }
 }
