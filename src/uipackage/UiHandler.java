@@ -45,4 +45,9 @@ public class UiHandler {
         list.put(5,"Angular");
         return list;
     }
+
+    public void handleAddBondRequest(int headId, int tailId, int rating)
+    {
+        /// TODO: Register
+    }
 }

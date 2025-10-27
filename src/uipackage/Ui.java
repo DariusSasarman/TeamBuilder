@@ -81,6 +81,7 @@ public class Ui {
         setButtonStyle(editPersonDataButton);
         editPersonDataButton.addActionListener(e -> showPersonList());
         setButtonStyle(addBondDataButton);
+        addBondDataButton.addActionListener(e -> addBondUi());
         setButtonStyle(editBondDataButton);
         setButtonStyle(addGroupDataButton);
         setButtonStyle(editGroupDataButton);
@@ -199,6 +200,108 @@ public class Ui {
 
         dialog.setVisible(true);
         return;
+    }
+
+    private void addBondUi(){
+        JDialog dialog = new JDialog();
+        dialog.setLayout(new BorderLayout(0,0));
+        dialog.setSize(500,300);
+        dialog.setBackground(new Color(0x2B2C30));
+        dialog.setForeground(new Color(255,255,255));
+        dialog.setLocationRelativeTo(null);
+        dialog.setTitle("Who met who?");
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setBackground(new Color(0x2B2C30));
+        HashMap<Integer,String> peopleList = handler.handleGetPersonList();
+
+        JPanel idSelect = new JPanel();
+        idSelect.setBackground(new Color(0x2B2C30));
+        idSelect.setForeground(new Color(255,255,255));
+        JComboBox<String> dropdown1 = new JComboBox<>(peopleList.values().toArray(new String[peopleList.size()]));
+        Font largeFont = new Font(dropdown1.getFont().getName(), Font.PLAIN, 20);
+        dropdown1.setFont(largeFont);
+        JComboBox<String> dropdown2 = new JComboBox<>(peopleList.values().toArray(new String[peopleList.size()]));
+        dropdown2.setFont(largeFont);
+        JLabel metText = new JLabel("met");
+        metText.setFont(largeFont);
+        metText.setForeground(new Color(255,255,255));
+        idSelect.add(dropdown1);
+        idSelect.add(metText);
+        idSelect.add(dropdown2);
+
+        JPanel ratingSelect = new JPanel();
+        ratingSelect.setBackground(new Color(0x2B2C30));
+        ratingSelect.setForeground(new Color(255,255,255));
+        ratingSelect.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
+        JLabel ratingIntroWriting = new JLabel("Initial bond rating (out of 10):");
+        ratingIntroWriting.setFont(largeFont);
+        ratingIntroWriting.setForeground(new Color(255,255,255));
+        JComboBox<Integer> dropdown3 = new JComboBox<>();
+        dropdown3.setFont(largeFont);
+        for(int i = 1; i<=10; i++)
+        {
+            dropdown3.addItem(i);
+        };
+        ratingSelect.add(ratingIntroWriting);
+        ratingSelect.add(dropdown3);
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setBackground(new Color(0x2B2C30));
+        buttonsPanel.setForeground(new Color(255,255,255));
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener( e -> {
+            dialog.dispose();
+        });
+        setButtonStyle(cancelButton);
+        cancelButton.setFont(largeFont);
+
+        JButton saveButton = new JButton("Save");
+        saveButton.addActionListener(e -> {
+            try {
+                String name1 = (String) dropdown1.getSelectedItem();
+                String name2 = (String) dropdown2.getSelectedItem();
+
+                // Get corresponding IDs by searching the HashMap
+                Integer id1 = null;
+                Integer id2 = null;
+                for (HashMap.Entry<Integer, String> entry : peopleList.entrySet()) {
+                    if (entry.getValue().equals(name1)) id1 = entry.getKey();
+                    if (entry.getValue().equals(name2)) id2 = entry.getKey();
+                }
+
+                if (id1 == null || id2 == null) {
+                    throw new Exception("Could not find IDs for selected people.");
+                }
+                if (id1 == id2)
+                {
+                    throw new Exception("People already know themselves.");
+                }
+
+                Integer rating = (Integer) dropdown3.getSelectedItem();
+                handler.handleAddBondRequest(id1,id2,rating);
+            }
+            catch (Exception ex)
+            {
+                JOptionPane.showMessageDialog(dialog, "Error saving bond: " + ex.getMessage());
+            }
+        });
+        setButtonStyle(saveButton);
+        saveButton.setFont(largeFont);
+
+        buttonsPanel.add(cancelButton);
+        buttonsPanel.add(saveButton);
+
+        container.add(Box.createVerticalGlue());
+        container.add(idSelect);
+        container.add(Box.createVerticalStrut(10));
+        container.add(ratingSelect);
+        container.add(Box.createVerticalStrut(10));
+        container.add(buttonsPanel);
+        container.add(Box.createVerticalGlue());
+        dialog.add(container);
+        dialog.setVisible(true);
     }
 
     private void editPersonUi(int id)
@@ -337,7 +440,6 @@ public class Ui {
                     int index = nameList.locationToIndex(e.getPoint());
                     if (index != -1) {
                         String selectedValue = nameList.getModel().getElementAt(index);
-
                         Integer personId = null;
                         for (HashMap.Entry<Integer, String> entry : dataList.entrySet()) {
                             if (entry.getValue().equals(selectedValue)) {
@@ -345,11 +447,13 @@ public class Ui {
                                 break;
                             }
                         }
-
                         if (personId != null) {
-                            System.out.println("Double-clicked: " + selectedValue + " (key=" + personId + ")");
+                            try {
+                                editPersonUi(personId);
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(dialog, "Error: " + ex.getMessage());
+                            }
                             dialog.dispose();
-                            editPersonUi(personId);
                         }
                     }
                 }
