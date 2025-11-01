@@ -139,4 +139,8 @@ public class UiHandler {
     public void handleGetSaveLocation(String filepath) {
         // TODO: Load data from file
     }
+
+    public void handleChangeCurrentGroup(int groupId) {
+        // TODO: Set this as the active group
+    }
 }

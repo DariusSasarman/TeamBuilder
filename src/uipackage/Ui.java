@@ -117,7 +117,6 @@ public class Ui {
             }
         }
         });
-
         setButtonStyle(getSaveLocationButton);
         getSaveLocationButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -133,7 +132,19 @@ public class Ui {
                 }
             }
         });
+
         setButtonStyle(changeCurrentGroupButton);
+        changeCurrentGroupButton.addActionListener(e -> {
+            Integer selectedGroupId = showList(handler.handleGetGroupList(), "Who are we working with now?");
+            if (selectedGroupId != null) {
+                try {
+                    handler.handleChangeCurrentGroup(selectedGroupId);
+                    graphArea.repaint();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error switching group: " + ex.getMessage());
+                }
+            }
+        });
         setButtonStyle(addPersonToCurrentGroupButton);
         setButtonStyle(removePersonFromCurrentGroupButton);
         setButtonStyle(raiseBondFromCurrentGroupButton);
