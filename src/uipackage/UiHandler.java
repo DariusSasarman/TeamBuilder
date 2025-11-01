@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UiHandler {
+
+    /// Person settings
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
         /// TODO: Register
@@ -51,6 +53,7 @@ public class UiHandler {
         return list;
     }
 
+    /// Bond settings
     public void handleAddBondRequest(int headId, int tailId, int rating)
     {
         /// TODO: Register
@@ -95,17 +98,18 @@ public class UiHandler {
         return list;
     }
 
+    /// Group Settings
     public void handleAddGroupRequest(String title, ArrayList<Integer> personIds) {
-        // TODO: Create new group in data
+        // TODO: Create new group in register
     }
 
     public String handleGetGroupTitle(int id) {
-        // TODO: Get from data
+        // TODO: Get from register
         return "My Team";
     }
 
     public ArrayList<Integer> handleGetGroupMembers(int id) {
-        // TODO: Get from data
+        // TODO: Get from register
         ArrayList<Integer> members = new ArrayList<>();
         members.add(10);
         members.add(13);
@@ -113,15 +117,16 @@ public class UiHandler {
     }
 
     public void handleEditGroupRequest(int id, String title, ArrayList<Integer> personIds) {
-        // TODO: Update group in data
+        // TODO: Update group in register
     }
 
     public void handleDeleteGroupRequest(int id) {
-        // TODO: Remove group from data
+        // TODO: Remove group from register
     }
 
     public HashMap<Integer,String> handleGetGroupList()
     {
+        // TODO: Get groups from register
         HashMap<Integer,String> list = new HashMap<>();
         list.put(13,"30415");
         list.put(12,"30414");
@@ -132,6 +137,7 @@ public class UiHandler {
         return list;
     }
 
+    /// Save location settings
     public void handleSetSaveLocation(String filepath) {
         // TODO: Change Persistence location
     }
@@ -140,7 +146,58 @@ public class UiHandler {
         // TODO: Load data from file
     }
 
+    /// Active group interactions
     public void handleChangeCurrentGroup(int groupId) {
         // TODO: Set this as the active group
+    }
+
+    public HashMap<Integer, String> handleGetPeopleInCurrentGroup() {
+        // TODO: Return only people in active group
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(10,"John");
+        list.put(13,"Mary");
+        return list;
+    }
+
+    public void handleAddPersonToCurrentGroup(int id)
+    {
+        /// TODO: Register add to Current Group
+    }
+
+    public HashMap<Integer, String> handleGetPeopleNotInCurrentGroup() {
+        // TODO: Return people NOT in active group
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(8,"Marcus");
+        list.put(9,"Peter");
+        return list;
+    }
+
+    public void handleRemovePersonFromCurrentGroup(int id)
+    {
+        /// TODO: Register add to Active group
+    }
+
+    public HashMap<Integer, String> handleGetBondsInCurrentGroup() {
+        // TODO: Return bonds within active group (format: "Alice and Bob")
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, "John and Mary");
+        list.put(2, "Mary and Peter");
+        return list;
+    }
+
+    public void handleRaiseBondInCurrentGroup(int bondId) {
+        // TODO: Increase bond rating by 1 (max 10)
+    }
+
+    public void handleLowerBondInCurrentGroup(int bondId) {
+        // TODO: Decrease bond rating by 1 (min 1)
+    }
+
+    public void handleRaiseAllBondsInCurrentGroup() {
+        // TODO: Increase all bonds in current group by 1 (max 10)
+    }
+
+    public void handleLowerAllBondsInCurrentGroup() {
+        // TODO: Decrease all bonds in current group by 1 (min 1)
     }
 }

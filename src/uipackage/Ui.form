@@ -319,7 +319,7 @@
                     <properties>
                       <horizontalAlignment value="0"/>
                       <horizontalTextPosition value="0"/>
-                      <text value="Two people are getting to know eachoter"/>
+                      <text value="Two people are getting along better"/>
                     </properties>
                   </component>
                   <component id="dde65" class="javax.swing.JButton" binding="lowerBondFromCurrentGroupButton">

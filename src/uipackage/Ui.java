@@ -104,19 +104,10 @@ public class Ui {
 
         setButtonStyle(setSaveLocationButton);
         setSaveLocationButton.addActionListener(e -> {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Where should we save?");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int result = fileChooser.showSaveDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            try {
-                File selectedFile = fileChooser.getSelectedFile();
-                handler.handleSetSaveLocation(selectedFile.getAbsolutePath());
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error setting save location: " + ex.getMessage());
-            }
-        }
+            setSaveLocationUi();
         });
+
+        /// Respect upper template
         setButtonStyle(getSaveLocationButton);
         getSaveLocationButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -145,12 +136,75 @@ public class Ui {
                 }
             }
         });
+
         setButtonStyle(addPersonToCurrentGroupButton);
+        addPersonToCurrentGroupButton.addActionListener(e -> {
+            Integer selectedPersonId = showList(handler.handleGetPeopleNotInCurrentGroup(), "Who joined the crew?");
+            if (selectedPersonId != null) {
+                try {
+                    handler.handleAddPersonToCurrentGroup(selectedPersonId);
+                    graphArea.repaint();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error adding person to group: " + ex.getMessage());
+                }
+            }
+        });
+
         setButtonStyle(removePersonFromCurrentGroupButton);
+        removePersonFromCurrentGroupButton.addActionListener(e -> {
+            Integer selectedPersonId = showList(handler.handleGetPeopleInCurrentGroup(), "Who left the crew?");
+            if (selectedPersonId != null) {
+                try {
+                    handler.handleRemovePersonFromCurrentGroup(selectedPersonId);
+                    graphArea.repaint();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error removing person from group: " + ex.getMessage());
+                }
+            }
+        });
+
         setButtonStyle(raiseBondFromCurrentGroupButton);
+        raiseBondFromCurrentGroupButton.addActionListener(e -> {
+            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is getting stronger?");
+            if (selectedBondId != null) {
+                try {
+                    handler.handleRaiseBondInCurrentGroup(selectedBondId);
+                    graphArea.repaint();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error raising bond: " + ex.getMessage());
+                }
+            }
+        });
         setButtonStyle(lowerBondFromCurrentGroupButton);
+        lowerBondFromCurrentGroupButton.addActionListener(e -> {
+            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is weakening?");
+            if (selectedBondId != null) {
+                try {
+                    handler.handleLowerBondInCurrentGroup(selectedBondId);
+                    graphArea.repaint();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error lowering bond: " + ex.getMessage());
+                }
+            }
+        });
         setButtonStyle(raiseAllBondsFromCurrentGroupButton);
+        raiseAllBondsFromCurrentGroupButton.addActionListener(e -> {
+            try {
+                handler.handleRaiseAllBondsInCurrentGroup();
+                graphArea.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error raising bonds: " + ex.getMessage());
+            }
+        });
         setButtonStyle(lowerAllBondsFromCurrentGroup);
+        lowerAllBondsFromCurrentGroup.addActionListener(e -> {
+            try {
+                handler.handleLowerAllBondsInCurrentGroup();
+                graphArea.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error lowering bonds: " + ex.getMessage());
+            }
+        });
 
         setButtonStyle(generatePartitionsBasedOnCurrentGroupButton);
         setButtonStyle(getMaxDirectCentralityPersonButton);
@@ -162,8 +216,7 @@ public class Ui {
         setButtonStyle(getClosenessCentralityButton);
         setButtonStyle(getKCoreDecompositionButton);
     }
-    private void setButtonStyle(JButton b)
-    {
+    private void setButtonStyle(JButton b) {
         b.setBackground(new Color(0x2B2C30));
         b.setForeground(new Color(223, 225, 229));
         b.setFocusPainted(false);
@@ -843,8 +896,22 @@ public class Ui {
         dialog.setVisible(true);
     }
 
-    private Integer showList(HashMap <Integer, String > dataList, String titleText)
-    {
+    private void setSaveLocationUi() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Where should we save the information?");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                handler.handleSetSaveLocation(selectedFile.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error setting save location: " + ex.getMessage());
+            }
+        }
+        fileChooser.setVisible(true);
+    }
+    private Integer showList(HashMap <Integer, String > dataList, String titleText) {
         JDialog dialog = new JDialog((Frame) null, titleText, true);
         dialog.setLayout(new BorderLayout(0,0));
         dialog.setSize(800,500);
@@ -904,7 +971,6 @@ public class Ui {
         dialog.setVisible(true);
         return targetId[0];
     }
-
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
