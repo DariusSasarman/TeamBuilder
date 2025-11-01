@@ -2,6 +2,7 @@ package uipackage;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,10 @@ public class UiHandler {
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
         /// TODO: Register
+    }
+
+    public void handleDeletePersonRequest(int id) {
+        // TODO: Remove person from data (and their bonds)
     }
 
     public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes)
@@ -51,6 +56,33 @@ public class UiHandler {
         /// TODO: Register
     }
 
+    public int handleGetBondHeadId(int id) {
+        // TODO: Get from register
+        return 10;
+    }
+
+    public int handleGetBondTailId(int id) {
+        // TODO: Get from register
+        return 13;
+    }
+
+    public int handleGetBondRating(int id) {
+        // TODO: Get from register
+        return 7;
+    }
+
+    public String handleGetBondNotes(int id) {
+        // TODO: Get from register
+        return "They seem to get along";
+    }
+
+    public void handleEditBondRequest(int id, int newRating, String notes) {
+        // TODO: Update bond in register
+    }
+
+    public void handleDeleteBondRequest(int id) {
+        // TODO: Remove bond from register
+    }
     public HashMap<Integer,String> handleGetBondList()
     {
         HashMap<Integer,String> list = new HashMap<>();
@@ -63,6 +95,31 @@ public class UiHandler {
         return list;
     }
 
+    public void handleAddGroupRequest(String title, ArrayList<Integer> personIds) {
+        // TODO: Create new group in data
+    }
+
+    public String handleGetGroupTitle(int id) {
+        // TODO: Get from data
+        return "My Team";
+    }
+
+    public ArrayList<Integer> handleGetGroupMembers(int id) {
+        // TODO: Get from data
+        ArrayList<Integer> members = new ArrayList<>();
+        members.add(10);
+        members.add(13);
+        return members;
+    }
+
+    public void handleEditGroupRequest(int id, String title, ArrayList<Integer> personIds) {
+        // TODO: Update group in data
+    }
+
+    public void handleDeleteGroupRequest(int id) {
+        // TODO: Remove group from data
+    }
+
     public HashMap<Integer,String> handleGetGroupList()
     {
         HashMap<Integer,String> list = new HashMap<>();
@@ -73,5 +130,13 @@ public class UiHandler {
         list.put(9,"30410");
         list.put(8,"3041-1");
         return list;
+    }
+
+    public void handleSetSaveLocation(String filepath) {
+        // TODO: Change Persistence location
+    }
+
+    public void handleGetSaveLocation(String filepath) {
+        // TODO: Load data from file
     }
 }

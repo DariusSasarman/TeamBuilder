@@ -7,7 +7,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Ui {
     private UiHandler handler;
@@ -50,7 +52,6 @@ public class Ui {
     private JButton getDjikstraButton;
     private JButton getClosenessCentralityButton;
     private JButton getKCoreDecompositionButton;
-    private enum OPERAITON_TYPE { PERSON, BOND, GROUP}
 
     public Ui(UiHandler handler){
         this.handler = handler;
@@ -92,15 +93,46 @@ public class Ui {
             editBondUi(id);
         });
         setButtonStyle(addGroupDataButton);
-
+        addGroupDataButton.addActionListener(e -> {
+            addGroupUi();
+        });
         setButtonStyle(editGroupDataButton);
         editGroupDataButton.addActionListener(e -> {
             Integer id = showList(handler.handleGetGroupList(),"Here's who you're taking care of");
             editGroupUi(id);
         });
-        setButtonStyle(setSaveLocationButton);
-        setButtonStyle(getSaveLocationButton);
 
+        setButtonStyle(setSaveLocationButton);
+        setSaveLocationButton.addActionListener(e -> {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Where should we save?");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                handler.handleSetSaveLocation(selectedFile.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error setting save location: " + ex.getMessage());
+            }
+        }
+        });
+
+        setButtonStyle(getSaveLocationButton);
+        getSaveLocationButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Where did you leave off?");
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    handler.handleGetSaveLocation(selectedFile.getAbsolutePath());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error loading save: " + ex.getMessage());
+                }
+            }
+        });
         setButtonStyle(changeCurrentGroupButton);
         setButtonStyle(addPersonToCurrentGroupButton);
         setButtonStyle(removePersonFromCurrentGroupButton);
@@ -317,6 +349,113 @@ public class Ui {
         dialog.setVisible(true);
     }
 
+    private void addGroupUi() {
+        JDialog dialog = new JDialog();
+        dialog.setLayout(new BorderLayout(0,0));
+        dialog.setSize(500,400);
+        dialog.setLocationRelativeTo(null);
+        dialog.setTitle("So who are we talking about");
+        dialog.setBackground(new Color(0x2B2C30));
+
+        // TOP: Title input
+        JPanel topPanel = new JPanel(new BorderLayout(10, 10));
+        topPanel.setBackground(new Color(0x2B2C30));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
+
+        Font largeFont = new Font("Dialog", Font.PLAIN, 20);
+        JLabel titleLabel = new JLabel("Group name:");
+        titleLabel.setFont(largeFont);
+        titleLabel.setForeground(new Color(255, 255, 255));
+
+        JTextField titleField = new JTextField();
+        titleField.setFont(largeFont);
+        titleField.setPreferredSize(new Dimension(0, 45)); // Height 45, width auto
+
+        topPanel.add(titleLabel, BorderLayout.WEST);
+        topPanel.add(titleField, BorderLayout.CENTER);
+
+        // CENTER: Member selection
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
+        centerPanel.setBackground(new Color(0x2B2C30));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        JLabel membersLabel = new JLabel("Who's in from the start?");
+        membersLabel.setFont(largeFont);
+        membersLabel.setForeground(new Color(255, 255, 255));
+        centerPanel.add(membersLabel, BorderLayout.NORTH);
+
+        // Get person list and create checkboxes
+        HashMap<Integer, String> peopleList = handler.handleGetPersonList();
+        JPanel checkboxPanel = new JPanel();
+        checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
+        checkboxPanel.setBackground(new Color(0x2B2C30));
+
+        HashMap<Integer, JCheckBox> checkboxMap = new HashMap<>();
+        Font checkboxFont = new Font("Dialog", Font.PLAIN, 18);
+
+        for (Map.Entry<Integer, String> entry : peopleList.entrySet()) {
+            JCheckBox checkbox = new JCheckBox(entry.getValue());
+            checkbox.setFont(checkboxFont);
+            checkbox.setBackground(new Color(0x2B2C30));
+            checkbox.setForeground(new Color(223, 225, 229));
+            checkbox.setFocusPainted(false);
+            checkboxMap.put(entry.getKey(), checkbox);
+            checkboxPanel.add(checkbox);
+            checkboxPanel.add(Box.createVerticalStrut(5));
+        }
+
+        JScrollPane scrollPane = new JScrollPane(checkboxPanel);
+        scrollPane.setBackground(new Color(0x2B2C30));
+        scrollPane.getViewport().setBackground(new Color(0x2B2C30));
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0x3E3F44), 1));
+        centerPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // BOTTOM: Buttons
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        bottomPanel.setBackground(new Color(0x2B2C30));
+
+        JButton cancelButton = new JButton("Cancel");
+        setButtonStyle(cancelButton);
+        cancelButton.setFont(largeFont);
+        cancelButton.addActionListener(e -> dialog.dispose());
+
+        JButton createButton = new JButton("Create Group");
+        setButtonStyle(createButton);
+        createButton.setFont(largeFont);
+        createButton.addActionListener(e -> {
+            try {
+                String title = titleField.getText().trim();
+                if (title.isEmpty()) {
+                    JOptionPane.showMessageDialog(dialog, "Please give this crew a name!");
+                    return;
+                }
+
+                // Collect selected person IDs
+                ArrayList<Integer> selectedIds = new ArrayList<>();
+                for (Map.Entry<Integer, JCheckBox> entry : checkboxMap.entrySet()) {
+                    if (entry.getValue().isSelected()) {
+                        selectedIds.add(entry.getKey());
+                    }
+                }
+
+                handler.handleAddGroupRequest(title, selectedIds);
+                dialog.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Error creating group: " + ex.getMessage());
+            }
+        });
+
+        bottomPanel.add(cancelButton);
+        bottomPanel.add(createButton);
+
+        // Assemble dialog
+        dialog.add(topPanel, BorderLayout.NORTH);
+        dialog.add(centerPanel, BorderLayout.CENTER);
+        dialog.add(bottomPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
+    }
+
     private void editPersonUi(int id) {
         JDialog dialog = new JDialog();
         dialog.setLayout(new BorderLayout(0,0));
@@ -395,7 +534,28 @@ public class Ui {
             }
             dialog.dispose();
         });
+        JButton deleteButton = new JButton("Delete information");
+        setButtonStyle(deleteButton);
+        deleteButton.setForeground(new Color(255, 100, 100));
+        deleteButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                    dialog,
+                    "Delete this person and all their bonds? Can't be undone.",
+                    "Delete the information about this person?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    handler.handleDeletePersonRequest(id);
+                    dialog.dispose();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog, "Error deleting person: " + ex.getMessage());
+                }
+            }
+        });
 
+        bottomPanel.add(deleteButton);
         bottomPanel.add(cancelButton);
         bottomPanel.add(saveButton);
 
@@ -408,14 +568,268 @@ public class Ui {
         return;
     }
 
-    private void editBondUi(int id)
-    {
-        System.out.println("Edit Bond id " + id);
+    private void editBondUi(int id) {
+        JDialog dialog = new JDialog();
+        dialog.setLayout(new BorderLayout(0,0));
+        dialog.setSize(600,350);
+        dialog.setLocationRelativeTo(null);
+        dialog.setTitle("How are things between them?");
+        dialog.setBackground(new Color(0x2B2C30));
+
+        // Get bond data
+        int headId = handler.handleGetBondHeadId(id);
+        int tailId = handler.handleGetBondTailId(id);
+        int currentRating = handler.handleGetBondRating(id);
+        String currentNotes = handler.handleGetBondNotes(id);
+        String person1Name = handler.handleGetPersonName(headId);
+        String person2Name = handler.handleGetPersonName(tailId);
+
+        // TOP: Display the two people
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+        topPanel.setBackground(new Color(0x2B2C30));
+
+        Font largeFont = new Font("Dialog", Font.BOLD, 42);
+        JLabel person1Label = new JLabel(person1Name);
+        person1Label.setFont(largeFont);
+        person1Label.setForeground(new Color(255, 255, 255));
+
+        JLabel arrowLabel = new JLabel(" and ");
+        arrowLabel.setFont(new Font("Dialog", Font.PLAIN, 42));
+        arrowLabel.setForeground(new Color(100, 200, 255));
+
+        JLabel person2Label = new JLabel(person2Name);
+        person2Label.setFont(largeFont);
+        person2Label.setForeground(new Color(255, 255, 255));
+
+        topPanel.add(person1Label);
+        topPanel.add(arrowLabel);
+        topPanel.add(person2Label);
+
+        // CENTER: Form Fields
+        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 15));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        formPanel.setBackground(new Color(0x2B2C30));
+
+        Font mediumFont = new Font("Dialog", Font.PLAIN, 18);
+
+        JLabel ratingLabel = new JLabel("Bond strength:");
+        ratingLabel.setFont(mediumFont);
+        ratingLabel.setForeground(new Color(255, 255, 255));
+
+        JComboBox<Integer> ratingDropdown = new JComboBox<>();
+        ratingDropdown.setFont(mediumFont);
+        for(int i = 1; i <= 10; i++) {
+            ratingDropdown.addItem(i);
+        }
+        ratingDropdown.setSelectedItem(currentRating);
+
+        JLabel notesLabel = new JLabel("Notes:");
+        notesLabel.setFont(mediumFont);
+        notesLabel.setForeground(new Color(255, 255, 255));
+
+        JTextField notesField = new JTextField(currentNotes);
+        notesField.setFont(mediumFont);
+
+        formPanel.add(ratingLabel);
+        formPanel.add(ratingDropdown);
+        formPanel.add(notesLabel);
+        formPanel.add(notesField);
+
+        // BOTTOM: Buttons
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        bottomPanel.setBackground(new Color(0x2B2C30));
+
+        JButton deleteButton = new JButton("Delete Bond");
+        setButtonStyle(deleteButton);
+        deleteButton.setFont(mediumFont);
+        deleteButton.setForeground(new Color(255, 100, 100));
+        deleteButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                    dialog,
+                    "Are you sure? This can't be undone.",
+                    "Delete this bond?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    handler.handleDeleteBondRequest(id);
+                    dialog.dispose();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog, "Error deleting bond: " + ex.getMessage());
+                }
+            }
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        setButtonStyle(cancelButton);
+        cancelButton.setFont(mediumFont);
+        cancelButton.addActionListener(e -> dialog.dispose());
+
+        JButton saveButton = new JButton("Save");
+        setButtonStyle(saveButton);
+        saveButton.setFont(mediumFont);
+        saveButton.addActionListener(e -> {
+            try {
+                int newRating = (Integer) ratingDropdown.getSelectedItem();
+                String newNotes = notesField.getText();
+                handler.handleEditBondRequest(id, newRating, newNotes);
+                dialog.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Error saving bond: " + ex.getMessage());
+            }
+        });
+
+        bottomPanel.add(deleteButton);
+        bottomPanel.add(cancelButton);
+        bottomPanel.add(saveButton);
+
+        // Assemble dialog
+        dialog.add(topPanel, BorderLayout.NORTH);
+        dialog.add(formPanel, BorderLayout.CENTER);
+        dialog.add(bottomPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
     }
 
-    private void editGroupUi(int id)
-    {
-        System.out.println("Edit group id " + id);
+    private void editGroupUi(int id) {
+        JDialog dialog = new JDialog();
+        dialog.setLayout(new BorderLayout(0,0));
+        dialog.setSize(500,450);
+        dialog.setLocationRelativeTo(null);
+        dialog.setTitle("Who's in this crew?");
+        dialog.setBackground(new Color(0x2B2C30));
+
+        // Get group data
+        String currentTitle = handler.handleGetGroupTitle(id);
+        ArrayList<Integer> currentMembers = handler.handleGetGroupMembers(id);
+
+        // TOP: Title input
+        JPanel topPanel = new JPanel(new BorderLayout(10, 10));
+        topPanel.setBackground(new Color(0x2B2C30));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
+
+        Font largeFont = new Font("Dialog", Font.PLAIN, 20);
+        JLabel titleLabel = new JLabel("Group name:");
+        titleLabel.setFont(largeFont);
+        titleLabel.setForeground(new Color(255, 255, 255));
+
+        JTextField titleField = new JTextField(currentTitle);
+        titleField.setFont(largeFont);
+        titleField.setPreferredSize(new Dimension(0, 45));
+
+        topPanel.add(titleLabel, BorderLayout.WEST);
+        topPanel.add(titleField, BorderLayout.CENTER);
+
+        // CENTER: Member selection
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
+        centerPanel.setBackground(new Color(0x2B2C30));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        JLabel membersLabel = new JLabel("Who's in this crew?");
+        membersLabel.setFont(largeFont);
+        membersLabel.setForeground(new Color(255, 255, 255));
+        centerPanel.add(membersLabel, BorderLayout.NORTH);
+
+        // Get person list and create checkboxes
+        HashMap<Integer, String> peopleList = handler.handleGetPersonList();
+        JPanel checkboxPanel = new JPanel();
+        checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
+        checkboxPanel.setBackground(new Color(0x2B2C30));
+
+        HashMap<Integer, JCheckBox> checkboxMap = new HashMap<>();
+        Font checkboxFont = new Font("Dialog", Font.PLAIN, 18);
+
+        for (Map.Entry<Integer, String> entry : peopleList.entrySet()) {
+            JCheckBox checkbox = new JCheckBox(entry.getValue());
+            checkbox.setFont(checkboxFont);
+            checkbox.setBackground(new Color(0x2B2C30));
+            checkbox.setForeground(new Color(223, 225, 229));
+            checkbox.setFocusPainted(false);
+
+            // Check if person is already in group
+            if (currentMembers.contains(entry.getKey())) {
+                checkbox.setSelected(true);
+            }
+
+            checkboxMap.put(entry.getKey(), checkbox);
+            checkboxPanel.add(checkbox);
+            checkboxPanel.add(Box.createVerticalStrut(5));
+        }
+
+        JScrollPane scrollPane = new JScrollPane(checkboxPanel);
+        scrollPane.setBackground(new Color(0x2B2C30));
+        scrollPane.getViewport().setBackground(new Color(0x2B2C30));
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0x3E3F44), 1));
+        centerPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // BOTTOM: Buttons
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        bottomPanel.setBackground(new Color(0x2B2C30));
+
+        JButton deleteButton = new JButton("Delete Group");
+        setButtonStyle(deleteButton);
+        deleteButton.setFont(largeFont);
+        deleteButton.setForeground(new Color(255, 100, 100));
+        deleteButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                    dialog,
+                    "Delete this whole crew? Can't be undone.",
+                    "Delete group?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    handler.handleDeleteGroupRequest(id);
+                    dialog.dispose();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog, "Error deleting group: " + ex.getMessage());
+                }
+            }
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        setButtonStyle(cancelButton);
+        cancelButton.setFont(largeFont);
+        cancelButton.addActionListener(e -> dialog.dispose());
+
+        JButton saveButton = new JButton("Save");
+        setButtonStyle(saveButton);
+        saveButton.setFont(largeFont);
+        saveButton.addActionListener(e -> {
+            try {
+                String newTitle = titleField.getText().trim();
+                if (newTitle.isEmpty()) {
+                    JOptionPane.showMessageDialog(dialog, "Please give this crew a name!");
+                    return;
+                }
+
+                // Collect selected person IDs
+                ArrayList<Integer> selectedIds = new ArrayList<>();
+                for (Map.Entry<Integer, JCheckBox> entry : checkboxMap.entrySet()) {
+                    if (entry.getValue().isSelected()) {
+                        selectedIds.add(entry.getKey());
+                    }
+                }
+
+                handler.handleEditGroupRequest(id, newTitle, selectedIds);
+                dialog.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Error saving group: " + ex.getMessage());
+            }
+        });
+
+        bottomPanel.add(deleteButton);
+        bottomPanel.add(cancelButton);
+        bottomPanel.add(saveButton);
+
+        // Assemble dialog
+        dialog.add(topPanel, BorderLayout.NORTH);
+        dialog.add(centerPanel, BorderLayout.CENTER);
+        dialog.add(bottomPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
     }
 
     private Integer showList(HashMap <Integer, String > dataList, String titleText)
