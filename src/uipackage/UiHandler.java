@@ -200,4 +200,15 @@ public class UiHandler {
     public void handleLowerAllBondsInCurrentGroup() {
         // TODO: Decrease all bonds in current group by 1 (min 1)
     }
+
+    /// Right side
+
+    public HashMap<Integer, String> handleGetActiveGroupPartitions(Integer groupCount)
+    {
+        /// TODO: Partition Generator
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, "John and Mary");
+        list.put(2, "Mary and Peter");
+        return list;
+    }
 }

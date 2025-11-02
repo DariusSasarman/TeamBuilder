@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Ui {
+    private final Color BG_COLOR = new Color(0x2B2C30);
     private UiHandler handler;
     private JPanel contentPanel;
     private JPanel generalSettingsPanel;
@@ -41,7 +42,7 @@ public class Ui {
     private JButton raiseBondFromCurrentGroupButton;
     private JButton lowerBondFromCurrentGroupButton;
     private JButton raiseAllBondsFromCurrentGroupButton;
-    private JButton lowerAllBondsFromCurrentGroup;
+    private JButton lowerAllBondsFromCurrentGroupButton;
 
     private JButton generatePartitionsBasedOnCurrentGroupButton;
     private JButton getMaxDirectCentralityPersonButton;
@@ -59,7 +60,7 @@ public class Ui {
         setupButtons();
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("TeamBuilder");
-            frame.setBackground(new Color(0x2B2C30));
+            frame.setBackground(BG_COLOR);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(this.contentPanel);
             frame.pack();
@@ -71,9 +72,9 @@ public class Ui {
 
     private void setupPanels()
     {
-        generalSettingsButtonPanel.setBackground(new Color(0x2B2C30));
-        graphActionsButtonPanel.setBackground(new Color(0x2B2C30));
-        groupSettingsButtonPanel.setBackground(new Color(0x2B2C30));
+        generalSettingsButtonPanel.setBackground(BG_COLOR);
+        graphActionsButtonPanel.setBackground(BG_COLOR);
+        groupSettingsButtonPanel.setBackground(BG_COLOR);
     }
 
     private void setupButtons()
@@ -82,14 +83,14 @@ public class Ui {
         addPersonDataButton.addActionListener(e -> addPersonUi());
         setButtonStyle(editPersonDataButton);
         editPersonDataButton.addActionListener(e -> {
-            Integer id = showList(handler.handleGetPersonList(),"Here's who you know?");
+            Integer id = showList(handler.handleGetPersonList(),"Here's who you know?",true);
             editPersonUi(id);
         });
         setButtonStyle(addBondDataButton);
         addBondDataButton.addActionListener(e -> addBondUi());
         setButtonStyle(editBondDataButton);
         editBondDataButton.addActionListener(e -> {
-            Integer id = showList(handler.handleGetBondList(),"Here's who knows who:");
+            Integer id = showList(handler.handleGetBondList(),"Here's who knows who:",true);
             editBondUi(id);
         });
         setButtonStyle(addGroupDataButton);
@@ -98,7 +99,7 @@ public class Ui {
         });
         setButtonStyle(editGroupDataButton);
         editGroupDataButton.addActionListener(e -> {
-            Integer id = showList(handler.handleGetGroupList(),"Here's who you're taking care of");
+            Integer id = showList(handler.handleGetGroupList(),"Here's who you're taking care of",true);
             editGroupUi(id);
         });
 
@@ -110,103 +111,50 @@ public class Ui {
         /// Respect upper template
         setButtonStyle(getSaveLocationButton);
         getSaveLocationButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Where did you leave off?");
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            int result = fileChooser.showOpenDialog(null);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                try {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    handler.handleGetSaveLocation(selectedFile.getAbsolutePath());
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error loading save: " + ex.getMessage());
-                }
-            }
+            getSaveLocationUi();
         });
 
         setButtonStyle(changeCurrentGroupButton);
         changeCurrentGroupButton.addActionListener(e -> {
-            Integer selectedGroupId = showList(handler.handleGetGroupList(), "Who are we working with now?");
-            if (selectedGroupId != null) {
-                try {
-                    handler.handleChangeCurrentGroup(selectedGroupId);
-                    graphArea.repaint();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error switching group: " + ex.getMessage());
-                }
-            }
+            Integer selectedGroupId = showList(handler.handleGetGroupList(), "Who are we working with now?",true);
+            changeCurrentGroupUi(selectedGroupId);
         });
 
         setButtonStyle(addPersonToCurrentGroupButton);
         addPersonToCurrentGroupButton.addActionListener(e -> {
-            Integer selectedPersonId = showList(handler.handleGetPeopleNotInCurrentGroup(), "Who joined the crew?");
-            if (selectedPersonId != null) {
-                try {
-                    handler.handleAddPersonToCurrentGroup(selectedPersonId);
-                    graphArea.repaint();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error adding person to group: " + ex.getMessage());
-                }
-            }
+            Integer selectedPersonId = showList(handler.handleGetPeopleNotInCurrentGroup(), "Who joined the crew?",true);
+            addPersonToCurrentGroupUi(selectedPersonId);
         });
 
         setButtonStyle(removePersonFromCurrentGroupButton);
         removePersonFromCurrentGroupButton.addActionListener(e -> {
-            Integer selectedPersonId = showList(handler.handleGetPeopleInCurrentGroup(), "Who left the crew?");
-            if (selectedPersonId != null) {
-                try {
-                    handler.handleRemovePersonFromCurrentGroup(selectedPersonId);
-                    graphArea.repaint();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error removing person from group: " + ex.getMessage());
-                }
-            }
+            Integer selectedPersonId = showList(handler.handleGetPeopleInCurrentGroup(), "Who left the crew?",true);
+            removePersonFromCurrentGroupUi(selectedPersonId);
         });
 
         setButtonStyle(raiseBondFromCurrentGroupButton);
         raiseBondFromCurrentGroupButton.addActionListener(e -> {
-            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is getting stronger?");
-            if (selectedBondId != null) {
-                try {
-                    handler.handleRaiseBondInCurrentGroup(selectedBondId);
-                    graphArea.repaint();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error raising bond: " + ex.getMessage());
-                }
-            }
+            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is getting stronger?",true);
+            raiseBondFromCurrentGroupUi(selectedBondId);
         });
         setButtonStyle(lowerBondFromCurrentGroupButton);
         lowerBondFromCurrentGroupButton.addActionListener(e -> {
-            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is weakening?");
-            if (selectedBondId != null) {
-                try {
-                    handler.handleLowerBondInCurrentGroup(selectedBondId);
-                    graphArea.repaint();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error lowering bond: " + ex.getMessage());
-                }
-            }
+            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is weakening?", true);
+            lowerBondFromCurrentGroupUi(selectedBondId);
         });
         setButtonStyle(raiseAllBondsFromCurrentGroupButton);
         raiseAllBondsFromCurrentGroupButton.addActionListener(e -> {
-            try {
-                handler.handleRaiseAllBondsInCurrentGroup();
-                graphArea.repaint();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error raising bonds: " + ex.getMessage());
-            }
+            raiseAllBondsFromCurrentGroupUi();
         });
-        setButtonStyle(lowerAllBondsFromCurrentGroup);
-        lowerAllBondsFromCurrentGroup.addActionListener(e -> {
-            try {
-                handler.handleLowerAllBondsInCurrentGroup();
-                graphArea.repaint();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error lowering bonds: " + ex.getMessage());
-            }
+        setButtonStyle(lowerAllBondsFromCurrentGroupButton);
+        lowerAllBondsFromCurrentGroupButton.addActionListener(e -> {
+            lowerAllBondsFromCurrentGroupUi();
         });
 
         setButtonStyle(generatePartitionsBasedOnCurrentGroupButton);
+        generatePartitionsBasedOnCurrentGroupButton.addActionListener( e -> {
+            generatePartitionsUi();
+        });
         setButtonStyle(getMaxDirectCentralityPersonButton);
         setButtonStyle(getMaxIndirectCentralityPersonButton);
         setButtonStyle(getMinDirectCentralityPersonButton);
@@ -217,8 +165,8 @@ public class Ui {
         setButtonStyle(getKCoreDecompositionButton);
     }
     private void setButtonStyle(JButton b) {
-        b.setBackground(new Color(0x2B2C30));
-        b.setForeground(new Color(223, 225, 229));
+        b.setBackground(BG_COLOR);
+        b.setForeground(new Color(255, 255, 255));
         b.setFocusPainted(false);
     }
 
@@ -231,7 +179,7 @@ public class Ui {
         /// LEFT: Image Selection Panel
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.setPreferredSize(new Dimension(180, 180));
-        imagePanel.setBackground(new Color(0x2B2C30));
+        imagePanel.setBackground(BG_COLOR);
         imagePanel.setForeground(new Color(255,255,255));
         imagePanel.setBorder(BorderFactory.createTitledBorder( null,"Selected image",0,0,null,new Color(255,255,255)));
         JLabel imageLabel = new JLabel("No Image", SwingConstants.CENTER);
@@ -262,7 +210,7 @@ public class Ui {
         // CENTER: Form Fields
         JPanel formPanel = new JPanel(new GridLayout(6, 2, 5, 5));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        formPanel.setBackground(new Color(0x2B2C30));
+        formPanel.setBackground(BG_COLOR);
 
         JTextField nameField = new JTextField();
         JLabel textNameInput = new JLabel("Name:");
@@ -278,7 +226,7 @@ public class Ui {
 
         // SOUTH : Buttons Panel
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        bottomPanel.setBackground(new Color(0x2B2C30));
+        bottomPanel.setBackground(BG_COLOR);
         JButton cancelButton = new JButton("Cancel");
         setButtonStyle(cancelButton);
         cancelButton.addActionListener(e -> {
@@ -314,17 +262,17 @@ public class Ui {
         JDialog dialog = new JDialog();
         dialog.setLayout(new BorderLayout(0,0));
         dialog.setSize(500,300);
-        dialog.setBackground(new Color(0x2B2C30));
+        dialog.setBackground(BG_COLOR);
         dialog.setForeground(new Color(255,255,255));
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("Who met who?");
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBackground(new Color(0x2B2C30));
+        container.setBackground(BG_COLOR);
         HashMap<Integer,String> peopleList = handler.handleGetPersonList();
 
         JPanel idSelect = new JPanel();
-        idSelect.setBackground(new Color(0x2B2C30));
+        idSelect.setBackground(BG_COLOR);
         idSelect.setForeground(new Color(255,255,255));
         JComboBox<String> dropdown1 = new JComboBox<>(peopleList.values().toArray(new String[peopleList.size()]));
         Font largeFont = new Font(dropdown1.getFont().getName(), Font.PLAIN, 20);
@@ -339,7 +287,7 @@ public class Ui {
         idSelect.add(dropdown2);
 
         JPanel ratingSelect = new JPanel();
-        ratingSelect.setBackground(new Color(0x2B2C30));
+        ratingSelect.setBackground(BG_COLOR);
         ratingSelect.setForeground(new Color(255,255,255));
         ratingSelect.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
         JLabel ratingIntroWriting = new JLabel("Initial bond rating (out of 10):");
@@ -355,7 +303,7 @@ public class Ui {
         ratingSelect.add(dropdown3);
 
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setBackground(new Color(0x2B2C30));
+        buttonsPanel.setBackground(BG_COLOR);
         buttonsPanel.setForeground(new Color(255,255,255));
 
         JButton cancelButton = new JButton("Cancel");
@@ -419,11 +367,11 @@ public class Ui {
         dialog.setSize(500,400);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("So who are we talking about");
-        dialog.setBackground(new Color(0x2B2C30));
+        dialog.setBackground(BG_COLOR);
 
         // TOP: Title input
         JPanel topPanel = new JPanel(new BorderLayout(10, 10));
-        topPanel.setBackground(new Color(0x2B2C30));
+        topPanel.setBackground(BG_COLOR);
         topPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
 
         Font largeFont = new Font("Dialog", Font.PLAIN, 20);
@@ -440,7 +388,7 @@ public class Ui {
 
         // CENTER: Member selection
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
-        centerPanel.setBackground(new Color(0x2B2C30));
+        centerPanel.setBackground(BG_COLOR);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JLabel membersLabel = new JLabel("Who's in from the start?");
@@ -452,7 +400,7 @@ public class Ui {
         HashMap<Integer, String> peopleList = handler.handleGetPersonList();
         JPanel checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
-        checkboxPanel.setBackground(new Color(0x2B2C30));
+        checkboxPanel.setBackground(BG_COLOR);
 
         HashMap<Integer, JCheckBox> checkboxMap = new HashMap<>();
         Font checkboxFont = new Font("Dialog", Font.PLAIN, 18);
@@ -460,7 +408,7 @@ public class Ui {
         for (Map.Entry<Integer, String> entry : peopleList.entrySet()) {
             JCheckBox checkbox = new JCheckBox(entry.getValue());
             checkbox.setFont(checkboxFont);
-            checkbox.setBackground(new Color(0x2B2C30));
+            checkbox.setBackground(BG_COLOR);
             checkbox.setForeground(new Color(223, 225, 229));
             checkbox.setFocusPainted(false);
             checkboxMap.put(entry.getKey(), checkbox);
@@ -469,14 +417,14 @@ public class Ui {
         }
 
         JScrollPane scrollPane = new JScrollPane(checkboxPanel);
-        scrollPane.setBackground(new Color(0x2B2C30));
-        scrollPane.getViewport().setBackground(new Color(0x2B2C30));
+        scrollPane.setBackground(BG_COLOR);
+        scrollPane.getViewport().setBackground(BG_COLOR);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0x3E3F44), 1));
         centerPanel.add(scrollPane, BorderLayout.CENTER);
 
         // BOTTOM: Buttons
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        bottomPanel.setBackground(new Color(0x2B2C30));
+        bottomPanel.setBackground(BG_COLOR);
 
         JButton cancelButton = new JButton("Cancel");
         setButtonStyle(cancelButton);
@@ -529,7 +477,7 @@ public class Ui {
         /// LEFT: Image Selection Panel
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.setPreferredSize(new Dimension(180, 180));
-        imagePanel.setBackground(new Color(0x2B2C30));
+        imagePanel.setBackground(BG_COLOR);
         imagePanel.setForeground(new Color(255,255,255));
         imagePanel.setBorder(BorderFactory.createTitledBorder( null,"Selected image",0,0,null,new Color(255,255,255)));
         JLabel imageLabel = new JLabel("No Image", SwingConstants.CENTER);
@@ -561,7 +509,7 @@ public class Ui {
         // CENTER: Form Fields
         JPanel formPanel = new JPanel(new GridLayout(6, 2, 5, 5));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        formPanel.setBackground(new Color(0x2B2C30));
+        formPanel.setBackground(BG_COLOR);
 
         JTextField nameField = new JTextField();
         JLabel textNameInput = new JLabel("Name:");
@@ -579,7 +527,7 @@ public class Ui {
 
         // SOUTH : Buttons Panel
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        bottomPanel.setBackground(new Color(0x2B2C30));
+        bottomPanel.setBackground(BG_COLOR);
         JButton cancelButton = new JButton("Cancel");
         setButtonStyle(cancelButton);
         cancelButton.addActionListener(e -> {
@@ -638,7 +586,7 @@ public class Ui {
         dialog.setSize(600,350);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("How are things between them?");
-        dialog.setBackground(new Color(0x2B2C30));
+        dialog.setBackground(BG_COLOR);
 
         // Get bond data
         int headId = handler.handleGetBondHeadId(id);
@@ -650,7 +598,7 @@ public class Ui {
 
         // TOP: Display the two people
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
-        topPanel.setBackground(new Color(0x2B2C30));
+        topPanel.setBackground(BG_COLOR);
 
         Font largeFont = new Font("Dialog", Font.BOLD, 42);
         JLabel person1Label = new JLabel(person1Name);
@@ -672,7 +620,7 @@ public class Ui {
         // CENTER: Form Fields
         JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 15));
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
-        formPanel.setBackground(new Color(0x2B2C30));
+        formPanel.setBackground(BG_COLOR);
 
         Font mediumFont = new Font("Dialog", Font.PLAIN, 18);
 
@@ -701,7 +649,7 @@ public class Ui {
 
         // BOTTOM: Buttons
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        bottomPanel.setBackground(new Color(0x2B2C30));
+        bottomPanel.setBackground(BG_COLOR);
 
         JButton deleteButton = new JButton("Delete Bond");
         setButtonStyle(deleteButton);
@@ -762,7 +710,7 @@ public class Ui {
         dialog.setSize(500,450);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("Who's in this crew?");
-        dialog.setBackground(new Color(0x2B2C30));
+        dialog.setBackground(BG_COLOR);
 
         // Get group data
         String currentTitle = handler.handleGetGroupTitle(id);
@@ -770,7 +718,7 @@ public class Ui {
 
         // TOP: Title input
         JPanel topPanel = new JPanel(new BorderLayout(10, 10));
-        topPanel.setBackground(new Color(0x2B2C30));
+        topPanel.setBackground(BG_COLOR);
         topPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
 
         Font largeFont = new Font("Dialog", Font.PLAIN, 20);
@@ -787,7 +735,7 @@ public class Ui {
 
         // CENTER: Member selection
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
-        centerPanel.setBackground(new Color(0x2B2C30));
+        centerPanel.setBackground(BG_COLOR);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JLabel membersLabel = new JLabel("Who's in this crew?");
@@ -799,7 +747,7 @@ public class Ui {
         HashMap<Integer, String> peopleList = handler.handleGetPersonList();
         JPanel checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
-        checkboxPanel.setBackground(new Color(0x2B2C30));
+        checkboxPanel.setBackground(BG_COLOR);
 
         HashMap<Integer, JCheckBox> checkboxMap = new HashMap<>();
         Font checkboxFont = new Font("Dialog", Font.PLAIN, 18);
@@ -807,7 +755,7 @@ public class Ui {
         for (Map.Entry<Integer, String> entry : peopleList.entrySet()) {
             JCheckBox checkbox = new JCheckBox(entry.getValue());
             checkbox.setFont(checkboxFont);
-            checkbox.setBackground(new Color(0x2B2C30));
+            checkbox.setBackground(BG_COLOR);
             checkbox.setForeground(new Color(223, 225, 229));
             checkbox.setFocusPainted(false);
 
@@ -822,14 +770,14 @@ public class Ui {
         }
 
         JScrollPane scrollPane = new JScrollPane(checkboxPanel);
-        scrollPane.setBackground(new Color(0x2B2C30));
-        scrollPane.getViewport().setBackground(new Color(0x2B2C30));
+        scrollPane.setBackground(BG_COLOR);
+        scrollPane.getViewport().setBackground(BG_COLOR);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0x3E3F44), 1));
         centerPanel.add(scrollPane, BorderLayout.CENTER);
 
         // BOTTOM: Buttons
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        bottomPanel.setBackground(new Color(0x2B2C30));
+        bottomPanel.setBackground(BG_COLOR);
 
         JButton deleteButton = new JButton("Delete Group");
         setButtonStyle(deleteButton);
@@ -911,12 +859,162 @@ public class Ui {
         }
         fileChooser.setVisible(true);
     }
-    private Integer showList(HashMap <Integer, String > dataList, String titleText) {
+
+    private void getSaveLocationUi() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Where did you leave off?");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                handler.handleGetSaveLocation(selectedFile.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error loading save: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void changeCurrentGroupUi(Integer selectedGroupId) {
+        if (selectedGroupId != null) {
+            try {
+                handler.handleChangeCurrentGroup(selectedGroupId);
+                graphArea.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error switching group: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void addPersonToCurrentGroupUi(Integer selectedPersonId) {
+        if (selectedPersonId != null) {
+            try {
+                handler.handleAddPersonToCurrentGroup(selectedPersonId);
+                graphArea.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error adding person to group: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void removePersonFromCurrentGroupUi(Integer selectedPersonId) {
+        if (selectedPersonId != null) {
+            try {
+                handler.handleRemovePersonFromCurrentGroup(selectedPersonId);
+                graphArea.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error removing person from group: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void raiseBondFromCurrentGroupUi(Integer selectedBondId) {
+        if (selectedBondId != null) {
+            try {
+                handler.handleRaiseBondInCurrentGroup(selectedBondId);
+                graphArea.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error raising bond: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void lowerBondFromCurrentGroupUi(Integer selectedBondId) {
+        if (selectedBondId != null) {
+            try {
+                handler.handleLowerBondInCurrentGroup(selectedBondId);
+                graphArea.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error lowering bond: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void raiseAllBondsFromCurrentGroupUi() {
+        try {
+            handler.handleRaiseAllBondsInCurrentGroup();
+            graphArea.repaint();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error raising bonds: " + ex.getMessage());
+        }
+    }
+
+    private void lowerAllBondsFromCurrentGroupUi() {
+        try {
+            handler.handleLowerAllBondsInCurrentGroup();
+            graphArea.repaint();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error lowering bonds: " + ex.getMessage());
+        }
+    }
+
+    private void generatePartitionsUi()
+    {
+        JDialog dialog = new JDialog();
+        dialog.setLayout(new BorderLayout(10,10));
+        dialog.setSize(600,350);
+        dialog.setLocationRelativeTo(null);
+        dialog.setTitle("How many groups should be in this activity?");
+
+
+        JPanel container = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        container.setBackground(BG_COLOR);
+        container.setForeground(BG_COLOR);
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        topPanel.setBackground(BG_COLOR);
+        topPanel.setForeground(BG_COLOR);
+
+        JLabel textLabel = new JLabel("Pick how many groups in this activity:");
+        textLabel.setFont(new Font("Dialog",Font.BOLD,25));
+        textLabel.setForeground(new Color(255,255,255));
+        topPanel.add(textLabel);
+
+        JComboBox<Integer> options = new JComboBox<>();
+        int count = handler.handleGetPeopleInCurrentGroup().size();
+        for(int i = 2; i <= count; i++)
+        {
+            options.addItem(i);
+        }
+        options.setFont(new Font("Dialog",Font.BOLD,32));
+        topPanel.add(options);
+
+        JPanel botPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        botPanel.setBackground(BG_COLOR);
+        botPanel.setForeground(BG_COLOR);
+
+        JButton cancelButton = new JButton("Cancel");
+        setButtonStyle(cancelButton);
+        cancelButton.setFont(new Font("Dialog", Font.BOLD,42));
+        cancelButton.addActionListener( e -> {
+            dialog.dispose();
+        });
+        botPanel.add(cancelButton);
+
+        JButton runButton = new JButton("Let's gooo!!");
+        setButtonStyle(runButton);
+        runButton.setForeground(new Color(50,255,50));
+        runButton.setFont(new Font("Dialog", Font.BOLD,42));
+        runButton.addActionListener( e -> {
+            Integer groupCount = options.getItemAt(options.getSelectedIndex());
+            showList(handler.handleGetActiveGroupPartitions(groupCount), "Here are the groups:",false);
+            dialog.dispose();
+        });
+        botPanel.add(runButton);
+
+        container.add(topPanel);
+        container.add(botPanel);
+        dialog.add(container);
+        dialog.setVisible(true);
+    }
+
+
+    private Integer showList(HashMap <Integer, String > dataList, String titleText, boolean clickable) {
         JDialog dialog = new JDialog((Frame) null, titleText, true);
         dialog.setLayout(new BorderLayout(0,0));
         dialog.setSize(800,500);
         dialog.setLocationRelativeTo(null);
-        dialog.setBackground(new Color(0x2B2C30));
+        dialog.setBackground(BG_COLOR);
         dialog.setForeground(new Color(255,255,255));
         DefaultListModel<String> stringList = new DefaultListModel<>();
 
@@ -927,7 +1025,7 @@ public class Ui {
 
         JList<String> displayList = new JList<>(stringList);
         displayList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-            JLabel label = new JLabel(value); // 'value' is the actual String (not 'project' or 'value.getName()')
+            JLabel label = new JLabel(value);
             label.setHorizontalAlignment(JLabel.CENTER);
             label.setVerticalAlignment(JLabel.CENTER);
             Font labelFont = label.getFont();
@@ -939,32 +1037,35 @@ public class Ui {
                 label.setBackground(new Color(0x3E3F44));
                 label.setForeground(Color.WHITE);
             } else {
-                label.setBackground(new Color(0x2B2C30));
+                label.setBackground(BG_COLOR);
                 label.setForeground(Color.LIGHT_GRAY);
             }
             label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             return label;
         });
         Integer[] targetId = {null};
-        displayList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int index = displayList.locationToIndex(e.getPoint());
-                    if (index != -1) {
-                        String selectedValue = displayList.getModel().getElementAt(index);
+        if(clickable)
+        {
+            displayList.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 2) {
+                        int index = displayList.locationToIndex(e.getPoint());
+                        if (index != -1) {
+                            String selectedValue = displayList.getModel().getElementAt(index);
 
-                        for (HashMap.Entry<Integer, String> entry : dataList.entrySet()) {
-                            if (entry.getValue().equals(selectedValue)) {
-                                targetId[0] = entry.getKey();
-                                break;
+                            for (HashMap.Entry<Integer, String> entry : dataList.entrySet()) {
+                                if (entry.getValue().equals(selectedValue)) {
+                                    targetId[0] = entry.getKey();
+                                    break;
+                                }
                             }
+                            dialog.dispose();
                         }
-                        dialog.dispose();
                     }
                 }
-            }
-        });
+            });
+        }
         JScrollPane scrollPane = new JScrollPane(displayList);
         dialog.add(scrollPane, BorderLayout.CENTER);
 
