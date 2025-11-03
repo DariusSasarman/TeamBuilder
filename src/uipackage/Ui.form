@@ -137,7 +137,7 @@
               <horizontalScrollBarPolicy value="31"/>
               <verticalScrollBarPolicy value="20"/>
             </properties>
-            <border type="none" title="Group Interactions">
+            <border type="none" title="Active Group Interactions">
               <font/>
               <title-color color="-2104859"/>
             </border>
@@ -271,7 +271,7 @@
               <horizontalScrollBarPolicy value="31"/>
               <verticalScrollBarPolicy value="20"/>
             </properties>
-            <border type="none" title="Group Settings">
+            <border type="none" title="Active Group Settings">
               <font/>
               <title-color color="-2104859"/>
             </border>
