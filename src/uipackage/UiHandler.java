@@ -89,6 +89,7 @@ public class UiHandler {
     public HashMap<Integer,String> handleGetBondList()
     {
         HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, "John and Maryy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy");
         list.put(13,"John" + " and " + "Steve");
         list.put(12,"John2" + " and " + "Steve2");
         list.put(11,"John3" + " and " + "Steve3");
@@ -207,7 +208,7 @@ public class UiHandler {
     {
         /// TODO: Partition Generator
         HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "John and Mary");
+        list.put(1, "John and Maryy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy");
         list.put(2, "Mary and Peter");
         return list;
     }

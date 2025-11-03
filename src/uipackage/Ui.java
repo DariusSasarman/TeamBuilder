@@ -83,15 +83,21 @@ public class Ui {
         addPersonDataButton.addActionListener(e -> addPersonUi());
         setButtonStyle(editPersonDataButton);
         editPersonDataButton.addActionListener(e -> {
-            Integer id = showList(handler.handleGetPersonList(),"Here's who you know?",true);
-            editPersonUi(id);
+            Integer id = showList(handler.handleGetPersonList(),"Here's who you know:",true);
+            if(id != null)
+            {
+                editPersonUi(id);
+            }
         });
         setButtonStyle(addBondDataButton);
         addBondDataButton.addActionListener(e -> addBondUi());
         setButtonStyle(editBondDataButton);
         editBondDataButton.addActionListener(e -> {
             Integer id = showList(handler.handleGetBondList(),"Here's who knows who:",true);
-            editBondUi(id);
+            if(id != null)
+            {
+                editBondUi(id);
+            }
         });
         setButtonStyle(addGroupDataButton);
         addGroupDataButton.addActionListener(e -> {
@@ -100,7 +106,10 @@ public class Ui {
         setButtonStyle(editGroupDataButton);
         editGroupDataButton.addActionListener(e -> {
             Integer id = showList(handler.handleGetGroupList(),"Here's who you're taking care of",true);
-            editGroupUi(id);
+            if(id != null)
+            {
+                editGroupUi(id);
+            }
         });
 
         setButtonStyle(setSaveLocationButton);
@@ -117,30 +126,45 @@ public class Ui {
         setButtonStyle(changeCurrentGroupButton);
         changeCurrentGroupButton.addActionListener(e -> {
             Integer selectedGroupId = showList(handler.handleGetGroupList(), "Who are we working with now?",true);
-            changeCurrentGroupUi(selectedGroupId);
+            if(selectedGroupId != null)
+            {
+                changeCurrentGroupUi(selectedGroupId);
+            }
         });
 
         setButtonStyle(addPersonToCurrentGroupButton);
         addPersonToCurrentGroupButton.addActionListener(e -> {
             Integer selectedPersonId = showList(handler.handleGetPeopleNotInCurrentGroup(), "Who joined the crew?",true);
-            addPersonToCurrentGroupUi(selectedPersonId);
+            if(selectedPersonId != null)
+            {
+                addPersonToCurrentGroupUi(selectedPersonId);
+            }
         });
 
         setButtonStyle(removePersonFromCurrentGroupButton);
         removePersonFromCurrentGroupButton.addActionListener(e -> {
             Integer selectedPersonId = showList(handler.handleGetPeopleInCurrentGroup(), "Who left the crew?",true);
-            removePersonFromCurrentGroupUi(selectedPersonId);
+            if(selectedPersonId != null)
+            {
+                removePersonFromCurrentGroupUi(selectedPersonId);
+            }
         });
 
         setButtonStyle(raiseBondFromCurrentGroupButton);
         raiseBondFromCurrentGroupButton.addActionListener(e -> {
             Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is getting stronger?",true);
-            raiseBondFromCurrentGroupUi(selectedBondId);
+            if(selectedBondId != null)
+            {
+                raiseBondFromCurrentGroupUi(selectedBondId);
+            }
         });
         setButtonStyle(lowerBondFromCurrentGroupButton);
         lowerBondFromCurrentGroupButton.addActionListener(e -> {
             Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is weakening?", true);
-            lowerBondFromCurrentGroupUi(selectedBondId);
+            if(selectedBondId != null)
+            {
+                lowerBondFromCurrentGroupUi(selectedBondId);
+            }
         });
         setButtonStyle(raiseAllBondsFromCurrentGroupButton);
         raiseAllBondsFromCurrentGroupButton.addActionListener(e -> {
@@ -948,11 +972,10 @@ public class Ui {
         }
     }
 
-    private void generatePartitionsUi()
-    {
+    private void generatePartitionsUi() {
         JDialog dialog = new JDialog();
         dialog.setLayout(new BorderLayout(10,10));
-        dialog.setSize(600,350);
+        dialog.setSize(700,350);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("How many groups should be in this activity?");
 
@@ -965,7 +988,7 @@ public class Ui {
         topPanel.setBackground(BG_COLOR);
         topPanel.setForeground(BG_COLOR);
 
-        JLabel textLabel = new JLabel("Pick how many groups in this activity:");
+        JLabel textLabel = new JLabel("Pick how many groups are in this activity:");
         textLabel.setFont(new Font("Dialog",Font.BOLD,25));
         textLabel.setForeground(new Color(255,255,255));
         topPanel.add(textLabel);
@@ -991,7 +1014,7 @@ public class Ui {
         });
         botPanel.add(cancelButton);
 
-        JButton runButton = new JButton("Let's gooo!!");
+        JButton runButton = new JButton("Let's see the groups");
         setButtonStyle(runButton);
         runButton.setForeground(new Color(50,255,50));
         runButton.setFont(new Font("Dialog", Font.BOLD,42));
@@ -1008,65 +1031,81 @@ public class Ui {
         dialog.setVisible(true);
     }
 
-
-    private Integer showList(HashMap <Integer, String > dataList, String titleText, boolean clickable) {
-        JDialog dialog = new JDialog((Frame) null, titleText, true);
-        dialog.setLayout(new BorderLayout(0,0));
-        dialog.setSize(800,500);
+    private Integer showList(HashMap<Integer, String> dataList, String titleText, boolean clickable) {
+        JDialog dialog = new JDialog((Frame) null, "", true);
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(800, 500);
         dialog.setLocationRelativeTo(null);
         dialog.setBackground(BG_COLOR);
-        dialog.setForeground(new Color(255,255,255));
-        DefaultListModel<String> stringList = new DefaultListModel<>();
 
-        for(String name : dataList.values())
-        {
-            stringList.addElement(name);
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 15));
+        titlePanel.setBackground(BG_COLOR);
+        JLabel titleLabel = new JLabel(titleText);
+        titleLabel.setFont(new Font("Dialog", Font.BOLD, 28));
+        titleLabel.setForeground(new Color(255, 255, 255));
+        titlePanel.add(titleLabel);
+
+        DefaultListModel<Integer> listModel = new DefaultListModel<>();
+        for (Integer key : dataList.keySet()) {
+            listModel.addElement(key);
         }
 
-        JList<String> displayList = new JList<>(stringList);
+        JList<Integer> displayList = new JList<>(listModel);
         displayList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-            JLabel label = new JLabel(value);
-            label.setHorizontalAlignment(JLabel.CENTER);
-            label.setVerticalAlignment(JLabel.CENTER);
-            Font labelFont = label.getFont();
-            int fontSize = 50;
-            label.setFont(new Font(labelFont.getName(), Font.PLAIN,fontSize));
-            label.setOpaque(true);
+            String text = dataList.get(value);
+            JTextArea textArea = new JTextArea(text);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setEditable(false);
+            textArea.setFocusable(false);
+            textArea.setFont(new Font("Dialog", Font.PLAIN, 40));
+            textArea.setColumns(15);
 
-            if (isSelected) {
-                label.setBackground(new Color(0x3E3F44));
-                label.setForeground(Color.WHITE);
+            /// This is for limit cases when the string is too big
+            int width = 700;
+            textArea.setSize(new Dimension(width, Integer.MAX_VALUE));
+            Dimension d = textArea.getPreferredSize();
+            textArea.setPreferredSize(new Dimension(width, d.height + 20 ));
+
+            JPanel wrapper = new JPanel(new BorderLayout());
+            wrapper.setOpaque(true);
+
+            if (isSelected && clickable) {
+                textArea.setBackground(new Color(0x3E3F44));
+                wrapper.setBackground(new Color(0x3E3F44));
+                textArea.setForeground(Color.WHITE);
             } else {
-                label.setBackground(BG_COLOR);
-                label.setForeground(Color.LIGHT_GRAY);
+                textArea.setBackground(BG_COLOR);
+                wrapper.setBackground(BG_COLOR);
+                textArea.setForeground(Color.LIGHT_GRAY);
             }
-            label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            return label;
+            textArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            wrapper.add(textArea,BorderLayout.CENTER);
+            return wrapper;
         });
+
         Integer[] targetId = {null};
-        if(clickable)
-        {
+
+        if (clickable) {
             displayList.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if (e.getClickCount() == 2) {
                         int index = displayList.locationToIndex(e.getPoint());
                         if (index != -1) {
-                            String selectedValue = displayList.getModel().getElementAt(index);
-
-                            for (HashMap.Entry<Integer, String> entry : dataList.entrySet()) {
-                                if (entry.getValue().equals(selectedValue)) {
-                                    targetId[0] = entry.getKey();
-                                    break;
-                                }
-                            }
+                            targetId[0] = displayList.getModel().getElementAt(index);
                             dialog.dispose();
                         }
                     }
                 }
             });
+        } else {
+            displayList.setEnabled(false);
         }
+
         JScrollPane scrollPane = new JScrollPane(displayList);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        dialog.add(titlePanel, BorderLayout.NORTH);
         dialog.add(scrollPane, BorderLayout.CENTER);
 
         dialog.setVisible(true);
