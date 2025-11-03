@@ -7,7 +7,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,7 +119,6 @@ public class Ui {
             setSaveLocationUi();
         });
 
-        /// Respect upper template
         setButtonStyle(getSaveLocationButton);
         getSaveLocationButton.addActionListener(e -> {
             getSaveLocationUi();
@@ -180,14 +181,42 @@ public class Ui {
             generatePartitionsUi();
         });
         setButtonStyle(getMaxDirectCentralityPersonButton);
+        getMaxDirectCentralityPersonButton.addActionListener( e -> {
+            getMaxDirectCentralityUi();
+        });
         setButtonStyle(getMaxIndirectCentralityPersonButton);
+        getMaxIndirectCentralityPersonButton.addActionListener(e -> {
+            getMaxIndirectCentralityUi();
+        });
         setButtonStyle(getMinDirectCentralityPersonButton);
+        getMinDirectCentralityPersonButton.addActionListener( e -> {
+            getMinDirectCentralityUi();
+        });
         setButtonStyle(getMinIndirectCentralityPersonButton);
+        getMinIndirectCentralityPersonButton.addActionListener (e -> {
+            getMinIndirectCentralityUi();
+        });
         setButtonStyle(getClusteringButton);
+        getClusteringButton.addActionListener( e -> {
+            getClusteringUi();
+        });
+
         setButtonStyle(getDjikstraButton);
+        getDjikstraButton.addActionListener(e -> {
+            getDjikstraUi();
+        });
+
         setButtonStyle(getClosenessCentralityButton);
+        getClosenessCentralityButton.addActionListener( e -> {
+            /// this one is special, not just show list of something
+            getClosenessCentralityUi();
+        });
         setButtonStyle(getKCoreDecompositionButton);
+        getKCoreDecompositionButton.addActionListener( e -> {
+            getKCoreDecompositionUi();
+        });
     }
+
     private void setButtonStyle(JButton b) {
         b.setBackground(BG_COLOR);
         b.setForeground(new Color(255, 255, 255));
@@ -1029,6 +1058,62 @@ public class Ui {
         container.add(botPanel);
         dialog.add(container);
         dialog.setVisible(true);
+    }
+
+    private void getMaxDirectCentralityUi()
+    {
+        showList(handler.handleGetAscendingDirectCentrality(),"Here's the group, in order of popularity:", false);
+    }
+
+    private void getMaxIndirectCentralityUi()
+    {
+        showList(handler.handleGetAscendingIndirectCentrality(),"Here's the group, in order of influence:", false);
+    }
+
+    private void getMinDirectCentralityUi()
+    {
+        HashMap<Integer,String> ascendingList = handler.handleGetAscendingDirectCentrality();
+        HashMap<Integer,String> descendingList = new HashMap<>();
+        ArrayList<String> values = new ArrayList<>(ascendingList.values());
+        Collections.reverse(values);
+        int index = 0;
+        for(Integer key : ascendingList.keySet())
+        {
+            descendingList.put(key,values.get(index++));
+        }
+        showList(descendingList, "Here's the group, in order of unpopularity:", false);
+    }
+
+    private void getMinIndirectCentralityUi()
+    {
+        HashMap<Integer,String> ascendingList = handler.handleGetAscendingIndirectCentrality();
+        HashMap<Integer,String> descendingList = new HashMap<>();
+        ArrayList<String> values = new ArrayList<>(ascendingList.values());
+        Collections.reverse(values);
+        int index = 0;
+        for(Integer key : ascendingList.keySet())
+        {
+            descendingList.put(key,values.get(index++));
+        }
+        showList(descendingList, "Here's the group, in order of irrelevance:", false);
+    }
+
+    private void getClusteringUi()
+    {
+        showList(handler.handleGetClustering(), "Here's the cliques we found:", false);
+    }
+
+    private void getDjikstraUi() {
+        /// this one is special, not just showList of something
+
+    }
+
+    private void getClosenessCentralityUi() {
+        /// this one is special, not just showList of something
+    }
+
+    private void getKCoreDecompositionUi() {
+        showList(handler.handleGetKCoreDecomposition(), "Here's who the og's are:", false);
     }
 
     private Integer showList(HashMap<Integer, String> dataList, String titleText, boolean clickable) {

@@ -212,4 +212,43 @@ public class UiHandler {
         list.put(2, "Mary and Peter");
         return list;
     }
+
+    public HashMap<Integer,String> handleGetAscendingDirectCentrality(){
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, "Top");
+        list.put(2, "Mid");
+        list.put(3, "Bot");
+        return list;
+    }
+
+    public HashMap<Integer,String> handleGetAscendingIndirectCentrality(){
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, "Top");
+        list.put(2, "Mid");
+        list.put(3, "Bot");
+        return list;
+    }
+
+    public HashMap<Integer,String> handleGetClustering(){
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, "Ala, bala and portocala");
+        list.put(2, "Innie, minnie, miny and moe");
+        list.put(3, "Holly, Jolly and Christmas");
+        return list;
+    }
+
+    public HashMap<Integer,String> handleGetKCoreDecomposition()
+    {
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(13,"Mary");
+        list.put(12,"Mark");
+        list.put(11,"Martin");
+        list.put(8,"Marcus");
+        list.put(10,"John");
+        list.put(9,"Peter");
+        list.put(7,"Quarkus");
+        list.put(6,"React");
+        list.put(5,"Angular");
+        return list;
+    }
 }
