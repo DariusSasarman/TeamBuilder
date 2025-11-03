@@ -13,6 +13,14 @@ class Bond {
         this.headId = headId;
         this.tailId = tailId;
         this.rating = rating;
+        if(this.rating <= 0)
+        {
+            this.rating = 1;
+        }
+        if(this.rating >= 11)
+        {
+            this.rating = 10;
+        }
         this.notes = notes;
     }
 
@@ -22,6 +30,14 @@ class Bond {
         this.headId = headId;
         this.tailId = tailId;
         this.rating = rating;
+        if(this.rating <= 0)
+        {
+            this.rating = 1;
+        }
+        if(this.rating >= 11)
+        {
+            this.rating = 10;
+        }
         this.notes = "";
     }
 

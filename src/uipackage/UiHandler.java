@@ -251,4 +251,18 @@ public class UiHandler {
         list.put(5,"Angular");
         return list;
     }
+
+    public HashMap<Integer,String> handleGetDijkstraRoute(int id1, int id2)
+    {
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, this.handleGetPersonName(id1) + " knows " + "(9/10) " + "George");
+        list.put(2, "George" + " knows " + "(7/10) " + "Marcel");
+        list.put(3, "Marcel" + " knows " + "(10/10) " + this.handleGetPersonName(id2));
+        return list;
+    }
+
+    public double handleGetActiveGroupRating()
+    {
+        return 10;
+    }
 }

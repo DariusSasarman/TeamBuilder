@@ -56,7 +56,7 @@ public class Ui {
     private JButton getClosenessCentralityButton;
     private JButton getKCoreDecompositionButton;
 
-    public Ui(UiHandler handler){
+    public Ui(UiHandler handler) {
         this.handler = handler;
         setupPanels();
         setupButtons();
@@ -72,22 +72,19 @@ public class Ui {
         });
     }
 
-    private void setupPanels()
-    {
+    private void setupPanels() {
         generalSettingsButtonPanel.setBackground(BG_COLOR);
         graphActionsButtonPanel.setBackground(BG_COLOR);
         groupSettingsButtonPanel.setBackground(BG_COLOR);
     }
 
-    private void setupButtons()
-    {
+    private void setupButtons() {
         setButtonStyle(addPersonDataButton);
         addPersonDataButton.addActionListener(e -> addPersonUi());
         setButtonStyle(editPersonDataButton);
         editPersonDataButton.addActionListener(e -> {
-            Integer id = showList(handler.handleGetPersonList(),"Here's who you know:",true);
-            if(id != null)
-            {
+            Integer id = showList(handler.handleGetPersonList(), "Here's who you know:", true);
+            if (id != null) {
                 editPersonUi(id);
             }
         });
@@ -95,9 +92,8 @@ public class Ui {
         addBondDataButton.addActionListener(e -> addBondUi());
         setButtonStyle(editBondDataButton);
         editBondDataButton.addActionListener(e -> {
-            Integer id = showList(handler.handleGetBondList(),"Here's who knows who:",true);
-            if(id != null)
-            {
+            Integer id = showList(handler.handleGetBondList(), "Here's who knows who:", true);
+            if (id != null) {
                 editBondUi(id);
             }
         });
@@ -107,9 +103,8 @@ public class Ui {
         });
         setButtonStyle(editGroupDataButton);
         editGroupDataButton.addActionListener(e -> {
-            Integer id = showList(handler.handleGetGroupList(),"Here's who you're taking care of",true);
-            if(id != null)
-            {
+            Integer id = showList(handler.handleGetGroupList(), "Here's who you're taking care of", true);
+            if (id != null) {
                 editGroupUi(id);
             }
         });
@@ -126,44 +121,39 @@ public class Ui {
 
         setButtonStyle(changeCurrentGroupButton);
         changeCurrentGroupButton.addActionListener(e -> {
-            Integer selectedGroupId = showList(handler.handleGetGroupList(), "Who are we working with now?",true);
-            if(selectedGroupId != null)
-            {
+            Integer selectedGroupId = showList(handler.handleGetGroupList(), "Who are we working with now?", true);
+            if (selectedGroupId != null) {
                 changeCurrentGroupUi(selectedGroupId);
             }
         });
 
         setButtonStyle(addPersonToCurrentGroupButton);
         addPersonToCurrentGroupButton.addActionListener(e -> {
-            Integer selectedPersonId = showList(handler.handleGetPeopleNotInCurrentGroup(), "Who joined the crew?",true);
-            if(selectedPersonId != null)
-            {
+            Integer selectedPersonId = showList(handler.handleGetPeopleNotInCurrentGroup(), "Who joined the crew?", true);
+            if (selectedPersonId != null) {
                 addPersonToCurrentGroupUi(selectedPersonId);
             }
         });
 
         setButtonStyle(removePersonFromCurrentGroupButton);
         removePersonFromCurrentGroupButton.addActionListener(e -> {
-            Integer selectedPersonId = showList(handler.handleGetPeopleInCurrentGroup(), "Who left the crew?",true);
-            if(selectedPersonId != null)
-            {
+            Integer selectedPersonId = showList(handler.handleGetPeopleInCurrentGroup(), "Who left the crew?", true);
+            if (selectedPersonId != null) {
                 removePersonFromCurrentGroupUi(selectedPersonId);
             }
         });
 
         setButtonStyle(raiseBondFromCurrentGroupButton);
         raiseBondFromCurrentGroupButton.addActionListener(e -> {
-            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is getting stronger?",true);
-            if(selectedBondId != null)
-            {
+            Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is getting stronger?", true);
+            if (selectedBondId != null) {
                 raiseBondFromCurrentGroupUi(selectedBondId);
             }
         });
         setButtonStyle(lowerBondFromCurrentGroupButton);
         lowerBondFromCurrentGroupButton.addActionListener(e -> {
             Integer selectedBondId = showList(handler.handleGetBondsInCurrentGroup(), "Which bond is weakening?", true);
-            if(selectedBondId != null)
-            {
+            if (selectedBondId != null) {
                 lowerBondFromCurrentGroupUi(selectedBondId);
             }
         });
@@ -177,11 +167,11 @@ public class Ui {
         });
 
         setButtonStyle(generatePartitionsBasedOnCurrentGroupButton);
-        generatePartitionsBasedOnCurrentGroupButton.addActionListener( e -> {
+        generatePartitionsBasedOnCurrentGroupButton.addActionListener(e -> {
             generatePartitionsUi();
         });
         setButtonStyle(getMaxDirectCentralityPersonButton);
-        getMaxDirectCentralityPersonButton.addActionListener( e -> {
+        getMaxDirectCentralityPersonButton.addActionListener(e -> {
             getMaxDirectCentralityUi();
         });
         setButtonStyle(getMaxIndirectCentralityPersonButton);
@@ -189,15 +179,15 @@ public class Ui {
             getMaxIndirectCentralityUi();
         });
         setButtonStyle(getMinDirectCentralityPersonButton);
-        getMinDirectCentralityPersonButton.addActionListener( e -> {
+        getMinDirectCentralityPersonButton.addActionListener(e -> {
             getMinDirectCentralityUi();
         });
         setButtonStyle(getMinIndirectCentralityPersonButton);
-        getMinIndirectCentralityPersonButton.addActionListener (e -> {
+        getMinIndirectCentralityPersonButton.addActionListener(e -> {
             getMinIndirectCentralityUi();
         });
         setButtonStyle(getClusteringButton);
-        getClusteringButton.addActionListener( e -> {
+        getClusteringButton.addActionListener(e -> {
             getClusteringUi();
         });
 
@@ -207,12 +197,11 @@ public class Ui {
         });
 
         setButtonStyle(getClosenessCentralityButton);
-        getClosenessCentralityButton.addActionListener( e -> {
-            /// this one is special, not just show list of something
+        getClosenessCentralityButton.addActionListener(e -> {
             getClosenessCentralityUi();
         });
         setButtonStyle(getKCoreDecompositionButton);
-        getKCoreDecompositionButton.addActionListener( e -> {
+        getKCoreDecompositionButton.addActionListener(e -> {
             getKCoreDecompositionUi();
         });
     }
@@ -225,18 +214,18 @@ public class Ui {
 
     private void addPersonUi() {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(0,0));
-        dialog.setSize(500,300);
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(500, 300);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("Who did you meet?");
         /// LEFT: Image Selection Panel
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.setPreferredSize(new Dimension(180, 180));
         imagePanel.setBackground(BG_COLOR);
-        imagePanel.setForeground(new Color(255,255,255));
-        imagePanel.setBorder(BorderFactory.createTitledBorder( null,"Selected image",0,0,null,new Color(255,255,255)));
+        imagePanel.setForeground(new Color(255, 255, 255));
+        imagePanel.setBorder(BorderFactory.createTitledBorder(null, "Selected image", 0, 0, null, new Color(255, 255, 255)));
         JLabel imageLabel = new JLabel("No Image", SwingConstants.CENTER);
-        imageLabel.setForeground(new Color(255,255,255));
+        imageLabel.setForeground(new Color(255, 255, 255));
         imagePanel.add(imageLabel, BorderLayout.CENTER);
 
         /// Allows the user to pop-up the File-selection pannel
@@ -267,13 +256,13 @@ public class Ui {
 
         JTextField nameField = new JTextField();
         JLabel textNameInput = new JLabel("Name:");
-        textNameInput.setForeground(new Color(255,255,255));
+        textNameInput.setForeground(new Color(255, 255, 255));
         formPanel.add(textNameInput);
         formPanel.add(nameField);
 
         JTextField notesField = new JTextField();
         JLabel textNotesInput = new JLabel("Initial notes:");
-        textNotesInput.setForeground(new Color(255,255,255));
+        textNotesInput.setForeground(new Color(255, 255, 255));
         formPanel.add(textNotesInput);
         formPanel.add(notesField);
 
@@ -290,11 +279,9 @@ public class Ui {
         setButtonStyle(saveButton);
         saveButton.addActionListener(e -> {
             try {
-                handler.handleAddPersonRequest(selectedImage[0],nameField.getText(),notesField.getText());
-            }
-            catch (Exception error)
-            {
-                JOptionPane.showMessageDialog(null,"An error occured :" + error.getMessage());
+                handler.handleAddPersonRequest(selectedImage[0], nameField.getText(), notesField.getText());
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(null, "An error occured :" + error.getMessage());
             }
             dialog.dispose();
         });
@@ -311,22 +298,22 @@ public class Ui {
         return;
     }
 
-    private void addBondUi(){
+    private void addBondUi() {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(0,0));
-        dialog.setSize(500,300);
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(500, 300);
         dialog.setBackground(BG_COLOR);
-        dialog.setForeground(new Color(255,255,255));
+        dialog.setForeground(new Color(255, 255, 255));
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("Who met who?");
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setBackground(BG_COLOR);
-        HashMap<Integer,String> peopleList = handler.handleGetPersonList();
+        HashMap<Integer, String> peopleList = handler.handleGetPersonList();
 
         JPanel idSelect = new JPanel();
         idSelect.setBackground(BG_COLOR);
-        idSelect.setForeground(new Color(255,255,255));
+        idSelect.setForeground(new Color(255, 255, 255));
         JComboBox<String> dropdown1 = new JComboBox<>(peopleList.values().toArray(new String[peopleList.size()]));
         Font largeFont = new Font(dropdown1.getFont().getName(), Font.PLAIN, 20);
         dropdown1.setFont(largeFont);
@@ -334,33 +321,33 @@ public class Ui {
         dropdown2.setFont(largeFont);
         JLabel metText = new JLabel("met");
         metText.setFont(largeFont);
-        metText.setForeground(new Color(255,255,255));
+        metText.setForeground(new Color(255, 255, 255));
         idSelect.add(dropdown1);
         idSelect.add(metText);
         idSelect.add(dropdown2);
 
         JPanel ratingSelect = new JPanel();
         ratingSelect.setBackground(BG_COLOR);
-        ratingSelect.setForeground(new Color(255,255,255));
-        ratingSelect.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
+        ratingSelect.setForeground(new Color(255, 255, 255));
+        ratingSelect.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         JLabel ratingIntroWriting = new JLabel("Initial bond rating (out of 10):");
         ratingIntroWriting.setFont(largeFont);
-        ratingIntroWriting.setForeground(new Color(255,255,255));
+        ratingIntroWriting.setForeground(new Color(255, 255, 255));
         JComboBox<Integer> dropdown3 = new JComboBox<>();
         dropdown3.setFont(largeFont);
-        for(int i = 1; i<=10; i++)
-        {
+        for (int i = 1; i <= 10; i++) {
             dropdown3.addItem(i);
-        };
+        }
+        ;
         ratingSelect.add(ratingIntroWriting);
         ratingSelect.add(dropdown3);
 
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBackground(BG_COLOR);
-        buttonsPanel.setForeground(new Color(255,255,255));
+        buttonsPanel.setForeground(new Color(255, 255, 255));
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener( e -> {
+        cancelButton.addActionListener(e -> {
             dialog.dispose();
         });
         setButtonStyle(cancelButton);
@@ -383,17 +370,14 @@ public class Ui {
                 if (id1 == null || id2 == null) {
                     throw new Exception("Could not find IDs for selected people.");
                 }
-                if (id1 == id2)
-                {
+                if (id1 == id2) {
                     throw new Exception("People already know themselves.");
                 }
 
                 Integer rating = (Integer) dropdown3.getSelectedItem();
-                handler.handleAddBondRequest(id1,id2,rating);
+                handler.handleAddBondRequest(id1, id2, rating);
                 dialog.dispose();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "Error saving bond: " + ex.getMessage());
             }
         });
@@ -416,8 +400,8 @@ public class Ui {
 
     private void addGroupUi() {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(0,0));
-        dialog.setSize(500,400);
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(500, 400);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("So who are we talking about");
         dialog.setBackground(BG_COLOR);
@@ -523,18 +507,18 @@ public class Ui {
 
     private void editPersonUi(int id) {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(0,0));
-        dialog.setSize(500,300);
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(500, 300);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("So what's new about them?");
         /// LEFT: Image Selection Panel
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.setPreferredSize(new Dimension(180, 180));
         imagePanel.setBackground(BG_COLOR);
-        imagePanel.setForeground(new Color(255,255,255));
-        imagePanel.setBorder(BorderFactory.createTitledBorder( null,"Selected image",0,0,null,new Color(255,255,255)));
+        imagePanel.setForeground(new Color(255, 255, 255));
+        imagePanel.setBorder(BorderFactory.createTitledBorder(null, "Selected image", 0, 0, null, new Color(255, 255, 255)));
         JLabel imageLabel = new JLabel("No Image", SwingConstants.CENTER);
-        imageLabel.setForeground(new Color(255,255,255));
+        imageLabel.setForeground(new Color(255, 255, 255));
         imagePanel.add(imageLabel, BorderLayout.CENTER);
 
         /// Allows the user to pop-up the File-selection pannel
@@ -566,14 +550,14 @@ public class Ui {
 
         JTextField nameField = new JTextField();
         JLabel textNameInput = new JLabel("Name:");
-        textNameInput.setForeground(new Color(255,255,255));
+        textNameInput.setForeground(new Color(255, 255, 255));
         nameField.setText(handler.handleGetPersonName(id));
         formPanel.add(textNameInput);
         formPanel.add(nameField);
 
         JTextField notesField = new JTextField();
         JLabel textNotesInput = new JLabel("Notes:");
-        textNotesInput.setForeground(new Color(255,255,255));
+        textNotesInput.setForeground(new Color(255, 255, 255));
         notesField.setText(handler.handleGetPersonNotes(id));
         formPanel.add(textNotesInput);
         formPanel.add(notesField);
@@ -591,11 +575,9 @@ public class Ui {
         setButtonStyle(saveButton);
         saveButton.addActionListener(e -> {
             try {
-                handler.handleEditPersonRequest(id,selectedImage[0],nameField.getText(),notesField.getText());
-            }
-            catch (Exception error)
-            {
-                JOptionPane.showMessageDialog(null,"An error occured :" + error.getMessage());
+                handler.handleEditPersonRequest(id, selectedImage[0], nameField.getText(), notesField.getText());
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(null, "An error occured :" + error.getMessage());
             }
             dialog.dispose();
         });
@@ -635,8 +617,8 @@ public class Ui {
 
     private void editBondUi(int id) {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(0,0));
-        dialog.setSize(600,350);
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(600, 350);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("How are things between them?");
         dialog.setBackground(BG_COLOR);
@@ -683,7 +665,7 @@ public class Ui {
 
         JComboBox<Integer> ratingDropdown = new JComboBox<>();
         ratingDropdown.setFont(mediumFont);
-        for(int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             ratingDropdown.addItem(i);
         }
         ratingDropdown.setSelectedItem(currentRating);
@@ -759,8 +741,8 @@ public class Ui {
 
     private void editGroupUi(int id) {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(0,0));
-        dialog.setSize(500,450);
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(500, 450);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("Who's in this crew?");
         dialog.setBackground(BG_COLOR);
@@ -986,6 +968,7 @@ public class Ui {
     private void raiseAllBondsFromCurrentGroupUi() {
         try {
             handler.handleRaiseAllBondsInCurrentGroup();
+            JOptionPane.showMessageDialog(null, "Raised all bonds by 1/10!");
             graphArea.repaint();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error raising bonds: " + ex.getMessage());
@@ -995,6 +978,7 @@ public class Ui {
     private void lowerAllBondsFromCurrentGroupUi() {
         try {
             handler.handleLowerAllBondsInCurrentGroup();
+            JOptionPane.showMessageDialog(null, "Lowered all bonds by 1/10!");
             graphArea.repaint();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error lowering bonds: " + ex.getMessage());
@@ -1003,8 +987,8 @@ public class Ui {
 
     private void generatePartitionsUi() {
         JDialog dialog = new JDialog();
-        dialog.setLayout(new BorderLayout(10,10));
-        dialog.setSize(700,350);
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.setSize(700, 350);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("How many groups should be in this activity?");
 
@@ -1018,17 +1002,16 @@ public class Ui {
         topPanel.setForeground(BG_COLOR);
 
         JLabel textLabel = new JLabel("Pick how many groups are in this activity:");
-        textLabel.setFont(new Font("Dialog",Font.BOLD,25));
-        textLabel.setForeground(new Color(255,255,255));
+        textLabel.setFont(new Font("Dialog", Font.BOLD, 25));
+        textLabel.setForeground(new Color(255, 255, 255));
         topPanel.add(textLabel);
 
         JComboBox<Integer> options = new JComboBox<>();
         int count = handler.handleGetPeopleInCurrentGroup().size();
-        for(int i = 2; i <= count; i++)
-        {
+        for (int i = 2; i <= count; i++) {
             options.addItem(i);
         }
-        options.setFont(new Font("Dialog",Font.BOLD,32));
+        options.setFont(new Font("Dialog", Font.BOLD, 32));
         topPanel.add(options);
 
         JPanel botPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -1037,19 +1020,23 @@ public class Ui {
 
         JButton cancelButton = new JButton("Cancel");
         setButtonStyle(cancelButton);
-        cancelButton.setFont(new Font("Dialog", Font.BOLD,42));
-        cancelButton.addActionListener( e -> {
+        cancelButton.setFont(new Font("Dialog", Font.BOLD, 42));
+        cancelButton.addActionListener(e -> {
             dialog.dispose();
         });
         botPanel.add(cancelButton);
 
         JButton runButton = new JButton("Let's see the groups");
         setButtonStyle(runButton);
-        runButton.setForeground(new Color(50,255,50));
-        runButton.setFont(new Font("Dialog", Font.BOLD,42));
-        runButton.addActionListener( e -> {
+        runButton.setForeground(new Color(50, 255, 50));
+        runButton.setFont(new Font("Dialog", Font.BOLD, 42));
+        runButton.addActionListener(e -> {
             Integer groupCount = options.getItemAt(options.getSelectedIndex());
-            showList(handler.handleGetActiveGroupPartitions(groupCount), "Here are the groups:",false);
+            try {
+                showList(handler.handleGetActiveGroupPartitions(groupCount), "Here are the groups:", false);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error getting the groups:" + ex.getMessage());
+            }
             dialog.dispose();
         });
         botPanel.add(runButton);
@@ -1060,56 +1047,211 @@ public class Ui {
         dialog.setVisible(true);
     }
 
-    private void getMaxDirectCentralityUi()
-    {
-        showList(handler.handleGetAscendingDirectCentrality(),"Here's the group, in order of popularity:", false);
+    private void getMaxDirectCentralityUi() {
+        try {
+            showList(handler.handleGetAscendingDirectCentrality(), "Here's the group, in order of popularity:", false);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error getting the list:" + ex.getMessage());
+        }
     }
 
-    private void getMaxIndirectCentralityUi()
-    {
-        showList(handler.handleGetAscendingIndirectCentrality(),"Here's the group, in order of influence:", false);
+    private void getMaxIndirectCentralityUi() {
+        try {
+            showList(handler.handleGetAscendingIndirectCentrality(), "Here's the group, in order of influence:", false);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error getting the list:" + ex.getMessage());
+        }
     }
 
-    private void getMinDirectCentralityUi()
-    {
-        HashMap<Integer,String> ascendingList = handler.handleGetAscendingDirectCentrality();
-        HashMap<Integer,String> descendingList = new HashMap<>();
+    private void getMinDirectCentralityUi() {
+        HashMap<Integer, String> ascendingList = handler.handleGetAscendingDirectCentrality();
+        HashMap<Integer, String> descendingList = new HashMap<>();
         ArrayList<String> values = new ArrayList<>(ascendingList.values());
         Collections.reverse(values);
         int index = 0;
-        for(Integer key : ascendingList.keySet())
-        {
-            descendingList.put(key,values.get(index++));
+        for (Integer key : ascendingList.keySet()) {
+            descendingList.put(key, values.get(index++));
         }
-        showList(descendingList, "Here's the group, in order of unpopularity:", false);
+
+        try {
+            showList(descendingList, "Here's the group, in order of unpopularity:", false);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error getting the list:" + ex.getMessage());
+        }
     }
 
-    private void getMinIndirectCentralityUi()
-    {
-        HashMap<Integer,String> ascendingList = handler.handleGetAscendingIndirectCentrality();
-        HashMap<Integer,String> descendingList = new HashMap<>();
+    private void getMinIndirectCentralityUi() {
+        HashMap<Integer, String> ascendingList = handler.handleGetAscendingIndirectCentrality();
+        HashMap<Integer, String> descendingList = new HashMap<>();
         ArrayList<String> values = new ArrayList<>(ascendingList.values());
         Collections.reverse(values);
         int index = 0;
-        for(Integer key : ascendingList.keySet())
-        {
-            descendingList.put(key,values.get(index++));
+        for (Integer key : ascendingList.keySet()) {
+            descendingList.put(key, values.get(index++));
         }
-        showList(descendingList, "Here's the group, in order of irrelevance:", false);
+
+        try {
+            showList(descendingList, "Here's the group, in order of irrelevance:", false);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error getting the list:" + ex.getMessage());
+        }
     }
 
-    private void getClusteringUi()
-    {
-        showList(handler.handleGetClustering(), "Here's the cliques we found:", false);
+    private void getClusteringUi() {
+        try {
+            showList(handler.handleGetClustering(), "Here's the cliques we found:", false);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error getting clustering:" + ex.getMessage());
+        }
     }
 
     private void getDjikstraUi() {
-        /// this one is special, not just showList of something
+        JDialog dialog = new JDialog();
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(500, 300);
+        dialog.setBackground(BG_COLOR);
+        dialog.setForeground(new Color(255, 255, 255));
+        dialog.setLocationRelativeTo(null);
+        dialog.setTitle("Who should meet who?");
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setBackground(BG_COLOR);
+        HashMap<Integer, String> peopleList = handler.handleGetPersonList();
+
+        JLabel prefixText = new JLabel("I want ");
+        Font largeFont = new Font(prefixText.getFont().getName(), Font.PLAIN, 20);
+        prefixText.setForeground(new Color(255, 255, 255));
+        prefixText.setFont(largeFont);
+        JPanel idSelect = new JPanel();
+        idSelect.setBackground(BG_COLOR);
+        idSelect.setForeground(new Color(255, 255, 255));
+        JComboBox<String> dropdown1 = new JComboBox<>(peopleList.values().toArray(new String[peopleList.size()]));
+        dropdown1.setFont(largeFont);
+        JComboBox<String> dropdown2 = new JComboBox<>(peopleList.values().toArray(new String[peopleList.size()]));
+        dropdown2.setFont(largeFont);
+        JLabel metText = new JLabel("to meet");
+        metText.setFont(largeFont);
+        metText.setForeground(new Color(255, 255, 255));
+        idSelect.add(prefixText);
+        idSelect.add(dropdown1);
+        idSelect.add(metText);
+        idSelect.add(dropdown2);
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setBackground(BG_COLOR);
+        buttonsPanel.setForeground(new Color(255, 255, 255));
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(e -> {
+            dialog.dispose();
+        });
+        setButtonStyle(cancelButton);
+        cancelButton.setFont(largeFont);
+
+        JButton saveButton = new JButton("Show me how");
+        saveButton.addActionListener(e -> {
+            try {
+                String name1 = (String) dropdown1.getSelectedItem();
+                String name2 = (String) dropdown2.getSelectedItem();
+
+                // Get corresponding IDs by searching the HashMap
+                Integer id1 = null;
+                Integer id2 = null;
+                for (HashMap.Entry<Integer, String> entry : peopleList.entrySet()) {
+                    if (entry.getValue().equals(name1)) id1 = entry.getKey();
+                    if (entry.getValue().equals(name2)) id2 = entry.getKey();
+                }
+
+                if (id1 == null || id2 == null) {
+                    throw new Exception("Could not find IDs for selected people.");
+                }
+                if (id1 == id2) {
+                    throw new Exception("People already know themselves.");
+                }
+                HashMap<Integer, String> list = handler.handleGetDijkstraRoute(id1, id2);
+                if (list.values().size() == 0) {
+                    JOptionPane.showMessageDialog(dialog, "They should meet directly.");
+                } else {
+                    showList(list, "Here's how the two could meet:", false);
+                }
+                dialog.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Error finding route: " + ex.getMessage());
+            }
+        });
+        setButtonStyle(saveButton);
+        saveButton.setFont(largeFont);
+
+        buttonsPanel.add(cancelButton);
+        buttonsPanel.add(saveButton);
+
+        container.add(Box.createVerticalGlue());
+        container.add(idSelect);
+        container.add(Box.createVerticalStrut(10));
+        container.add(buttonsPanel);
+        container.add(Box.createVerticalGlue());
+        dialog.add(container);
+        dialog.setVisible(true);
 
     }
 
     private void getClosenessCentralityUi() {
-        /// this one is special, not just showList of something
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Group Rating");
+        dialog.setModal(true);
+        dialog.setSize(400, 150);
+
+        JPanel container = new JPanel();
+        container.setBackground(BG_COLOR);
+        container.setForeground(Color.WHITE);
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JPanel topPanel = new JPanel();
+        topPanel.setBackground(BG_COLOR);
+        JLabel explanationText = new JLabel("On a scale of 1 to 10, your group would be a ");
+        Font largeFont = new Font(explanationText.getFont().getName(), Font.PLAIN, 40);
+        explanationText.setFont(largeFont);
+        explanationText.setForeground(Color.WHITE);
+        topPanel.add(explanationText);
+
+        JPanel botPanel = new JPanel();
+        botPanel.setBackground(BG_COLOR);
+
+        double rating = -1;
+        try {
+            rating = handler.handleGetActiveGroupRating();
+        }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(dialog, "Error finding route: " + ex.getMessage());
+        }
+
+        String displayedRating;
+        Color ratingColor;
+
+        if(rating < 0) {
+            displayedRating = "???";
+            ratingColor = Color.GRAY;
+        }
+        else
+        {
+            displayedRating = String.format("%.1f", rating);
+            ratingColor = new Color((int) ((10 - rating)*235/10), (int) (rating * 235/10), 0);
+        }
+
+        JLabel ratingLabel = new JLabel(displayedRating + "/10");
+        ratingLabel.setFont(largeFont);
+        ratingLabel.setForeground(ratingColor);
+        botPanel.add(ratingLabel);
+
+        container.add(topPanel);
+        container.add(Box.createVerticalStrut(10));
+        container.add(botPanel);
+
+        dialog.add(container);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
 
     private void getKCoreDecompositionUi() {
@@ -1150,7 +1292,7 @@ public class Ui {
             int width = 700;
             textArea.setSize(new Dimension(width, Integer.MAX_VALUE));
             Dimension d = textArea.getPreferredSize();
-            textArea.setPreferredSize(new Dimension(width, d.height + 20 ));
+            textArea.setPreferredSize(new Dimension(width, d.height + 20));
 
             JPanel wrapper = new JPanel(new BorderLayout());
             wrapper.setOpaque(true);
@@ -1165,7 +1307,7 @@ public class Ui {
                 textArea.setForeground(Color.LIGHT_GRAY);
             }
             textArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            wrapper.add(textArea,BorderLayout.CENTER);
+            wrapper.add(textArea, BorderLayout.CENTER);
             return wrapper;
         });
 
