@@ -2,11 +2,13 @@ package uipackage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URL;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,6 +65,8 @@ public class Ui {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("TeamBuilder");
             frame.setBackground(BG_COLOR);
+            ImageIcon img = new ImageIcon("/icons/icon_15.png");
+            frame.setIconImage(img.getImage());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(this.contentPanel);
             frame.pack();
@@ -1264,6 +1268,7 @@ public class Ui {
         dialog.setSize(800, 500);
         dialog.setLocationRelativeTo(null);
         dialog.setBackground(BG_COLOR);
+        dialog.setForeground(BG_COLOR);
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 15));
         titlePanel.setBackground(BG_COLOR);
@@ -1278,9 +1283,11 @@ public class Ui {
         }
 
         JList<Integer> displayList = new JList<>(listModel);
+        displayList.setBackground(BG_COLOR);
         displayList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
             String text = dataList.get(value);
             JTextArea textArea = new JTextArea(text);
+            Border border = BorderFactory.createLineBorder(Color.WHITE);
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
             textArea.setEditable(false);
@@ -1306,7 +1313,8 @@ public class Ui {
                 wrapper.setBackground(BG_COLOR);
                 textArea.setForeground(Color.LIGHT_GRAY);
             }
-            textArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            textArea.setBorder(BorderFactory.createCompoundBorder(border,
+                    BorderFactory.createEmptyBorder(10, 10, 10, 10)));
             wrapper.add(textArea, BorderLayout.CENTER);
             return wrapper;
         });
