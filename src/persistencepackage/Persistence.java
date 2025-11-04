@@ -11,7 +11,7 @@ public class Persistence {
     private static int nextPersonUID = 0;
 
     public Persistence() {
-        /// QUERY DB FOR ALL ITEMS
+        /// TODO: FIGURE OUT HOW TO STORE THE DATABASE CONNECTION
         queryDB();
     }
 
@@ -23,6 +23,7 @@ public class Persistence {
 
     private static void queryDB()
     {
+        /// TODO: QUERY DB TO CAPTURE EXISTING DATA
         System.out.println("Calling Database Connection...");
         new PersistenceManager();
     }
