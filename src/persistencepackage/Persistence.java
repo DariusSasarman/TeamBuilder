@@ -1,29 +1,37 @@
 package persistencepackage;
 
+import datapackage.PersistenceManager;
+
 public class Persistence {
 
-    public void recieveRequest(String request)
-    {
+    /**
+     * ALL INTERACTIONS WITH DATABASE ARE DONE HERE
+     */
 
+    private static int nextPersonUID = 0;
+
+    public Persistence() {
+        /// QUERY DB FOR ALL ITEMS
+        queryDB();
     }
 
-    private void createRequest(String request)
+    private static void queryDBforNextPersonUID()
     {
-
+        /// TODO: QUERY DB FOR THE NEXT PERSON UI
+        nextPersonUID++;
     }
 
-    private void readRequest(String request)
+    private static void queryDB()
     {
-
+        System.out.println("Calling Database Connection...");
+        new PersistenceManager();
     }
 
-    private void updateRequest(String request)
+    public static int getNextPersonUID()
     {
-
+        int returnValue = nextPersonUID;
+        queryDBforNextPersonUID();
+        return returnValue;
     }
 
-    private void deleteRequest(String request)
-    {
-        
-    }
 }

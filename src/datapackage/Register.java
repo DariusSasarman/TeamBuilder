@@ -1,11 +1,8 @@
 package datapackage;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collections;
 
-import uipackage.Graph;
 
 class Register {
     protected static ArrayList<Person> peopleList = new ArrayList<>();
@@ -13,34 +10,12 @@ class Register {
     protected static ArrayList<Bond> bondList = new ArrayList<>();
     protected static int activeGroupId;
 
-    protected static int binarySearch (int ind)
+    /**
+     *  ALL INTERACTIONS WITH ARRAYLISTS ARE DONE HERE
+     */
+
+    protected static void addPerson(Person newcomer)
     {
-        /// TODO
-        return 0;
+        peopleList.add(newcomer);
     }
-
-    protected static int getActiveGroupId() {
-        return activeGroupId;
-    }
-
-    protected static void setActiveGroupId(int newActiveGroupId) {
-            boolean exists = false;
-            /// TODO: replace with binarySearch
-            for(Group g : groupList)
-            {
-                if (g.getGroupId() == newActiveGroupId)
-                {
-                    exists = true;
-                }
-            }
-            if (exists)
-            {
-                activeGroupId = newActiveGroupId;
-            }
-            else
-            {
-                throw new IllegalArgumentException("There's no such group");
-            }
-    }
-
 }

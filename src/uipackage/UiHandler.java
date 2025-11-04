@@ -1,5 +1,7 @@
 package uipackage;
 
+import datapackage.UiManager;
+
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -8,10 +10,14 @@ import java.util.Map;
 
 public class UiHandler {
 
+    public UiHandler()
+    {
+        new UiManager();
+    }
     /// Person settings
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
-        /// TODO: Register
+        UiManager.addPersonToRegister(img,name,notes);
     }
 
     public void handleDeletePersonRequest(int id) {
