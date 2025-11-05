@@ -28,11 +28,19 @@ class Register {
 
     protected static void addPerson(Person newcomer)
     {
+        if(peopleList.get(newcomer.getId()) != null)
+        {
+            throw new RuntimeException("Person ID already exists.");
+        }
         peopleList.put(newcomer.getId(),newcomer);
     }
 
     protected static void deletePerson(Person deserter)
     {
+        if(peopleList.get(deserter.getId()) == null)
+        {
+            return;
+        }
         peopleList.remove(deserter.getId());
     }
 }
