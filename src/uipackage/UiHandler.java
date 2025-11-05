@@ -31,17 +31,17 @@ public class UiHandler {
 
     public String handleGetPersonName(int id)
     {
-        return new String("Yeah");
+        return UiManager.getPersonName(id);
     }
 
     public String handleGetPersonNotes(int id)
     {
-        return new String("Notes");
+        return UiManager.getPersonNotes(id);
     }
 
     public BufferedImage handleGetPersonImage(int id)
     {
-        return new BufferedImage(100,100,1);
+        return UiManager.getPersonImage(id);
     }
 
     public HashMap<Integer, String> handleGetPersonList()

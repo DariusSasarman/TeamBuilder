@@ -7,9 +7,9 @@ import java.util.HashMap;
 
 
 class Register {
-    private static HashMap<Integer,Person> peopleList = new HashMap<>();
-    private static HashMap<Integer,Group> groupList = new HashMap<>();
-    private static HashMap<Integer,Bond> bondList = new HashMap<>();
+    private static HashMap<Integer,Person> peopleList = new HashMap<Integer,Person>();
+    private static HashMap<Integer,Group> groupList = new HashMap<Integer,Group>();
+    private static HashMap<Integer,Bond> bondList = new HashMap<Integer,Bond>();
     private static int activeGroupId;
 
     /**
@@ -21,6 +21,7 @@ class Register {
         Person searched = peopleList.get(id);
         if(searched == null)
         {
+            /// TODO: Query DB to check if it exists??
             throw new RuntimeException("Person does not exist in memory");
         }
         return searched;
