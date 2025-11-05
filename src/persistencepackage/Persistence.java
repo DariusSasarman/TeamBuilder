@@ -2,6 +2,8 @@ package persistencepackage;
 
 import datapackage.PersistenceManager;
 
+import java.awt.image.BufferedImage;
+
 public class Persistence {
 
     /**
@@ -35,4 +37,13 @@ public class Persistence {
         return returnValue;
     }
 
+    public static void createPersonOnDb(int id, BufferedImage image, String name, String notes)
+    {
+        /// TODO: Query DB for CRUD create Operation
+    }
+
+    public static void deletePersonOnDb(int id)
+    {
+        /// TODO: Query DB for CRUD delete Operation
+    }
 }

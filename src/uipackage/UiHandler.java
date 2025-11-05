@@ -17,11 +17,11 @@ public class UiHandler {
     /// Person settings
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
-        UiManager.addPersonToRegister(img,name,notes);
+        UiManager.addPerson(img,name,notes);
     }
 
     public void handleDeletePersonRequest(int id) {
-        // TODO: Remove person from data (and their bonds)
+        UiManager.deletePerson(id);
     }
 
     public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes)

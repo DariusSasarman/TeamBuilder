@@ -10,9 +10,17 @@ public class UiManager extends Register{
      *  ALL INTERACTIONS WITH UIPACKAGE ARE HANDLED HERE
      */
 
-    public static void addPersonToRegister(BufferedImage img, String name, String notes)
+    public static void addPerson(BufferedImage img, String name, String notes)
     {
         Person newcomer = new Person(PersistenceManager.getNewPersonId(),img,name,notes);
-        addPerson(newcomer);
+        PersistenceManager.rememberPerson(newcomer);
+        Register.addPerson(newcomer);
+    }
+
+    public static void deletePerson(int id)
+    {
+        Person deserter = getPerson(id);
+        PersistenceManager.forgetPerson(deserter);
+        Register.deletePerson(deserter);
     }
 }

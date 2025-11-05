@@ -15,4 +15,14 @@ public class PersistenceManager extends Register {
     {
         return Persistence.getNextPersonUID();
     }
+
+    public static void rememberPerson(Person p)
+    {
+        Persistence.createPersonOnDb(p.getId(),p.getImage(),p.getName(),p.getNotes());
+    }
+
+    public static void forgetPerson(Person p)
+    {
+        Persistence.deletePersonOnDb(p.getId());
+    }
 }
