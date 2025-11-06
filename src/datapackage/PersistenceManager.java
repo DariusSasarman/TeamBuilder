@@ -21,8 +21,22 @@ public class PersistenceManager extends Register {
         Persistence.createPersonOnDb(p.getId(),p.getImage(),p.getName(),p.getNotes());
     }
 
-    public static void forgetPerson(Person p)
+    public static void forgetPerson(int id)
     {
-        Persistence.deletePersonOnDb(p.getId());
+        Persistence.deletePersonOnDb(id);
+    }
+
+    public static void revisePersonName(int id, String name)
+    {
+        Persistence.updatePersonName(id,name);
+    }
+
+    public static void revisePersonNotes(int id, String notes)
+    {
+        Persistence.updatePersonNotes(id,notes);
+    }
+    public static void revisePersonImage(int id, BufferedImage image)
+    {
+        Persistence.updatePersonImage(id,image);
     }
 }

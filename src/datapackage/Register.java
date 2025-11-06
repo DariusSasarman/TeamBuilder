@@ -1,6 +1,7 @@
 package datapackage;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,10 +19,10 @@ class Register {
 
     protected static Person getPerson(int id)
     {
+        /// Assum all data is loaded
         Person searched = peopleList.get(id);
         if(searched == null)
         {
-            /// TODO: Query DB to check if it exists??
             throw new RuntimeException("Person does not exist in memory");
         }
         return searched;
@@ -36,12 +37,23 @@ class Register {
         peopleList.put(newcomer.getId(),newcomer);
     }
 
-    protected static void deletePerson(Person deserter)
+    protected static void deletePerson(int id)
     {
-        if(peopleList.get(deserter.getId()) == null)
-        {
-            return;
-        }
-        peopleList.remove(deserter.getId());
+        peopleList.remove(getPerson(id).getId());
+    }
+
+    protected static void setPersonName(int id, String newName)
+    {
+        peopleList.get(id).setName(newName);
+    }
+
+    protected static void setPersonNotes(int id, String newNotes)
+    {
+        peopleList.get(id).setName(newNotes);
+    }
+
+    protected static void setPersonImage(int id, BufferedImage newImage)
+    {
+        peopleList.get(id).setImage(newImage);
     }
 }

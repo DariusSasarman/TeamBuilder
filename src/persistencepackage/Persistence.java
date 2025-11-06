@@ -28,6 +28,7 @@ public class Persistence {
         /// TODO: QUERY DB TO CAPTURE EXISTING DATA
         System.out.println("Calling Database Connection...");
         new PersistenceManager();
+        System.out.println("Done! Information loaded.");
     }
 
     public static int getNextPersonUID()
@@ -45,5 +46,20 @@ public class Persistence {
     public static void deletePersonOnDb(int id)
     {
         /// TODO: Query DB for CRUD delete Operation
+    }
+
+    public static void updatePersonName(int id, String newName)
+    {
+        /// TODO: Query DB for CRUD update Operation
+    }
+
+    public static void updatePersonNotes(int id, String newNotes)
+    {
+        /// TODO: Query DB for CRUD update Operation
+    }
+
+    public static void updatePersonImage(int id, BufferedImage newImage)
+    {
+        /// TODO: Query DB for CRUD update Operation
     }
 }

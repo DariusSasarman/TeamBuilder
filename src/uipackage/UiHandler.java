@@ -14,6 +14,7 @@ public class UiHandler {
     {
         new UiManager();
     }
+
     /// Person settings
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
@@ -26,7 +27,18 @@ public class UiHandler {
 
     public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes)
     {
-        /// TODO: Register
+        if(!handleGetPersonName(id).equals(name))
+        {
+            UiManager.editPersonName(id,name);
+        }
+        if(!handleGetPersonNotes(id).equals(notes))
+        {
+            UiManager.editPersonNotes(id,notes);
+        }
+        if(!handleGetPersonImage(id).equals(img))
+        {
+            UiManager.editPersonImage(id,img);
+        }
     }
 
     public String handleGetPersonName(int id)

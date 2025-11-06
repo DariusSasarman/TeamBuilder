@@ -19,26 +19,40 @@ public class UiManager extends Register{
 
     public static void deletePerson(int id)
     {
-        Person deserter = getPerson(id);
-        PersistenceManager.forgetPerson(deserter);
-        Register.deletePerson(deserter);
+        PersistenceManager.forgetPerson(id);
+        Register.deletePerson(id);
     }
 
     public static String getPersonName(int id)
     {
-        Person unnamed = Register.getPerson(id);
-        return unnamed.getName();
+        return Register.getPerson(id).getName();
     }
 
     public static String getPersonNotes(int id)
     {
-        Person checked = Register.getPerson(id);
-        return checked.getNotes();
+        return Register.getPerson(id).getNotes();
     }
 
     public static BufferedImage getPersonImage(int id)
     {
-        Person unmasked = Register.getPerson(id);
-        return unmasked.getImage();
+        return Register.getPerson(id).getImage();
+    }
+
+    public static void editPersonName(int id, String newName)
+    {
+        PersistenceManager.revisePersonName(id,newName);
+        Register.setPersonName(id,newName);
+    }
+
+    public static void editPersonNotes(int id, String newNotes)
+    {
+        PersistenceManager.revisePersonNotes(id,newNotes);
+        Register.setPersonNotes(id,newNotes);
+    }
+
+    public static void editPersonImage(int id, BufferedImage newImage)
+    {
+        PersistenceManager.revisePersonImage(id,newImage);
+        Register.setPersonImage(id, newImage);
     }
 }
