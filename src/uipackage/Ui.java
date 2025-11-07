@@ -233,7 +233,7 @@ public class Ui {
         imagePanel.add(imageLabel, BorderLayout.CENTER);
 
         /// Allows the user to pop-up the File-selection pannel
-        final BufferedImage[] selectedImage = new BufferedImage[1];
+        BufferedImage[] selectedImage = new BufferedImage[1];
         JButton selectImageButton = new JButton("Select Image");
         setButtonStyle(selectImageButton);
         selectImageButton.addActionListener(e -> {
@@ -526,8 +526,13 @@ public class Ui {
         imagePanel.add(imageLabel, BorderLayout.CENTER);
 
         /// Allows the user to pop-up the File-selection pannel
-        final BufferedImage[] selectedImage = new BufferedImage[1];
+        BufferedImage[] selectedImage = new BufferedImage[1];
         selectedImage[0] = handler.handleGetPersonImage(id);
+        if (selectedImage[0] != null) {
+            Image scaled = selectedImage[0].getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            imageLabel.setIcon(new ImageIcon(scaled));
+            imageLabel.setText(null);
+        }
         JButton selectImageButton = new JButton("Select Image");
         setButtonStyle(selectImageButton);
         selectImageButton.addActionListener(e -> {

@@ -35,7 +35,7 @@ public class UiHandler {
         {
             UiManager.editPersonNotes(id,notes);
         }
-        if(!handleGetPersonImage(id).equals(img))
+        if(img != null)
         {
             UiManager.editPersonImage(id,img);
         }
@@ -58,17 +58,7 @@ public class UiHandler {
 
     public HashMap<Integer, String> handleGetPersonList()
     {
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(13,"Mary");
-        list.put(12,"Mark");
-        list.put(11,"Martin");
-        list.put(8,"Marcus");
-        list.put(10,"John");
-        list.put(9,"Peter");
-        list.put(7,"Quarkus");
-        list.put(6,"React");
-        list.put(5,"Angular");
-        return list;
+        return UiManager.getPersonList();
     }
 
     /// Bond settings

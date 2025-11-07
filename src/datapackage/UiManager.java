@@ -2,6 +2,8 @@ package datapackage;
 
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+
 import uipackage.Graph;
 
 public class UiManager extends Register{
@@ -36,6 +38,11 @@ public class UiManager extends Register{
     public static BufferedImage getPersonImage(int id)
     {
         return Register.getPerson(id).getImage();
+    }
+
+    public static HashMap<Integer, String> getPersonList()
+    {
+        return Register.getPersonList();
     }
 
     public static void editPersonName(int id, String newName)

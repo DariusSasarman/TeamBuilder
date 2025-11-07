@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 
 class Register {
@@ -28,6 +29,16 @@ class Register {
         return searched;
     }
 
+    protected static HashMap<Integer, String> getPersonList()
+    {
+        HashMap<Integer,String> returnedList = new HashMap<>();
+        for(HashMap.Entry<Integer,Person> entry : peopleList.entrySet())
+        {
+            returnedList.put(entry.getKey(),entry.getValue().getName());
+        }
+        return returnedList;
+    }
+
     protected static void addPerson(Person newcomer)
     {
         if(peopleList.get(newcomer.getId()) != null)
@@ -49,7 +60,7 @@ class Register {
 
     protected static void setPersonNotes(int id, String newNotes)
     {
-        peopleList.get(id).setName(newNotes);
+        peopleList.get(id).setNotes(newNotes);
     }
 
     protected static void setPersonImage(int id, BufferedImage newImage)
