@@ -4,14 +4,14 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 
-class Model {
+public class Model {
     private static HashMap<Integer,Person> peopleList = new HashMap<Integer,Person>();
     private static HashMap<Integer,Group> groupList = new HashMap<Integer,Group>();
     private static HashMap<Integer,Bond> bondList = new HashMap<Integer,Bond>();
     private static int activeGroupId;
 
 
-    public Person getPerson(int id)
+    public static Person getPerson(int id)
     {
         Person searched = peopleList.get(id);
         if(searched == null)
@@ -21,7 +21,7 @@ class Model {
         return searched;
     }
 
-    public HashMap<Integer, String> getPersonList()
+    public static HashMap<Integer, String> getPersonList()
     {
         HashMap<Integer,String> returnedList = new HashMap<>();
         for(HashMap.Entry<Integer,Person> entry : peopleList.entrySet())
@@ -31,7 +31,7 @@ class Model {
         return returnedList;
     }
 
-    public void addPerson(Person newcomer)
+    public static void addPerson(Person newcomer)
     {
         if(peopleList.get(newcomer.getId()) != null)
         {
@@ -40,22 +40,22 @@ class Model {
         peopleList.put(newcomer.getId(),newcomer);
     }
 
-    public void deletePerson(int id)
+    public static void deletePerson(int id)
     {
         peopleList.remove(getPerson(id).getId());
     }
 
-    public void setPersonName(int id, String newName)
+    public static void setPersonName(int id, String newName)
     {
         peopleList.get(id).setName(newName);
     }
 
-    public void setPersonNotes(int id, String newNotes)
+    public static void setPersonNotes(int id, String newNotes)
     {
         peopleList.get(id).setNotes(newNotes);
     }
 
-    public void setPersonImage(int id, BufferedImage newImage)
+    public static void setPersonImage(int id, BufferedImage newImage)
     {
         peopleList.get(id).setImage(newImage);
     }

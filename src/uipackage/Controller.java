@@ -1,5 +1,7 @@
 package uipackage;
 
+import datapackage.Model;
+import datapackage.Person;
 import persistencepackage.Persistence;
 
 import java.awt.image.BufferedImage;
@@ -12,54 +14,60 @@ public class Controller {
         CONTROLLER CLASS
      */
 
-    private Persistence persistence;
-
-    public Controller( Persistence persistence)
-    {
-        this.persistence = persistence;
-    }
-
     /// Person settings
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
-
+        Person newcomer = new Person(Persistence.getNextPersonUID(),img,name,notes);
+        Model.addPerson(newcomer);
+        Persistence.createPersonOnDb(newcomer);
     }
 
     public void handleDeletePersonRequest(int id) {
-
+        Model.deletePerson(id);
+        Persistence.deletePersonOnDb(id);
     }
 
     public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes)
     {
+        Person target = Model.getPerson(id);
 
+        if(!target.getImage().equals(img))
+        {
+            Model.setPersonImage(id, img);
+            Persistence.updatePersonImage(id, img);
+        }
+
+        if(!target.getName().equals(name))
+        {
+            Model.setPersonName(id, name);
+            Persistence.updatePersonName(id, name);
+        }
+
+        if(!target.getNotes().equals(notes))
+        {
+            Model.setPersonNotes(id, notes);
+            Persistence.updatePersonNotes(id, notes);
+        }
     }
 
     public String handleGetPersonName(int id)
     {
-        return new String();
+        return Model.getPerson(id).getName();
     }
 
     public String handleGetPersonNotes(int id)
     {
-        return new String();
+        return Model.getPerson(id).getNotes();
     }
 
     public BufferedImage handleGetPersonImage(int id)
     {
-        return new BufferedImage(10,10,1);
+        return Model.getPerson(id).getImage();
     }
 
     public HashMap<Integer, String> handleGetPersonList()
     {
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "John and Maryy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy");
-        list.put(13,"John" + " and " + "Steve");
-        list.put(12,"John2" + " and " + "Steve2");
-        list.put(11,"John3" + " and " + "Steve3");
-        list.put(10,"John4" + " and " + "Steve4");
-        list.put(9,"John5" + " and " + "Steve5");
-        list.put(8,"John6" + " and " + "Steve6");
-        return list;
+        return Model.getPersonList();
     }
 
     /// Bond settings
