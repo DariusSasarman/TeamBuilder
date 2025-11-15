@@ -1,5 +1,7 @@
 package datapackage;
 
+import persistencepackage.Persistence;
+
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -8,15 +10,18 @@ public class Model {
     private static HashMap<Integer,Person> peopleList = new HashMap<Integer,Person>();
     private static HashMap<Integer,Group> groupList = new HashMap<Integer,Group>();
     private static HashMap<Integer,Bond> bondList = new HashMap<Integer,Bond>();
+    private static HashMap<String, Integer> bondCheckList = new HashMap<>();
     private static int activeGroupId;
 
+
+    ///  Person commands
 
     public static Person getPerson(int id)
     {
         Person searched = peopleList.get(id);
         if(searched == null)
         {
-            throw new RuntimeException("Person does not exist in memory");
+            searched = Persistence.readPerson(id);
         }
         return searched;
     }
@@ -58,5 +63,50 @@ public class Model {
     public static void setPersonImage(int id, BufferedImage newImage)
     {
         peopleList.get(id).setImage(newImage);
+    }
+
+    /// Bond commands
+
+    public static Integer findBondByHeads(int headId, int tailId) {
+        return bondCheckList.get(Math.max(headId, tailId) + "-" + Math.min(headId, tailId));
+    }
+
+    public static Bond getBond(int id)
+    {
+        Bond returned = bondList.get(id);
+        if(returned == null)
+        {
+            returned = Persistence.readBond(id);
+        }
+        return returned;
+    }
+
+    public static void addBond(Bond added)
+    {
+        bondList.put(added.getId(),added);
+        bondCheckList.put(Math.max(added.getHeadId(),added.getTailId()) + "-" + Math.min(added.getHeadId(),added.getTailId()),added.getId());
+    }
+
+    public static void setBondRating(int id, int newRating) {
+        bondList.get(id).setRating(newRating);
+    }
+
+    public static void setBondNotes(int id, String notes) {
+        bondList.get(id).setNotes(notes);
+    }
+
+    public static void deleteBond(int id) {
+        Bond bond = bondList.get(id);
+        bondCheckList.remove(Math.max(bond.getHeadId(), bond.getTailId()) + "-" + Math.min(bond.getHeadId(), bond.getTailId()));
+        bondList.remove(id);
+    }
+
+    public static HashMap<Integer, String> getBondList() {
+        HashMap<Integer,String> ret = new HashMap<>();
+        for(Bond b : bondList.values())
+        {
+            ret.put(b.getId(), peopleList.get(b.getHeadId()).getName() + " and " + peopleList.get(b.getTailId()).getName());
+        }
+        return ret;
     }
 }

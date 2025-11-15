@@ -1,5 +1,6 @@
 package uipackage;
 
+import datapackage.Bond;
 import datapackage.Model;
 import datapackage.Person;
 import persistencepackage.Persistence;
@@ -73,47 +74,54 @@ public class Controller {
     /// Bond settings
     public void handleAddBondRequest(int headId, int tailId, int rating)
     {
-        /// TODO: Register
+        Integer check = Model.findBondByHeads(headId,tailId);
+        if(check != null)
+        {
+            Model.getBond(check).setRating(rating);
+            return;
+        }
+        Bond b = new Bond(Persistence.getNextBondUID(),headId,tailId,rating);
+        Model.addBond(b);
+        Persistence.createBondOnDb(b);
     }
 
     public int handleGetBondHeadId(int id) {
-        // TODO: Get from register
-        return 10;
+        return Model.getBond(id).getHeadId();
     }
 
     public int handleGetBondTailId(int id) {
-        // TODO: Get from register
-        return 13;
+        return Model.getBond(id).getTailId();
     }
 
     public int handleGetBondRating(int id) {
-        // TODO: Get from register
-        return 7;
+        return Model.getBond(id).getRating();
     }
 
     public String handleGetBondNotes(int id) {
-        // TODO: Get from register
-        return "They seem to get along";
+        return Model.getBond(id).getNotes();
     }
 
     public void handleEditBondRequest(int id, int newRating, String notes) {
-        // TODO: Update bond in register
+        Bond edited = Model.getBond(id);
+        if(edited.getRating() != newRating)
+        {
+            Model.setBondRating(id,newRating);
+            Persistence.updateBondRating(id,newRating);
+        }
+        if(!edited.getNotes().equals(notes))
+        {
+            Model.setBondNotes(id,notes);
+            Persistence.updateBondNotes(id,notes);
+        }
     }
 
     public void handleDeleteBondRequest(int id) {
-        // TODO: Remove bond from register
+        Model.deleteBond(id);
+        Persistence.deleteBondOnDb(id);
     }
     public HashMap<Integer,String> handleGetBondList()
     {
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "John and Maryy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy");
-        list.put(13,"John" + " and " + "Steve");
-        list.put(12,"John2" + " and " + "Steve2");
-        list.put(11,"John3" + " and " + "Steve3");
-        list.put(10,"John4" + " and " + "Steve4");
-        list.put(9,"John5" + " and " + "Steve5");
-        list.put(8,"John6" + " and " + "Steve6");
-        return list;
+        return Model.getBondList();
     }
 
     /// Group Settings
