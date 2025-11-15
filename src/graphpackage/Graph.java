@@ -1,7 +1,5 @@
-package uipackage;
+package graphpackage;
 
-import javax.swing.*;
-import java.awt.*;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;

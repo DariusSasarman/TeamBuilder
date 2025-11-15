@@ -1,5 +1,7 @@
 package uipackage;
 
+import graphpackage.Graph;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -8,16 +10,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URL;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Ui {
+public class View {
     private final Color BG_COLOR = new Color(0x2B2C30);
-    private UiHandler handler;
+    private Controller handler;
     private JPanel contentPanel;
     private JPanel generalSettingsPanel;
     private JPanel graphPanel;
@@ -58,7 +58,7 @@ public class Ui {
     private JButton getClosenessCentralityButton;
     private JButton getKCoreDecompositionButton;
 
-    public Ui(UiHandler handler) {
+    public View(Controller handler) {
         this.handler = handler;
         setupPanels();
         setupButtons();
@@ -1354,6 +1354,7 @@ public class Ui {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+        ///this.graphArea = new Graph(handler.getGraphInfo());
         this.graphArea = new Graph();
     }
 }

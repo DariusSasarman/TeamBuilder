@@ -1,64 +1,65 @@
 package uipackage;
 
-import datapackage.UiManager;
+import persistencepackage.Persistence;
 
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-public class UiHandler {
+public class Controller {
 
-    public UiHandler()
+    /*
+        CONTROLLER CLASS
+     */
+
+    private Persistence persistence;
+
+    public Controller( Persistence persistence)
     {
-        new UiManager();
+        this.persistence = persistence;
     }
 
     /// Person settings
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
-        UiManager.addPerson(img,name,notes);
+
     }
 
     public void handleDeletePersonRequest(int id) {
-        UiManager.deletePerson(id);
+
     }
 
     public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes)
     {
-        if(!handleGetPersonName(id).equals(name))
-        {
-            UiManager.editPersonName(id,name);
-        }
-        if(!handleGetPersonNotes(id).equals(notes))
-        {
-            UiManager.editPersonNotes(id,notes);
-        }
-        if(img != null)
-        {
-            UiManager.editPersonImage(id,img);
-        }
+
     }
 
     public String handleGetPersonName(int id)
     {
-        return UiManager.getPersonName(id);
+        return new String();
     }
 
     public String handleGetPersonNotes(int id)
     {
-        return UiManager.getPersonNotes(id);
+        return new String();
     }
 
     public BufferedImage handleGetPersonImage(int id)
     {
-        return UiManager.getPersonImage(id);
+        return new BufferedImage(10,10,1);
     }
 
     public HashMap<Integer, String> handleGetPersonList()
     {
-        return UiManager.getPersonList();
+        HashMap<Integer,String> list = new HashMap<>();
+        list.put(1, "John and Maryy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy");
+        list.put(13,"John" + " and " + "Steve");
+        list.put(12,"John2" + " and " + "Steve2");
+        list.put(11,"John3" + " and " + "Steve3");
+        list.put(10,"John4" + " and " + "Steve4");
+        list.put(9,"John5" + " and " + "Steve5");
+        list.put(8,"John6" + " and " + "Steve6");
+        return list;
     }
 
     /// Bond settings

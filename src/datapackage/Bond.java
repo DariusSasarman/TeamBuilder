@@ -1,15 +1,14 @@
 package datapackage;
 
-class Bond {
-    private int id;
+public class Bond extends Entity{
+
     private int headId;
     private int tailId;
     private int rating;
-    private String notes;
 
     public Bond (int bondId, int headId, int tailId, int rating, String notes)
     {
-        this.id = bondId;
+        super(bondId,notes);
         this.headId = headId;
         this.tailId = tailId;
         this.rating = rating;
@@ -21,12 +20,11 @@ class Bond {
         {
             this.rating = 10;
         }
-        this.notes = notes;
     }
 
     public Bond (int bondId, int headId, int tailId, int rating)
     {
-        this.id = bondId;
+        super(bondId);
         this.headId = headId;
         this.tailId = tailId;
         this.rating = rating;
@@ -38,11 +36,6 @@ class Bond {
         {
             this.rating = 10;
         }
-        this.notes = "";
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setHeadId(int headId) {
@@ -55,12 +48,6 @@ class Bond {
 
     public void setRating(int rating) {this.rating = rating;}
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public int getId() {return id;}
-
     public int getHeadId() {
         return headId;
     }
@@ -71,12 +58,4 @@ class Bond {
 
     public int getRating() {return rating;}
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public int compareTo (Bond other)
-    {
-        return Integer.compare(this.id,other.id);
-    }
 }

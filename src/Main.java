@@ -1,11 +1,10 @@
-import datapackage.PersistenceManager;
+
 import persistencepackage.Persistence;
-import uipackage.Ui;
-import uipackage.UiHandler;
+import uipackage.View;
+import uipackage.Controller;
 
 public class Main {
     public static void main(String[] args) {
-        new Persistence();
-        new Ui(new UiHandler());
+        new View(new Controller(new Persistence()));
     }
 }
