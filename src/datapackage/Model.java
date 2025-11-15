@@ -3,6 +3,7 @@ package datapackage;
 import persistencepackage.Persistence;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -109,4 +110,41 @@ public class Model {
         }
         return ret;
     }
+
+    /// Group Commands
+
+    public static void addGroup(Group group) {
+        groupList.put(group.getId(),group);
+    }
+
+    public static Group getGroup(int id) {
+        Group returned = groupList.get(id);
+        if(returned == null)
+        {
+            returned = Persistence.readGroup(id);
+        }
+        return returned;
+    }
+
+    public static void setGroupTitle(int id, String title) {
+        groupList.get(id).setTitle(title);
+    }
+
+    public static void setGroupPersonIds(int id, ArrayList<Integer> personIds) {
+        groupList.get(id).setPersonIdList(personIds);
+    }
+
+    public static void deleteGroup(int id) {
+        groupList.remove(id);
+    }
+
+    public static HashMap<Integer, String> getGroupList() {
+        HashMap<Integer,String> ret = new HashMap<>();
+        for(Group group : groupList.values())
+        {
+            ret.put(group.getId(),group.getTitle());
+        }
+        return ret;
+    }
+
 }

@@ -1,6 +1,7 @@
 package uipackage;
 
 import datapackage.Bond;
+import datapackage.Group;
 import datapackage.Model;
 import datapackage.Person;
 import persistencepackage.Persistence;
@@ -126,41 +127,42 @@ public class Controller {
 
     /// Group Settings
     public void handleAddGroupRequest(String title, ArrayList<Integer> personIds) {
-        // TODO: Create new group in register
+        Group group = new Group(Persistence.getNextGroupUID(),title,personIds);
+        Model.addGroup(group);
+        Persistence.createGroupOnDB(group);
     }
 
     public String handleGetGroupTitle(int id) {
-        // TODO: Get from register
-        return "My Team";
+        return Model.getGroup(id).getTitle();
     }
 
     public ArrayList<Integer> handleGetGroupMembers(int id) {
-        // TODO: Get from register
-        ArrayList<Integer> members = new ArrayList<>();
-        members.add(10);
-        members.add(13);
-        return members;
+        return Model.getGroup(id).getPersonIdList();
     }
 
     public void handleEditGroupRequest(int id, String title, ArrayList<Integer> personIds) {
-        // TODO: Update group in register
+        Group target = Model.getGroup(id);
+        if(!target.getTitle().equals(title))
+        {
+            Model.setGroupTitle(id,title);
+            Persistence.updateGroupTitle(id,title);
+
+        }
+        if(!target.getPersonIdList().equals(personIds))
+        {
+            Model.setGroupPersonIds(id,personIds);
+            Persistence.updateGroupPersonIds(id,personIds);
+        }
     }
 
     public void handleDeleteGroupRequest(int id) {
-        // TODO: Remove group from register
+        Model.deleteGroup(id);
+        Persistence.deleteGroupOnDb(id);
     }
 
     public HashMap<Integer,String> handleGetGroupList()
     {
-        // TODO: Get groups from register
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(13,"30415");
-        list.put(12,"30414");
-        list.put(11,"30412");
-        list.put(10,"30411");
-        list.put(9,"30410");
-        list.put(8,"3041-1");
-        return list;
+        return Model.getGroupList();
     }
 
     /// Save location settings

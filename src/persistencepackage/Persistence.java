@@ -2,9 +2,11 @@ package persistencepackage;
 
 
 import datapackage.Bond;
+import datapackage.Group;
 import datapackage.Person;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public  class Persistence {
 
@@ -14,6 +16,8 @@ public  class Persistence {
 
     private static int nextPersonUID = 0;
     private static int nextBondUID = 0;
+    private static int nextGroupUID = 0;
+
 
     public Persistence() {
         /// TODO: FIGURE OUT HOW TO STORE THE DATABASE CONNECTION
@@ -97,5 +101,38 @@ public  class Persistence {
 
     public static void deleteBondOnDb(int id) {
         /// TODO: hahaha
+    }
+
+    /// Group queries
+    private static void queryDBforNextGroupUID() {
+        /// TODO: Query db for this
+        nextGroupUID++;
+    }
+
+    public static int getNextGroupUID() {
+        int returnValue = nextGroupUID;
+        queryDBforNextBondUID();
+        return returnValue;
+    }
+
+    public static void createGroupOnDB(Group group) {
+        /// TODO : This.
+    }
+
+    public static Group readGroup(int id) {
+        /// TODO : This.
+        return new Group(-1,"");
+    }
+
+    public static void updateGroupTitle(int id, String title) {
+        /// TODO : This.
+    }
+
+    public static void updateGroupPersonIds(int id, ArrayList<Integer> personIds) {
+        /// TODO: This
+    }
+
+    public static void deleteGroupOnDb(int id) {
+        /// TODO: This
     }
 }
