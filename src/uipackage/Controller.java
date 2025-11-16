@@ -5,6 +5,7 @@ import datapackage.Group;
 import datapackage.Model;
 import datapackage.Person;
 import persistencepackage.Persistence;
+import persistencepackage.User;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -165,14 +166,12 @@ public class Controller {
         return Model.getGroupList();
     }
 
-    /// Save location settings
-    public void handleSetSaveLocation(String filepath) {
-        // TODO: Change Persistence location
+    /// Account settings
+
+    public void handleLogin(String username, String password) {
+        Persistence.changeAccount(username,password);
     }
 
-    public void handleGetSaveLocation(String filepath) {
-        // TODO: Load data from file
-    }
 
     /// Active group interactions
     public void handleChangeCurrentGroup(int groupId) {
@@ -292,4 +291,6 @@ public class Controller {
     {
         return 10;
     }
+
+
 }

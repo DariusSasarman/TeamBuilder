@@ -15,6 +15,19 @@ public class Model {
     private static int activeGroupId;
 
 
+    public Model()
+    {
+        Persistence.queryDB();
+    }
+
+    public static void clearInfo()
+    {
+        peopleList.clear();
+        groupList.clear();
+        bondList.clear();
+        bondCheckList.clear();
+    }
+
     ///  Person commands
 
     public static Person getPerson(int id)

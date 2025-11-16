@@ -37,8 +37,7 @@ public class View {
     private JButton editBondDataButton;
     private JButton addGroupDataButton;
     private JButton editGroupDataButton;
-    private JButton setSaveLocationButton;
-    private JButton getSaveLocationButton;
+    private JButton changeAccountButton;
 
     private JButton changeCurrentGroupButton;
     private JButton addPersonToCurrentGroupButton;
@@ -54,7 +53,7 @@ public class View {
     private JButton getMinDirectCentralityPersonButton;
     private JButton getMinIndirectCentralityPersonButton;
     private JButton getClusteringButton;
-    private JButton getDjikstraButton;
+    private JButton getDijkstraButton;
     private JButton getClosenessCentralityButton;
     private JButton getKCoreDecompositionButton;
 
@@ -65,7 +64,7 @@ public class View {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("TeamBuilder");
             frame.setBackground(BG_COLOR);
-            ImageIcon img = new ImageIcon("/icons/icon_15.png");
+            ImageIcon img = new ImageIcon("icons/icon_15.png");
             frame.setIconImage(img.getImage());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(this.contentPanel);
@@ -113,15 +112,12 @@ public class View {
             }
         });
 
-        setButtonStyle(setSaveLocationButton);
-        setSaveLocationButton.addActionListener(e -> {
-            setSaveLocationUi();
+        setButtonStyle(changeAccountButton);
+        changeAccountButton.addActionListener(e -> {
+            changeAccountButtonUi();
         });
 
-        setButtonStyle(getSaveLocationButton);
-        getSaveLocationButton.addActionListener(e -> {
-            getSaveLocationUi();
-        });
+
 
         setButtonStyle(changeCurrentGroupButton);
         changeCurrentGroupButton.addActionListener(e -> {
@@ -195,9 +191,9 @@ public class View {
             getClusteringUi();
         });
 
-        setButtonStyle(getDjikstraButton);
-        getDjikstraButton.addActionListener(e -> {
-            getDjikstraUi();
+        setButtonStyle(getDijkstraButton);
+        getDijkstraButton.addActionListener(e -> {
+            getDijkstraUi();
         });
 
         setButtonStyle(getClosenessCentralityButton);
@@ -232,7 +228,7 @@ public class View {
         imageLabel.setForeground(new Color(255, 255, 255));
         imagePanel.add(imageLabel, BorderLayout.CENTER);
 
-        /// Allows the user to pop-up the File-selection pannel
+        /// Allows the user to pop up the File-selection panel
         BufferedImage[] selectedImage = new BufferedImage[1];
         JButton selectImageButton = new JButton("Select Image");
         setButtonStyle(selectImageButton);
@@ -285,7 +281,7 @@ public class View {
             try {
                 handler.handleAddPersonRequest(selectedImage[0], nameField.getText(), notesField.getText());
             } catch (Exception error) {
-                JOptionPane.showMessageDialog(null, "An error occured :" + error.getMessage());
+                JOptionPane.showMessageDialog(null, "An error occurred :" + error.getMessage());
             }
             dialog.dispose();
         });
@@ -525,7 +521,7 @@ public class View {
         imageLabel.setForeground(new Color(255, 255, 255));
         imagePanel.add(imageLabel, BorderLayout.CENTER);
 
-        /// Allows the user to pop-up the File-selection pannel
+        /// Allows the user to pop up the File-selection panel
         BufferedImage[] selectedImage = new BufferedImage[1];
         selectedImage[0] = handler.handleGetPersonImage(id);
         if (selectedImage[0] != null) {
@@ -586,7 +582,7 @@ public class View {
             try {
                 handler.handleEditPersonRequest(id, selectedImage[0], nameField.getText(), notesField.getText());
             } catch (Exception error) {
-                JOptionPane.showMessageDialog(null, "An error occured :" + error.getMessage());
+                JOptionPane.showMessageDialog(null, "An error occurred :" + error.getMessage());
             }
             dialog.dispose();
         });
@@ -888,35 +884,77 @@ public class View {
         dialog.setVisible(true);
     }
 
-    private void setSaveLocationUi() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Where should we save the information?");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int result = fileChooser.showSaveDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            try {
-                File selectedFile = fileChooser.getSelectedFile();
-                handler.handleSetSaveLocation(selectedFile.getAbsolutePath());
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error setting save location: " + ex.getMessage());
-            }
-        }
-        fileChooser.setVisible(true);
-    }
+    private void changeAccountButtonUi() {
+        JDialog dialog = new JDialog();
+        dialog.setLayout(new BorderLayout(0, 0));
+        dialog.setSize(400, 250);
+        dialog.setLocationRelativeTo(null);
+        dialog.setTitle("Let's take you to where you belong!");
+        dialog.setBackground(BG_COLOR);
 
-    private void getSaveLocationUi() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Where did you leave off?");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
+        // CENTER: Login fields
+        JPanel centerPanel = new JPanel(new GridLayout(2, 2, 10, 15));
+        centerPanel.setBackground(BG_COLOR);
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 20, 20));
+
+        Font largeFont = new Font("Dialog", Font.PLAIN, 20);
+
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setFont(largeFont);
+        usernameLabel.setForeground(new Color(255, 255, 255));
+
+        JTextField usernameField = new JTextField();
+        usernameField.setFont(largeFont);
+
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(largeFont);
+        passwordLabel.setForeground(new Color(255, 255, 255));
+
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setFont(largeFont);
+
+        centerPanel.add(usernameLabel);
+        centerPanel.add(usernameField);
+        centerPanel.add(passwordLabel);
+        centerPanel.add(passwordField);
+
+        // BOTTOM: Buttons
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        bottomPanel.setBackground(BG_COLOR);
+
+        JButton cancelButton = new JButton("Cancel");
+        setButtonStyle(cancelButton);
+        cancelButton.setFont(largeFont);
+        cancelButton.addActionListener(e -> dialog.dispose());
+
+        JButton loginButton = new JButton("Log in");
+        setButtonStyle(loginButton);
+        loginButton.setFont(largeFont);
+        loginButton.addActionListener(e -> {
             try {
-                File selectedFile = fileChooser.getSelectedFile();
-                handler.handleGetSaveLocation(selectedFile.getAbsolutePath());
+                String username = usernameField.getText().trim();
+                String password = new String(passwordField.getPassword());
+
+                if (username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(dialog, "Please enter both username and password!");
+                    return;
+                }
+
+                handler.handleLogin(username, password);
+                dialog.dispose();
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error loading save: " + ex.getMessage());
+                JOptionPane.showMessageDialog(dialog, "Error logging in: " + ex.getMessage());
             }
-        }
+        });
+
+        bottomPanel.add(cancelButton);
+        bottomPanel.add(loginButton);
+
+        // Assemble dialog
+        dialog.add(centerPanel, BorderLayout.CENTER);
+        dialog.add(bottomPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
     }
 
     private void changeCurrentGroupUi(Integer selectedGroupId) {
@@ -1114,7 +1152,7 @@ public class View {
         }
     }
 
-    private void getDjikstraUi() {
+    private void getDijkstraUi() {
         JDialog dialog = new JDialog();
         dialog.setLayout(new BorderLayout(0, 0));
         dialog.setSize(500, 300);

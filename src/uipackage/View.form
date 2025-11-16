@@ -80,16 +80,10 @@
                       <text value="See who I'm dealing with"/>
                     </properties>
                   </component>
-                  <component id="6f6f2" class="javax.swing.JButton" binding="setSaveLocationButton">
+                  <component id="6f6f2" class="javax.swing.JButton" binding="changeAccountButton">
                     <constraints/>
                     <properties>
-                      <text value="Let's make a checkpoint"/>
-                    </properties>
-                  </component>
-                  <component id="79d16" class="javax.swing.JButton" binding="getSaveLocationButton">
-                    <constraints/>
-                    <properties>
-                      <text value="That's not where I left off"/>
+                      <text value="This is not my stuff..."/>
                     </properties>
                   </component>
                 </children>
@@ -208,7 +202,7 @@
                       <text value="What cliques do we have?"/>
                     </properties>
                   </component>
-                  <component id="fbbeb" class="javax.swing.JButton" binding="getDjikstraButton">
+                  <component id="fbbeb" class="javax.swing.JButton" binding="getDijkstraButton">
                     <constraints>
                       <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>

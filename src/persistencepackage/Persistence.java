@@ -3,10 +3,12 @@ package persistencepackage;
 
 import datapackage.Bond;
 import datapackage.Group;
+import datapackage.Model;
 import datapackage.Person;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Map;
 
 public  class Persistence {
 
@@ -18,16 +20,40 @@ public  class Persistence {
     private static int nextBondUID = 0;
     private static int nextGroupUID = 0;
 
+    private static LoginManager loginManager;
+    private static User currentUser;
 
     public Persistence() {
         /// TODO: FIGURE OUT HOW TO STORE THE DATABASE CONNECTION
-        queryDB();
+
+        loginManager = new LoginManager();
+        currentUser = loginManager.login();
+        if(currentUser != null)
+        {
+            queryDB();
+        }
     }
 
-    private static void queryDB() {
+    public static void queryDB() {
+        Model.clearInfo();
+        System.out.println("Logging in : " + currentUser.getUsername());
         /// TODO: QUERY DB TO CAPTURE EXISTING DATA
         System.out.println("Calling Database Connection...");
+        /// TODO: READ ALL DATA based on USER
+        System.out.println("Connection secured!");
+
+
+        System.out.println("Loading all data in memory...");
+        /// TODO: UPLOAD ALL DATA in memory using Model.addXXXXX();
         System.out.println("Done! Information loaded.");
+    }
+
+    public static void changeAccount(String username, String password) {
+        User newUser = loginManager.changeAccount(username, password);
+        if (newUser != null) {
+            currentUser = newUser;
+            queryDB();
+        }
     }
 
     /// Person queries
@@ -111,7 +137,7 @@ public  class Persistence {
 
     public static int getNextGroupUID() {
         int returnValue = nextGroupUID;
-        queryDBforNextBondUID();
+        queryDBforNextGroupUID();
         return returnValue;
     }
 
@@ -135,4 +161,5 @@ public  class Persistence {
     public static void deleteGroupOnDb(int id) {
         /// TODO: This
     }
+
 }
