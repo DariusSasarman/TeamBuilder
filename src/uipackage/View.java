@@ -1,6 +1,6 @@
 package uipackage;
 
-import graphpackage.Graph;
+import graphpackage.GraphArea;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -376,6 +376,7 @@ public class View {
 
                 Integer rating = (Integer) dropdown3.getSelectedItem();
                 handler.handleAddBondRequest(id1, id2, rating);
+                graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "Error saving bond: " + ex.getMessage());
@@ -488,6 +489,7 @@ public class View {
                 }
 
                 handler.handleAddGroupRequest(title, selectedIds);
+                graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "Error creating group: " + ex.getMessage());
@@ -581,6 +583,7 @@ public class View {
         saveButton.addActionListener(e -> {
             try {
                 handler.handleEditPersonRequest(id, selectedImage[0], nameField.getText(), notesField.getText());
+                graphArea.repaint();
             } catch (Exception error) {
                 JOptionPane.showMessageDialog(null, "An error occurred :" + error.getMessage());
             }
@@ -600,6 +603,7 @@ public class View {
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
                     handler.handleDeletePersonRequest(id);
+                    graphArea.repaint();
                     dialog.dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(dialog, "Error deleting person: " + ex.getMessage());
@@ -706,6 +710,7 @@ public class View {
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
                     handler.handleDeleteBondRequest(id);
+                    graphArea.repaint();
                     dialog.dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(dialog, "Error deleting bond: " + ex.getMessage());
@@ -726,6 +731,7 @@ public class View {
                 int newRating = (Integer) ratingDropdown.getSelectedItem();
                 String newNotes = notesField.getText();
                 handler.handleEditBondRequest(id, newRating, newNotes);
+                graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "Error saving bond: " + ex.getMessage());
@@ -834,6 +840,7 @@ public class View {
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
                     handler.handleDeleteGroupRequest(id);
+                    graphArea.repaint();
                     dialog.dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(dialog, "Error deleting group: " + ex.getMessage());
@@ -866,6 +873,7 @@ public class View {
                 }
 
                 handler.handleEditGroupRequest(id, newTitle, selectedIds);
+                graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "Error saving group: " + ex.getMessage());
@@ -1393,6 +1401,6 @@ public class View {
     private void createUIComponents() {
         // TODO: place custom component creation code here
         ///this.graphArea = new Graph(handler.getGraphInfo());
-        this.graphArea = new Graph();
+        this.graphArea = new GraphArea();
     }
 }

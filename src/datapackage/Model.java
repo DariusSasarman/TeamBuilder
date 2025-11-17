@@ -160,4 +160,59 @@ public class Model {
         return ret;
     }
 
+    public static void setActiveGroupId(int id)
+    {
+        if(groupList.get(id) != null)
+        {
+            activeGroupId = id;
+        }
+        else
+        {
+            activeGroupId = -1;
+            throw new RuntimeException("Group hasn't been found.");
+        }
+    }
+
+    public static HashMap<Integer,String> getPeopleInActiveGroup()
+    {
+        HashMap<Integer,String> ret = new HashMap<>();
+        if(groupList.get(activeGroupId) != null)
+        {
+            for(Integer i : groupList.get(activeGroupId).getPersonIdList())
+            {
+                ret.put(i,peopleList.get(i).getName());
+            }
+        }
+        return ret;
+    }
+
+    public static void addPersonToActiveGroup(int newcomerId) {
+        if(groupList.get(activeGroupId) != null)
+        {
+            groupList.get(activeGroupId).getPersonIdList().add(newcomerId);
+        }
+    }
+
+    public static HashMap<Integer, String> getPeopleNotInActiveGroup() {
+        HashMap<Integer,String> ret = new HashMap<>();
+        for(Person p : peopleList.values())
+        {
+            ret.put(p.getId(),p.getName());
+        }
+        if(groupList.get(activeGroupId) != null)
+        {
+            for(Integer i : groupList.get(activeGroupId).getPersonIdList())
+            {
+                ret.remove(i);
+            }
+        }
+        return ret;
+    }
+
+    public static void removePersonFromCurrentGroup(int id) {
+
+        if(groupList.get(activeGroupId) != null) {
+            groupList.get(activeGroupId).getPersonIdList().remove(id);
+        }
+    }
 }

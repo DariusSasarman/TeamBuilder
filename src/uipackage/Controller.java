@@ -5,7 +5,6 @@ import datapackage.Group;
 import datapackage.Model;
 import datapackage.Person;
 import persistencepackage.Persistence;
-import persistencepackage.User;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -175,33 +174,25 @@ public class Controller {
 
     /// Active group interactions
     public void handleChangeCurrentGroup(int groupId) {
-        // TODO: Set this as the active group
+        Model.setActiveGroupId(groupId);
     }
 
     public HashMap<Integer, String> handleGetPeopleInCurrentGroup() {
-        // TODO: Return only people in active group
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(10,"John");
-        list.put(13,"Mary");
-        return list;
+        return Model.getPeopleInActiveGroup();
     }
 
-    public void handleAddPersonToCurrentGroup(int id)
+    public void handleAddPersonToCurrentGroup(int newcomerId)
     {
-        /// TODO: Register add to Current Group
+        Model.addPersonToActiveGroup(newcomerId);
     }
 
     public HashMap<Integer, String> handleGetPeopleNotInCurrentGroup() {
-        // TODO: Return people NOT in active group
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(8,"Marcus");
-        list.put(9,"Peter");
-        return list;
+        return Model.getPeopleNotInActiveGroup();
     }
 
     public void handleRemovePersonFromCurrentGroup(int id)
     {
-        /// TODO: Register add to Active group
+        Model.removePersonFromCurrentGroup(id);
     }
 
     public HashMap<Integer, String> handleGetBondsInCurrentGroup() {
