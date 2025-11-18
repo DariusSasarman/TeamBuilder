@@ -1,23 +1,31 @@
 package graphpackage;
 
+import datapackage.Bond;
+import datapackage.Person;
+
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Set;
 
-public class Graph extends DrawableElement{
+public class Graph {
+    ArrayList<Node> nodes;
+    ArrayList<Edge> edges;
 
-    public Graph(int x1, int x2, int y1, int y2, Color c)
+    public Graph(Set<Integer> people, Set<Integer> bonds)
     {
-        super(x1,x2,y1,y2,c);
+        /// Handle placing logic here.
     }
 
-    @Override
-    public void onDraw(Graphics g) {
-
+    public void onDraw(Graphics g)
+    {
+        for(Edge edge : edges)
+        {
+            edge.onDraw(g);
+        }
+        for(Node node : nodes)
+        {
+            node.onDraw(g);
+        }
     }
-
-    @Override
-    public void onClick() {
-
-    }
-
 
 }

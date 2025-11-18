@@ -196,27 +196,31 @@ public class Controller {
     }
 
     public HashMap<Integer, String> handleGetBondsInCurrentGroup() {
-        // TODO: Return bonds within active group (format: "Alice and Bob")
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "John and Mary");
-        list.put(2, "Mary and Peter");
-        return list;
+        return Model.getBondsInCurrentGroup();
     }
 
     public void handleRaiseBondInCurrentGroup(int bondId) {
-        // TODO: Increase bond rating by 1 (max 10)
+       Bond target = Model.getBond(bondId);
+       target.setRating(target.getRating() + 1);
     }
 
     public void handleLowerBondInCurrentGroup(int bondId) {
-        // TODO: Decrease bond rating by 1 (min 1)
+        Bond target = Model.getBond(bondId);
+        target.setRating(target.getRating() - 1);
     }
 
     public void handleRaiseAllBondsInCurrentGroup() {
-        // TODO: Increase all bonds in current group by 1 (max 10)
+        for( Integer id : handleGetBondsInCurrentGroup().keySet())
+        {
+            handleRaiseBondInCurrentGroup(id);
+        }
     }
 
     public void handleLowerAllBondsInCurrentGroup() {
-        // TODO: Decrease all bonds in current group by 1 (min 1)
+        for( Integer id : handleGetBondsInCurrentGroup().keySet())
+        {
+            handleLowerBondInCurrentGroup(id);
+        }
     }
 
     /// Right side

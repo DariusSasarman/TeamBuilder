@@ -46,7 +46,17 @@ public class Bond extends Entity{
         this.tailId = tailId;
     }
 
-    public void setRating(int rating) {this.rating = rating;}
+    public void setRating(int rating) {
+        this.rating = rating;
+        if(this.rating <= 0)
+        {
+            this.rating = 1;
+        }
+        if(this.rating >= 11)
+        {
+            this.rating = 10;
+        }
+    }
 
     public int getHeadId() {
         return headId;

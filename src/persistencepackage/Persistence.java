@@ -6,9 +6,14 @@ import datapackage.Group;
 import datapackage.Model;
 import datapackage.Person;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
+
 
 public  class Persistence {
 
@@ -46,6 +51,68 @@ public  class Persistence {
         System.out.println("Loading all data in memory...");
         /// TODO: UPLOAD ALL DATA in memory using Model.addXXXXX();
         System.out.println("Done! Information loaded.");
+
+        BufferedImage img = null;
+
+        // Robin
+        try {
+            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Robin&backgroundColor=ffcc00");
+            img = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Model.addPerson(new Person(getNextPersonUID(), img, "Robin"));
+
+        // Starfire
+        try {
+            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Starfire&backgroundColor=ff9966");
+            img = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Model.addPerson(new Person(getNextPersonUID(), img, "Starfire"));
+
+        // Beast Boy
+        try {
+            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=BeastBoy&backgroundColor=66cc66");
+            img = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Model.addPerson(new Person(getNextPersonUID(), img, "Beast Boy"));
+
+        // Raven
+        try {
+            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Raven&backgroundColor=6666cc");
+            img = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Model.addPerson(new Person(getNextPersonUID(), img, "Raven"));
+
+        // Cyborg
+        try {
+            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Cyborg&backgroundColor=cccccc");
+            img = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Model.addPerson(new Person(getNextPersonUID(), img, "Cyborg"));
+
+        // Add bonds between team members
+        Model.addBond(new Bond(getNextBondUID(), 0, 1, 10)); // Robin - Starfire
+        Model.addBond(new Bond(getNextBondUID(), 2, 3, 8));  // Beast Boy - Raven
+        Model.addBond(new Bond(getNextBondUID(), 0, 4, 9));  // Robin - Cyborg
+
+        // Create Teen Titans group
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(0); // Robin
+        list.add(1); // Starfire
+        list.add(2); // Beast Boy
+        list.add(3); // Raven
+        list.add(4); // Cyborg
+        Model.addGroup(new Group(getNextGroupUID(), "Teen Titans", list));
+        Model.setActiveGroupId(0);
     }
 
     public static void changeAccount(String username, String password) {

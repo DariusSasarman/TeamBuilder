@@ -5,6 +5,7 @@ import persistencepackage.Persistence;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 
 public class Model {
@@ -160,6 +161,7 @@ public class Model {
         return ret;
     }
 
+    /// Active group info
     public static void setActiveGroupId(int id)
     {
         if(groupList.get(id) != null)
@@ -183,6 +185,9 @@ public class Model {
                 ret.put(i,peopleList.get(i).getName());
             }
         }
+        else {
+            throw new RuntimeException("No active group is set.");
+        }
         return ret;
     }
 
@@ -190,6 +195,9 @@ public class Model {
         if(groupList.get(activeGroupId) != null)
         {
             groupList.get(activeGroupId).getPersonIdList().add(newcomerId);
+        }
+        else {
+            throw new RuntimeException("No active group is set.");
         }
     }
 
@@ -210,9 +218,22 @@ public class Model {
     }
 
     public static void removePersonFromCurrentGroup(int id) {
-
         if(groupList.get(activeGroupId) != null) {
             groupList.get(activeGroupId).getPersonIdList().remove(id);
         }
+    }
+
+    public static HashMap<Integer, String> getBondsInCurrentGroup() {
+        HashMap<Integer,String> ret = new HashMap<>();
+        Set<Integer> peopleId = getPeopleInActiveGroup().keySet();
+        for(Bond bond : bondList.values())
+        {
+            if(peopleId.contains(bond.getHeadId()) && peopleId.contains(bond.getTailId()))
+            {
+                String description = getPerson(bond.getHeadId()).getName() + " and " + getPerson(bond.getTailId()).getName();
+                ret.put(bond.getId(),description);
+            }
+        }
+        return ret;
     }
 }
