@@ -18,7 +18,7 @@ class GraphDraw {
         graph = new Graph(bonds);
         nodes = new HashMap<>();
         edges = new HashMap<>();
-        ArrayList<Triple> positions = graph.getNodePositions(panelWidth,panelHeight);
+        ArrayList<Triple> positions = graph.getNodePositions(panelWidth,panelHeight,calculatePhotoRadius(panelWidth,panelHeight,graph.getNodes().size()));
 
         for (Triple t : positions)
         {
@@ -52,8 +52,8 @@ class GraphDraw {
         }
     }
 
-    public static int calculatePhotoRadius(int panelWidth, int panelHeight, int nodeCount)
+    private int calculatePhotoRadius(int panelWidth, int panelHeight, int nodeCount)
     {
-        return Math.min(panelHeight,panelWidth)/(Math.max((int)Math.log((nodeCount + 3)),15));
+        return Math.min(panelHeight,panelWidth)/((int)Math.log(nodeCount + 1<<15));
     }
 }

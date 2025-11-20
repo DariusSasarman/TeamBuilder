@@ -23,20 +23,19 @@ class Graph {
         }
     }
 
-    private Set<Integer> getNodes()
+    public Set<Integer> getNodes()
     {
         return adjacencyMatrix.keySet();
     }
-
     private int getWeight(int head, int tail)
     {
         return adjacencyMatrix.get(head).get(tail);
     }
 
-    ArrayList<Triple> getNodePositions(int maxWidth, int maxHeight)
+    ArrayList<Triple> getNodePositions(int maxWidth, int maxHeight, int radius)
     {
+        /// Assume rectangle starts from 0.0
         ArrayList<Triple> ret = new ArrayList<>();
-        int radius = GraphDraw.calculatePhotoRadius(maxWidth,maxHeight,getNodes().size());
         Set<Integer> people = Model.getPeopleInActiveGroup().keySet();
         for(Integer uid : people)
         {
