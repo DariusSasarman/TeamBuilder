@@ -376,6 +376,7 @@ public class View {
 
                 Integer rating = (Integer) dropdown3.getSelectedItem();
                 handler.handleAddBondRequest(id1, id2, rating);
+                graphPanel.repaint();
                 graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
@@ -489,6 +490,7 @@ public class View {
                 }
 
                 handler.handleAddGroupRequest(title, selectedIds);
+                graphPanel.repaint();
                 graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
@@ -583,6 +585,7 @@ public class View {
         saveButton.addActionListener(e -> {
             try {
                 handler.handleEditPersonRequest(id, selectedImage[0], nameField.getText(), notesField.getText());
+                graphPanel.repaint();
                 graphArea.repaint();
             } catch (Exception error) {
                 JOptionPane.showMessageDialog(null, "An error occurred :" + error.getMessage());
@@ -603,6 +606,7 @@ public class View {
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
                     handler.handleDeletePersonRequest(id);
+                    graphPanel.repaint();
                     graphArea.repaint();
                     dialog.dispose();
                 } catch (Exception ex) {
@@ -710,6 +714,7 @@ public class View {
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
                     handler.handleDeleteBondRequest(id);
+                    graphPanel.repaint();
                     graphArea.repaint();
                     dialog.dispose();
                 } catch (Exception ex) {
@@ -731,6 +736,7 @@ public class View {
                 int newRating = (Integer) ratingDropdown.getSelectedItem();
                 String newNotes = notesField.getText();
                 handler.handleEditBondRequest(id, newRating, newNotes);
+                graphPanel.repaint();
                 graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
@@ -840,6 +846,7 @@ public class View {
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
                     handler.handleDeleteGroupRequest(id);
+                    graphPanel.repaint();
                     graphArea.repaint();
                     dialog.dispose();
                 } catch (Exception ex) {
@@ -873,6 +880,7 @@ public class View {
                 }
 
                 handler.handleEditGroupRequest(id, newTitle, selectedIds);
+                graphPanel.repaint();
                 graphArea.repaint();
                 dialog.dispose();
             } catch (Exception ex) {
@@ -969,6 +977,7 @@ public class View {
         if (selectedGroupId != null) {
             try {
                 handler.handleChangeCurrentGroup(selectedGroupId);
+                graphPanel.repaint();
                 graphArea.repaint();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error switching group: " + ex.getMessage());
@@ -980,6 +989,7 @@ public class View {
         if (selectedPersonId != null) {
             try {
                 handler.handleAddPersonToCurrentGroup(selectedPersonId);
+                graphPanel.repaint();
                 graphArea.repaint();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error adding person to group: " + ex.getMessage());
@@ -991,6 +1001,7 @@ public class View {
         if (selectedPersonId != null) {
             try {
                 handler.handleRemovePersonFromCurrentGroup(selectedPersonId);
+                graphPanel.repaint();
                 graphArea.repaint();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error removing person from group: " + ex.getMessage());
@@ -1002,6 +1013,7 @@ public class View {
         if (selectedBondId != null) {
             try {
                 handler.handleRaiseBondInCurrentGroup(selectedBondId);
+                graphPanel.repaint();
                 graphArea.repaint();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error raising bond: " + ex.getMessage());
@@ -1013,6 +1025,7 @@ public class View {
         if (selectedBondId != null) {
             try {
                 handler.handleLowerBondInCurrentGroup(selectedBondId);
+                graphPanel.repaint();
                 graphArea.repaint();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error lowering bond: " + ex.getMessage());
@@ -1024,6 +1037,7 @@ public class View {
         try {
             handler.handleRaiseAllBondsInCurrentGroup();
             JOptionPane.showMessageDialog(null, "Raised all bonds by 1/10!");
+            graphPanel.repaint();
             graphArea.repaint();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error raising bonds: " + ex.getMessage());
@@ -1034,6 +1048,7 @@ public class View {
         try {
             handler.handleLowerAllBondsInCurrentGroup();
             JOptionPane.showMessageDialog(null, "Lowered all bonds by 1/10!");
+            graphPanel.repaint();
             graphArea.repaint();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error lowering bonds: " + ex.getMessage());

@@ -1,31 +1,54 @@
 package graphpackage;
 
 import datapackage.Bond;
-import datapackage.Person;
+import datapackage.Model;
 
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class Graph {
-    ArrayList<Node> nodes;
-    ArrayList<Edge> edges;
-
-    public Graph(Set<Integer> people, Set<Integer> bonds)
+    HashMap<Integer, HashMap<Integer,Integer>> adjacencyMatrix;
+    public Graph(Set<Integer> bonds)
     {
-        /// Handle placing logic here.
+        adjacencyMatrix = new HashMap<>();
+        for(Integer i : bonds)
+        {
+            Bond bond = Model.getBond(i);
+            adjacencyMatrix.computeIfAbsent(bond.getHeadId(), k -> new HashMap<>());
+            adjacencyMatrix.computeIfAbsent(bond.getTailId(), k -> new HashMap<>());
+            adjacencyMatrix.get(bond.getHeadId()).put(bond.getTailId(),11 - bond.getRating());
+            adjacencyMatrix.get(bond.getTailId()).put(bond.getHeadId(),11 - bond.getRating());
+        }
     }
 
-    public void onDraw(Graphics g)
+    private Set<Integer> getNodes()
     {
-        for(Edge edge : edges)
+        return adjacencyMatrix.keySet();
+    }
+
+    private int getWeight(int head, int tail)
+    {
+        return adjacencyMatrix.get(head).get(tail);
+    }
+
+    ArrayList<Triple> getNodePositions(int maxWidth, int maxHeight)
+    {
+        ArrayList<Triple> ret = new ArrayList<>();
+        int radius = GraphDraw.calculatePhotoRadius(maxWidth,maxHeight,getNodes().size());
+        Set<Integer> people = Model.getPeopleInActiveGroup().keySet();
+        for(Integer uid : people)
         {
-            edge.onDraw(g);
+            /// TODO: This, but, properly.
+            int x = (int)(Math.random()*(maxWidth-2*radius)) ;
+            x+= radius;
+            int y = (int)(Math.random()*(maxHeight-2*radius));
+            y+= radius;
+            ret.add(new Triple(uid, x, y));
         }
-        for(Node node : nodes)
-        {
-            node.onDraw(g);
-        }
+
+        return ret;
     }
 
 }

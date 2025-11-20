@@ -4,28 +4,29 @@ import datapackage.Model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 import java.util.Set;
 
 public class GraphArea extends JPanel {
 
-    private Graph graph;
-
+    private GraphDraw graphDraw;
     public GraphArea() {
+        super();
+        setMinimumSize(new Dimension(400, 400));
+        setPreferredSize(new Dimension(600, 600));
         initializeGraph();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         initializeGraph();
-        //graph.onDraw(g);
-        g.drawRect(10,15,g.getClipBounds().width-20,g.getClipBounds().height-20);
+        graphDraw.onDraw(g);
     }
 
     private void initializeGraph()
     {
-        Set<Integer> peopleId = Model.getPeopleInActiveGroup().keySet();
-        Set<Integer> bondsId = Model.getBondsInCurrentGroup().keySet();
-        graph = new Graph(peopleId,bondsId);
+        graphDraw = new GraphDraw(Model.getBondsInCurrentGroup().keySet(),
+                getWidth(),
+                getHeight());
     }
 }
