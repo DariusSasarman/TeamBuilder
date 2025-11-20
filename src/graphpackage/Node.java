@@ -6,7 +6,7 @@ import datapackage.Person;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Node extends DrawableElement{
+class Node extends DrawableElement{
 
     private int personId;
 

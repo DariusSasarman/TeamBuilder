@@ -2,7 +2,7 @@ package graphpackage;
 
 import java.awt.*;
 
-public abstract class DrawableElement {
+abstract class DrawableElement {
     protected int x1;
     protected int x2;
     protected int y1;

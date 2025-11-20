@@ -6,7 +6,7 @@ import datapackage.Model;
 import javax.swing.*;
 import java.awt.*;
 
-public class Edge extends DrawableElement{
+class Edge extends DrawableElement{
 
     private int bondId;
 

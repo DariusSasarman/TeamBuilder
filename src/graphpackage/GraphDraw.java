@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-public class GraphDraw {
+class GraphDraw {
     HashMap<Integer,Node> nodes;
     HashMap<Integer,Edge> edges;
     Graph graph;
