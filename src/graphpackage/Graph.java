@@ -32,21 +32,30 @@ class Graph {
         return adjacencyMatrix.get(head).get(tail);
     }
 
+    private ArrayList<Triple> getInitialRadialPositions(int centerX, int centerY, int placementRadius)
+    {
+        double degree = 360.0 / getNodes().size();
+        degree = Math.toRadians(degree);
+        ArrayList<Triple> ret = new ArrayList<>();
+        int placementX = centerX - placementRadius;
+        int placementY = centerY;
+        for(Integer id : getNodes())
+        {
+            ret.add(new Triple(id,placementX,placementY));
+            int newPlacementX = (int) (centerX + (placementX-centerX) * Math.cos(degree) - (placementY-centerY) * Math.sin(degree));
+            int newPlacementY = (int) (centerY + (placementX-centerX) * Math.sin(degree) + (placementY-centerY) * Math.cos(degree));
+            placementX = newPlacementX;
+            placementY = newPlacementY;
+        }
+        return ret;
+    }
+
     ArrayList<Triple> getNodePositions(int maxWidth, int maxHeight, int radius)
     {
-        /// Assume rectangle starts from 0.0
+        /// Assume rectangle starts from 0
         ArrayList<Triple> ret = new ArrayList<>();
-        Set<Integer> people = Model.getPeopleInActiveGroup().keySet();
-        for(Integer uid : people)
-        {
-            /// TODO: This, but, properly.
-            int x = (int)(Math.random()*(maxWidth-2*radius)) ;
-            x+= radius;
-            int y = (int)(Math.random()*(maxHeight-2*radius));
-            y+= radius;
-            ret.add(new Triple(uid, x, y));
-        }
-
+        ret=getInitialRadialPositions(maxWidth/2,maxHeight/2,Math.min(maxWidth,maxHeight)/2-radius);
+        /// Now follows the placement code
         return ret;
     }
 

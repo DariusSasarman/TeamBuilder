@@ -54,64 +54,38 @@ public  class Persistence {
 
         BufferedImage img = null;
 
-        // Robin
-        try {
-            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Robin&backgroundColor=ffcc00");
-            img = ImageIO.read(url);
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Define person data
+        String[] names = {"Alex", "Jordan", "Maya", "Sam", "Taylor", "Casey", "Riley", "Morgan", "Cameron", "Drew"};
+        String[] colors = {"ff6b6b", "4ecdc4", "ffe66d", "a8e6cf", "dda15e", "bc6c25", "b8b8ff", "ffaaa5", "95e1d3", "f38181"};
+
+        // Create all persons
+        for (int i = 0; i < names.length; i++) {
+            try {
+                URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=" + names[i] + "&backgroundColor=" + colors[i]);
+                img = ImageIO.read(url);
+                Model.addPerson(new Person(getNextPersonUID(), img, names[i]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        Model.addPerson(new Person(getNextPersonUID(), img, "Robin"));
 
-        // Starfire
-        try {
-            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Starfire&backgroundColor=ff9966");
-            img = ImageIO.read(url);
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Define bonds: {person1Index, person2Index, strength}
+        int[][] bonds = {
+                {0, 1, 10}, {1, 2, 9}, {2, 3, 8}, {3, 4, 7}, {0, 4, 9},
+                {5, 6, 8}, {6, 7, 10}, {7, 8, 7}, {8, 9, 9}, {0, 5, 6}, {4, 9, 8}
+        };
+
+        // Add all bonds
+        for (int[] bond : bonds) {
+            Model.addBond(new Bond(getNextBondUID(), bond[0], bond[1], bond[2]));
         }
-        Model.addPerson(new Person(getNextPersonUID(), img, "Starfire"));
 
-        // Beast Boy
-        try {
-            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=BeastBoy&backgroundColor=66cc66");
-            img = ImageIO.read(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Model.addPerson(new Person(getNextPersonUID(), img, "Beast Boy"));
-
-        // Raven
-        try {
-            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Raven&backgroundColor=6666cc");
-            img = ImageIO.read(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Model.addPerson(new Person(getNextPersonUID(), img, "Raven"));
-
-        // Cyborg
-        try {
-            URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=Cyborg&backgroundColor=cccccc");
-            img = ImageIO.read(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Model.addPerson(new Person(getNextPersonUID(), img, "Cyborg"));
-
-        // Add bonds between team members
-        Model.addBond(new Bond(getNextBondUID(), 0, 1, 10)); // Robin - Starfire
-        Model.addBond(new Bond(getNextBondUID(), 2, 3, 8));  // Beast Boy - Raven
-        Model.addBond(new Bond(getNextBondUID(), 0, 4, 9));  // Robin - Cyborg
-
-        // Create Teen Titans group
+        // Create group with all members
         ArrayList<Integer> list = new ArrayList<>();
-        list.add(0); // Robin
-        list.add(1); // Starfire
-        list.add(2); // Beast Boy
-        list.add(3); // Raven
-        list.add(4); // Cyborg
-        Model.addGroup(new Group(getNextGroupUID(), "Teen Titans", list));
+        for (int i = 0; i < names.length; i++) {
+            list.add(i);
+        }
+        Model.addGroup(new Group(getNextGroupUID(), "Adventure Squad", list));
         Model.setActiveGroupId(0);
     }
 
