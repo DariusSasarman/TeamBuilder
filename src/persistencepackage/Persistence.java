@@ -77,7 +77,7 @@ public  class Persistence {
 
         // Add all bonds
         for (int[] bond : bonds) {
-            Model.addBond(new Bond(getNextBondUID(), bond[0], bond[1], bond[2]));
+            Model.addBond(new Bond(getNextBondUID(), bond[0], bond[1], (int)(Math.random()*10)));
         }
 
         // Create group with all members

@@ -10,10 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class View {
     private final Color BG_COLOR = new Color(0x2B2C30);
@@ -64,7 +61,7 @@ public class View {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("TeamBuilder");
             frame.setBackground(BG_COLOR);
-            ImageIcon img = new ImageIcon("icons/icon_15.png");
+            ImageIcon img = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/icon_15.png")));
             frame.setIconImage(img.getImage());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(this.contentPanel);
@@ -1414,8 +1411,6 @@ public class View {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
-        ///this.graphArea = new Graph(handler.getGraphInfo());
         this.graphArea = new GraphArea();
     }
 }

@@ -54,6 +54,6 @@ class GraphDraw {
 
     private int calculatePhotoRadius(int panelWidth, int panelHeight, int nodeCount)
     {
-        return Math.min(panelHeight,panelWidth)/((int)Math.log(nodeCount + 1<<15));
+        return (int) (Math.min(panelHeight,panelWidth)/(5* Math.sqrt(nodeCount)));
     }
 }
