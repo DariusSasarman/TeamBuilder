@@ -98,6 +98,18 @@ public class Model {
 
     public static void addBond(Bond added)
     {
+        Bond check = getBond(bondCheckList.get(Math.max(added.getHeadId(),added.getTailId()) + "-" + Math.min(added.getHeadId(),added.getTailId())));
+        if(check != null) {
+            if (check.getRating() != added.getRating())
+            {
+                check.setRating(added.getRating());
+            }
+            if(!check.getNotes().equals(added.getNotes()))
+            {
+                check.setNotes(added.getNotes());
+            }
+            return;
+        }
         bondList.put(added.getId(),added);
         bondCheckList.put(Math.max(added.getHeadId(),added.getTailId()) + "-" + Math.min(added.getHeadId(),added.getTailId()),added.getId());
     }

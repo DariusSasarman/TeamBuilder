@@ -69,15 +69,9 @@ public  class Persistence {
             }
         }
 
-        // Define bonds: {person1Index, person2Index, strength}
-        int[][] bonds = {
-                {0, 1, 10}, {1, 2, 9}, {2, 3, 8}, {3, 4, 7}, {0, 4, 9},
-                {5, 6, 8}, {6, 7, 10}, {7, 8, 7}, {8, 9, 9}, {0, 5, 6}, {4, 9, 8}
-        };
-
         // Add all bonds
-        for (int[] bond : bonds) {
-            Model.addBond(new Bond(getNextBondUID(), bond[0], bond[1], (int)(Math.random()*10)));
+        for (int i = 0; i<11; i++) {
+            Model.addBond(new Bond(getNextBondUID(), (int) (Math.random()*names.length), (int)(Math.random()* names.length), (int)(Math.random()*10)));
         }
 
         // Create group with all members
