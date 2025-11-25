@@ -15,9 +15,14 @@ class GraphDraw {
 
     public GraphDraw(Set<Integer> bonds, int panelWidth, int panelHeight)
     {
+
         graph = new Graph(bonds);
         nodes = new HashMap<>();
         edges = new HashMap<>();
+        if(bonds == null)
+        {
+            return;
+        }
         ArrayList<Triple> positions = graph.getNodePositions(panelWidth,panelHeight,calculatePhotoRadius(panelWidth,panelHeight,graph.getNodes().size()));
 
         for (Triple t : positions)

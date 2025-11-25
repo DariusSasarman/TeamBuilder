@@ -110,7 +110,7 @@ class Graph {
                         );
                         if(modulus(delta) < 2*radius)
                         {
-                            double overlap = 2*radius - modulus(delta);
+                            double overlap = 2*radius + 1 - modulus(delta);
                             double push = overlap / modulus(delta);
                             newDisplacement = new Pair(
                                     newDisplacement.first() + delta.first() * push,

@@ -50,9 +50,9 @@ public  class Persistence {
 
         System.out.println("Loading all data in memory...");
         /// TODO: UPLOAD ALL DATA in memory using Model.addXXXXX();
-        System.out.println("Done! Information loaded.");
 
         BufferedImage img = null;
+
 
         // Define person data
         String[] names = {"Alex", "Jordan", "Maya", "Sam", "Taylor", "Casey", "Riley", "Morgan", "Cameron", "Drew"};
@@ -81,6 +81,8 @@ public  class Persistence {
         }
         Model.addGroup(new Group(getNextGroupUID(), "Adventure Squad", list));
         Model.setActiveGroupId(0);
+
+        System.out.println("Done! Information loaded.");
     }
 
     public static void changeAccount(String username, String password) {
