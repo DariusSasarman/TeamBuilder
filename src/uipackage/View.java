@@ -1100,7 +1100,7 @@ public class View {
         runButton.addActionListener(e -> {
             Integer groupCount = options.getItemAt(options.getSelectedIndex());
             try {
-                showList(handler.handleGetActiveGroupPartitions(groupCount), "Here are the groups:", false);
+                showList(handler.handleGetActiveGroupPartitions(groupCount, (GraphArea) graphArea), "Here are the groups:", false);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error getting the groups:" + ex.getMessage());
             }
@@ -1116,7 +1116,7 @@ public class View {
 
     private void getMaxDirectCentralityUi() {
         try {
-            showList(handler.handleGetAscendingDirectCentrality(), "Here's the group, in order of popularity:", false);
+            showList(handler.handleGetAscendingDirectCentrality((GraphArea)graphArea), "Here's the group, in order of popularity:", false);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error getting the list:" + ex.getMessage());
         }
@@ -1124,14 +1124,14 @@ public class View {
 
     private void getMaxIndirectCentralityUi() {
         try {
-            showList(handler.handleGetAscendingIndirectCentrality(), "Here's the group, in order of influence:", false);
+            showList(handler.handleGetAscendingIndirectCentrality((GraphArea) graphArea), "Here's the group, in order of influence:", false);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error getting the list:" + ex.getMessage());
         }
     }
 
     private void getMinDirectCentralityUi() {
-        HashMap<Integer, String> ascendingList = handler.handleGetAscendingDirectCentrality();
+        HashMap<Integer, String> ascendingList = handler.handleGetAscendingDirectCentrality((GraphArea) graphArea);
         HashMap<Integer, String> descendingList = new HashMap<>();
         ArrayList<String> values = new ArrayList<>(ascendingList.values());
         Collections.reverse(values);
@@ -1148,7 +1148,7 @@ public class View {
     }
 
     private void getMinIndirectCentralityUi() {
-        HashMap<Integer, String> ascendingList = handler.handleGetAscendingIndirectCentrality();
+        HashMap<Integer, String> ascendingList = handler.handleGetAscendingIndirectCentrality((GraphArea) graphArea);
         HashMap<Integer, String> descendingList = new HashMap<>();
         ArrayList<String> values = new ArrayList<>(ascendingList.values());
         Collections.reverse(values);

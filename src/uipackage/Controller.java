@@ -4,11 +4,13 @@ import datapackage.Bond;
 import datapackage.Group;
 import datapackage.Model;
 import datapackage.Person;
+import graphpackage.GraphArea;
 import persistencepackage.Persistence;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Controller {
 
@@ -225,7 +227,7 @@ public class Controller {
 
     /// Right side
 
-    public HashMap<Integer, String> handleGetActiveGroupPartitions(Integer groupCount)
+    public HashMap<Integer, String> handleGetActiveGroupPartitions(Integer groupCount, GraphArea graphArea)
     {
         /// TODO: Partition Generator
         HashMap<Integer,String> list = new HashMap<>();
@@ -234,20 +236,12 @@ public class Controller {
         return list;
     }
 
-    public HashMap<Integer,String> handleGetAscendingDirectCentrality(){
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "Top");
-        list.put(2, "Mid");
-        list.put(3, "Bot");
-        return list;
+    public LinkedHashMap<Integer,String> handleGetAscendingDirectCentrality(GraphArea graphArea){
+        return graphArea.getAscendingDirectCentrality();
     }
 
-    public HashMap<Integer,String> handleGetAscendingIndirectCentrality(){
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "Top");
-        list.put(2, "Mid");
-        list.put(3, "Bot");
-        return list;
+    public LinkedHashMap<Integer,String> handleGetAscendingIndirectCentrality(GraphArea graphArea){
+        return graphArea.getAscendingIndirectCentrality();
     }
 
     public HashMap<Integer,String> handleGetClustering(){

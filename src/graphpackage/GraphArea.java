@@ -4,6 +4,8 @@ import datapackage.Model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class GraphArea extends JPanel {
@@ -28,5 +30,13 @@ public class GraphArea extends JPanel {
         graphDraw = new GraphDraw(Model.getBondsInCurrentGroup().keySet(),
                 getWidth(),
                 getHeight());
+    }
+
+    public LinkedHashMap<Integer, String> getAscendingDirectCentrality() {
+        return graphDraw.ascendingDirectCentrality();
+    }
+
+    public LinkedHashMap<Integer, String> getAscendingIndirectCentrality() {
+        return graphDraw.ascendingIndirectCentrality();
     }
 }

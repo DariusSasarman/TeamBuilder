@@ -168,4 +168,36 @@ class Graph {
         return ret;
     }
 
+    public List<Integer> directCentrality() {
+        List<Integer> nodes = new ArrayList<>(getNodes());
+
+        /// Sort based on:
+        /// Go from the reverse :
+        /// The sum <- of the stream <- of values <- of edges
+        /// I.e. the sum of total ratings towards target node.
+        nodes.sort((a, b) -> {
+            int scoreA = adjacencyMatrix.get(a).values().stream()
+                    .mapToInt(w -> 11 - w).sum();
+            int scoreB = adjacencyMatrix.get(b).values().stream()
+                    .mapToInt(w -> 11 - w).sum();
+            return Integer.compare(scoreB, scoreA);
+        });
+
+        return nodes;
+    }
+
+    public List<Integer> indirectCentrality() {
+        List<Integer> nodes = new ArrayList<>(getNodes());
+        /// Same logic as above, but on the connected nodes, not on the node itself
+        nodes.sort((a,b) -> {
+            int scoreA = adjacencyMatrix.get(a).keySet().stream().mapToInt(
+                    w -> adjacencyMatrix.get(w).values().stream().mapToInt(v-> 11-v).sum()
+            ).sum();
+            int scoreB = adjacencyMatrix.get(b).keySet().stream().mapToInt(
+                    w -> adjacencyMatrix.get(w).values().stream().mapToInt( v -> 11-v).sum()
+            ).sum();
+            return Integer.compare(scoreB,scoreA);
+        });
+        return nodes;
+    }
 }

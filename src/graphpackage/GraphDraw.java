@@ -6,6 +6,7 @@ import datapackage.Model;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 class GraphDraw {
@@ -15,7 +16,6 @@ class GraphDraw {
 
     public GraphDraw(Set<Integer> bonds, int panelWidth, int panelHeight)
     {
-
         graph = new Graph(bonds);
         nodes = new HashMap<>();
         edges = new HashMap<>();
@@ -60,5 +60,23 @@ class GraphDraw {
     private int calculatePhotoRadius(int panelWidth, int panelHeight, int nodeCount)
     {
         return (int) (Math.min(panelHeight,panelWidth)/(5* Math.sqrt(nodeCount)));
+    }
+
+    public LinkedHashMap<Integer, String> ascendingDirectCentrality() {
+        LinkedHashMap<Integer,String> ret = new LinkedHashMap<>();
+        for(Integer id : graph.directCentrality())
+        {
+            ret.put(id,Model.getPerson(id).getName());
+        }
+        return ret;
+    }
+
+    public LinkedHashMap<Integer, String> ascendingIndirectCentrality() {
+        LinkedHashMap<Integer,String> ret = new LinkedHashMap<>();
+        for(Integer id : graph.indirectCentrality())
+        {
+            ret.put(id,Model.getPerson(id).getName());
+        }
+        return ret;
     }
 }
