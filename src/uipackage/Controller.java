@@ -186,6 +186,7 @@ public class Controller {
     public void handleAddPersonToCurrentGroup(int newcomerId)
     {
         Model.addPersonToActiveGroup(newcomerId);
+        /// TODO: Persistance notify
     }
 
     public HashMap<Integer, String> handleGetPeopleNotInCurrentGroup() {
@@ -195,6 +196,7 @@ public class Controller {
     public void handleRemovePersonFromCurrentGroup(int id)
     {
         Model.removePersonFromCurrentGroup(id);
+        /// TODO: Persistance notify
     }
 
     public HashMap<Integer, String> handleGetBondsInCurrentGroup() {
@@ -204,11 +206,13 @@ public class Controller {
     public void handleRaiseBondInCurrentGroup(int bondId) {
        Bond target = Model.getBond(bondId);
        target.setRating(target.getRating() + 1);
+       /// TODO: Persistance notify
     }
 
     public void handleLowerBondInCurrentGroup(int bondId) {
         Bond target = Model.getBond(bondId);
         target.setRating(target.getRating() - 1);
+        /// TODO : Persistance notify
     }
 
     public void handleRaiseAllBondsInCurrentGroup() {
