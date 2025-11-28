@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 class GraphDraw {
@@ -29,8 +30,8 @@ class GraphDraw {
         {
             int radiusPhoto=calculatePhotoRadius(panelWidth,panelHeight,positions.size());
             int nameWidth=2*radiusPhoto;
-            Node newNode = new Node(t.id(),t.x(),t.y(),radiusPhoto,nameWidth);
-            nodes.put(t.id(),newNode);
+            Node newNode = new Node(t.first(),t.second(),t.third(),radiusPhoto,nameWidth);
+            nodes.put(t.first(),newNode);
         }
 
         for(Integer bondId : bonds)
@@ -76,6 +77,49 @@ class GraphDraw {
         for(Integer id : graph.indirectCentrality())
         {
             ret.put(id,Model.getPerson(id).getName());
+        }
+        return ret;
+    }
+
+    public LinkedHashMap<Integer, String> activeGroupPartitions(int groupCount) {
+        ArrayList<ArrayList<Integer>> lists = graph.groupPartitions(groupCount);
+        LinkedHashMap<Integer,String> ret = new LinkedHashMap<>();
+        int index = 0;
+        for(List<Integer> list : lists)
+        {
+            String peopleInGroup = "";
+            for(Integer id : list)
+            {
+                peopleInGroup = peopleInGroup + Model.getPerson(id).getName() + " ";
+            }
+            ret.put(index++,peopleInGroup);
+        }
+        return ret;
+    }
+
+    public LinkedHashMap<Integer, String> clustering() {
+        ArrayList<ArrayList<Integer>> lists = graph.clustering();
+        LinkedHashMap<Integer,String> ret = new LinkedHashMap<>();
+        int index = 0;
+        for(List<Integer> list : lists)
+        {
+            String peopleInGroup = "";
+            for(Integer id : list)
+            {
+                peopleInGroup = peopleInGroup + Model.getPerson(id).getName() + " ";
+            }
+            ret.put(index++,peopleInGroup);
+        }
+        return ret;
+    }
+
+    public LinkedHashMap<Integer, String> dijkstraRoute(int id1, int id2) {
+        LinkedHashMap<Integer,String> ret = new LinkedHashMap<>();
+        ArrayList<Triple> route = graph.dijkstra(id1,id2);
+        int index = 0;
+        for(Triple triple : route)
+        {
+            ret.put(index++, Model.getPerson(triple.first()).getName() + " knows(" + (11-triple.second()) +"/10) " + Model.getPerson(triple.third()).getName());
         }
         return ret;
     }

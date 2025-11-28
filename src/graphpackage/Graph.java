@@ -3,7 +3,6 @@ package graphpackage;
 import datapackage.Bond;
 import datapackage.Model;
 
-import java.security.KeyPair;
 import java.util.*;
 
 class Graph {
@@ -46,25 +45,53 @@ class Graph {
 
     private HashMap<Integer,Pair> getInitialRadialPositions(int centerX, int centerY, int placementRadius)
     {
-        double degree = 360.0 / getNodes().size();
-        degree = Math.toRadians(degree);
         HashMap<Integer,Pair> ret = new HashMap<>();
-        int placementX = centerX - placementRadius;
-        int placementY = centerY;
-        for(Integer id : getNodes())
+        double delta = 2 * Math.PI / getNodes().size();
+
+        List<Integer> nodes = directCentrality();
+        int len = nodes.size();
+        for(int i = 0; i<len;i++)
         {
-            ret.put(id,new Pair(placementX,placementY));
-            int newPlacementX = (int) (centerX + (placementX-centerX) * Math.cos(degree) - (placementY-centerY) * Math.sin(degree));
-            int newPlacementY = (int) (centerY + (placementX-centerX) * Math.sin(degree) + (placementY-centerY) * Math.cos(degree));
-            placementX = newPlacementX;
-            placementY = newPlacementY;
+            int nodeIndex = i;
+            int leftIndex = (nodeIndex - 1 + len)%len;
+            int rightIndex = (nodeIndex+1)%len;
+
+            int nodeId = nodes.get(nodeIndex);
+            int leftId = nodes.get(leftIndex);
+            int rightId= nodes.get(rightIndex);
+
+            if(getWeight(nodeId,leftId) != null || getWeight(nodeId, rightId)!=null) continue;
+
+            while(getWeight(nodeId,leftId)==null && getWeight(nodeId, rightId)==null)
+            {
+                nodeIndex = (nodeIndex + 1) % len;
+                leftIndex = (nodeIndex - 1 + len) % len;
+                rightIndex = (nodeIndex+1) % len;
+                if(nodeIndex == i) break;
+
+                nodeId = nodes.get(nodeIndex);
+                leftId = nodes.get(leftIndex);
+                rightId= nodes.get(rightIndex);
+            }
+            Collections.swap(nodes,i,nodeIndex);
         }
+        int i = 0;
+        for (Integer id : nodes) {
+            double angle = i * delta;
+
+            int x = (int)(centerX + placementRadius * Math.cos(angle));
+            int y = (int)(centerY + placementRadius * Math.sin(angle));
+
+            ret.put(id, new Pair(x, y));
+            i++;
+        }
+
         return ret;
     }
 
     private double attractionForce(double distance, double coefficient, int head, int tail)
     {
-        return distance * distance / coefficient * normalizeEdge(getWeight(head,tail));
+        return 2*distance * distance / coefficient * normalizeEdge(getWeight(head,tail));
     }
 
     private double repulsionForce(double distance, double coefficient)
@@ -199,5 +226,271 @@ class Graph {
             return Integer.compare(scoreB,scoreA);
         });
         return nodes;
+    }
+
+    private int getFurthestFromGroup ( ArrayList<Integer> group , TreeSet<Integer> peopleInGroups)
+    {
+        if(group.isEmpty())
+        {
+            for(Integer id : getNodes())
+            {
+                if(!peopleInGroups.contains(id))
+                {
+                    return id;
+                }
+            }
+        }
+        int addedId = -1;
+        int maxDistance = 0;
+        for(Integer candidate : getNodes())
+        {
+            /// If they're already in it, it wouldn't be fun to add them again.
+            if(group.contains(candidate) || peopleInGroups.contains(candidate))continue;
+            int candidateDistances = 0;
+            for(Integer member : group)
+            {
+                /// Add the sum of distances
+                Integer distance = getWeight(member,candidate);
+                if(distance == null)
+                {
+                    /// Disconnected means they should interact
+                    candidateDistances+= 100;
+                }
+                else
+                {
+                    /// Connected means they should get to know each-other better
+                    candidateDistances+= distance;
+                }
+            }
+            /// May the best one win
+            if(candidateDistances > maxDistance)
+            {
+                maxDistance= candidateDistances;
+                addedId = candidate;
+            }
+        }
+        return addedId;
+    }
+
+    public ArrayList<ArrayList<Integer>> groupPartitions(int groupCount) {
+        Set<Integer> nodes = getNodes();
+        ArrayList<ArrayList<Integer>> ret = new ArrayList<>();
+        TreeSet<Integer> inAGroup = new TreeSet<>();
+        /// Remove edge cases
+        if(groupCount <= 1 || groupCount >= nodes.size()/2)
+        {
+            for(Integer id : nodes)
+            {
+                if(inAGroup.contains(id))continue;
+                ArrayList<Integer> added = new ArrayList<>();
+                added.add(id);
+                inAGroup.add(id);
+                int partner = getFurthestFromGroup(added,inAGroup);
+                added.add(partner);
+                inAGroup.add(partner);
+                ret.add(added);
+            }
+            return ret;
+        }
+
+        int peoplePerGroup = nodes.size() / groupCount;
+        int peopleLeftOutside = nodes.size() % groupCount;
+
+
+        /// This is where we put people in groups
+        for (int i = 0; i < groupCount; i++) {
+            /// Making the group
+            ArrayList<Integer> added = new ArrayList<>();
+            for (int j = 0; j < peoplePerGroup; j++) {
+                /// Adding the furthest from the group
+                int id = getFurthestFromGroup(added,inAGroup);
+                if(id == -1) break;
+                added.add(id);
+                inAGroup.add(id);
+            }
+            /// This is so everybody is included (First size%groupCount got a +1 member)
+            if(peopleLeftOutside > 0)
+            {
+                int id = getFurthestFromGroup(added,inAGroup);
+                if(id == -1) break;
+                added.add(id);
+                inAGroup.add(id);
+                peopleLeftOutside--;
+            }
+            ret.add(added);
+        }
+        return ret;
+    }
+
+    private double computeMean()
+    {
+        double sum = 0;
+        double count = 0;
+        TreeSet<String> counted = new TreeSet<>();
+        for(Integer head : adjacencyMatrix.keySet())
+        {
+            for(Integer tail : adjacencyMatrix.get(head).keySet())
+            {
+                if(counted.contains(Math.max(head,tail)+" "+Math.min(head,tail)))continue;
+                Integer add = getWeight(head,tail);
+                sum += add;
+                count++;
+                counted.add(Math.max(head,tail)+" "+Math.min(head,tail));
+            }
+        }
+        if(count == 0) return 11;
+        return sum/count;
+    }
+
+    private double computeVariance()
+    {
+        double mean = computeMean();
+        double sum = 0;
+        double count = 0;
+        TreeSet<String> counted = new TreeSet<>();
+        for(Integer head : adjacencyMatrix.keySet())
+        {
+            for(Integer tail : adjacencyMatrix.get(head).keySet())
+            {
+                if(counted.contains(Math.max(head,tail)+" "+Math.min(head,tail)))continue;
+                Integer add = getWeight(head,tail);
+                counted.add(Math.max(head,tail)+" "+Math.min(head,tail));
+                sum+=(add-mean)*(add-mean);
+                count++;
+            }
+        }
+        if(count == 0 ) return 11;
+        return sum/count;
+    }
+
+    private double computeStandardDeviation()
+    {
+        return Math.sqrt(computeVariance());
+    }
+
+    private double computeAverageDistanceBetweenGroups(ArrayList<Integer> group1, ArrayList<Integer> group2) {
+        if(group1.isEmpty() || group2.isEmpty()) {
+            return Double.MAX_VALUE;
+        }
+
+        double sum = 0;
+        int count = 0;
+
+        for(Integer node1 : group1) {
+            for(Integer node2 : group2) {
+                Integer weight = getWeight(node1, node2);
+                sum += (weight != null) ? weight : 11;
+                count++;
+            }
+        }
+
+        return sum / count;
+    }
+
+    public ArrayList<ArrayList<Integer>> clustering() {
+
+        double thresholdDistance = computeMean() + 0.5 * computeStandardDeviation();
+        ArrayList<ArrayList<Integer>> ret = new ArrayList<>();
+        UnionFind groups = new UnionFind(getNodes());
+        HashMap<Integer,ArrayList<Integer>> sets = groups.getSets();
+        if(thresholdDistance < 10)
+        {
+            boolean continues;
+            do {
+                continues=false;
+                for (Integer head : sets.keySet())
+                {
+                    for(Integer tail : sets.keySet())
+                    {
+                        if(head.compareTo(tail) >= 0 )continue;
+
+                        double distance = computeAverageDistanceBetweenGroups(sets.get(head),sets.get(tail));
+
+                        if(distance < thresholdDistance)
+                        {
+                            groups.unite(head,tail);
+                            continues = true;
+                            break;
+                        }
+                    }
+                    if(continues)
+                    {
+                        break;
+                    }
+                }
+                sets = groups.getSets();
+            }while (continues);
+        }
+
+        for(Integer set : sets.keySet())
+        {
+            ret.add(sets.get(set));
+        }
+        return ret;
+    }
+
+    public ArrayList<Triple> dijkstra(int id1, int id2) {
+        if (id1 == id2) {
+            return new ArrayList<>();
+        }
+
+        HashMap<Integer, Integer> distances = new HashMap<>();
+        HashMap<Integer, Integer> parent = new HashMap<>();
+        HashSet<Integer> visited = new HashSet<>();
+        PriorityQueue<int[]> heap = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+
+        for (Integer id : getNodes()) {
+            distances.put(id, Integer.MAX_VALUE);
+        }
+        distances.put(id1, 0);
+        heap.add(new int[]{id1, 0});
+
+        while (!heap.isEmpty()) {
+            int[] current = heap.poll();
+            int u = current[0];
+            int distU = current[1];
+
+            // Skip if already visited
+            if (visited.contains(u)) continue;
+            visited.add(u);
+
+            if (u == id2) break; // reached destination
+
+            for (Integer v : adjacencyMatrix.get(u).keySet()) {
+                if (visited.contains(v)) continue;
+
+                Integer weight = getWeight(u, v);
+                if(weight == null) continue;
+
+                int newDist = distU + weight;
+
+                if (newDist < distances.get(v)) {
+                    distances.put(v, newDist);
+                    parent.put(v, u);
+                    heap.add(new int[]{v, newDist});
+                }
+            }
+        }
+
+        if (!parent.containsKey(id2)) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<Triple> path = new ArrayList<>();
+        Integer node = id2;
+        while (parent.containsKey(node)) {
+            int prev = parent.get(node);
+            Integer weight = getWeight(prev, node);
+            if(weight == null) return new ArrayList<>();
+            path.add( new Triple(prev, weight, node));
+            node = prev;
+        }
+        Collections.reverse(path);
+        // If path has only one edge (direct connection), return empty
+        if (path.size() == 1 ) {
+            return new ArrayList<>();
+        }
+
+        return path;
     }
 }

@@ -227,13 +227,9 @@ public class Controller {
 
     /// Right side
 
-    public HashMap<Integer, String> handleGetActiveGroupPartitions(Integer groupCount, GraphArea graphArea)
+    public LinkedHashMap<Integer, String> handleGetActiveGroupPartitions(Integer groupCount, GraphArea graphArea)
     {
-        /// TODO: Partition Generator
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "John and Maryy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy yy");
-        list.put(2, "Mary and Peter");
-        return list;
+        return graphArea.getActiveGroupPartitions(groupCount);
     }
 
     public LinkedHashMap<Integer,String> handleGetAscendingDirectCentrality(GraphArea graphArea){
@@ -244,12 +240,8 @@ public class Controller {
         return graphArea.getAscendingIndirectCentrality();
     }
 
-    public HashMap<Integer,String> handleGetClustering(){
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, "Ala, bala and portocala");
-        list.put(2, "Innie, minnie, miny and moe");
-        list.put(3, "Holly, Jolly and Christmas");
-        return list;
+    public LinkedHashMap<Integer,String> handleGetClustering(GraphArea graphArea){
+        return graphArea.getClustering();
     }
 
     public HashMap<Integer,String> handleGetKCoreDecomposition()
@@ -267,13 +259,9 @@ public class Controller {
         return list;
     }
 
-    public HashMap<Integer,String> handleGetDijkstraRoute(int id1, int id2)
+    public LinkedHashMap<Integer,String> handleGetDijkstraRoute(int id1, int id2, GraphArea graphArea)
     {
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(1, this.handleGetPersonName(id1) + " knows " + "(9/10) " + "George");
-        list.put(2, "George" + " knows " + "(7/10) " + "Marcel");
-        list.put(3, "Marcel" + " knows " + "(10/10) " + this.handleGetPersonName(id2));
-        return list;
+        return graphArea.getDijkstraRoute(id1,id2);
     }
 
     public double handleGetActiveGroupRating()

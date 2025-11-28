@@ -1075,7 +1075,7 @@ public class View {
 
         JComboBox<Integer> options = new JComboBox<>();
         int count = handler.handleGetPeopleInCurrentGroup().size();
-        for (int i = 2; i <= count; i++) {
+        for (int i = 2; i <= count/2; i++) {
             options.addItem(i);
         }
         options.setFont(new Font("Dialog", Font.BOLD, 32));
@@ -1166,7 +1166,7 @@ public class View {
 
     private void getClusteringUi() {
         try {
-            showList(handler.handleGetClustering(), "Here's the cliques we found:", false);
+            showList(handler.handleGetClustering((GraphArea) graphArea), "Here's the cliques we found:", false);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error getting clustering:" + ex.getMessage());
         }
@@ -1235,7 +1235,7 @@ public class View {
                 if (id1 == id2) {
                     throw new Exception("People already know themselves.");
                 }
-                HashMap<Integer, String> list = handler.handleGetDijkstraRoute(id1, id2);
+                HashMap<Integer, String> list = handler.handleGetDijkstraRoute(id1, id2, (GraphArea) graphArea);
                 if (list.values().size() == 0) {
                     JOptionPane.showMessageDialog(dialog, "They should meet directly.");
                 } else {
