@@ -62,6 +62,7 @@ public class View {
             JFrame frame = new JFrame("TeamBuilder");
             frame.setBackground(BG_COLOR);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
             frame.setContentPane(this.contentPanel);
             frame.pack();
             frame.setLocationRelativeTo(null);
