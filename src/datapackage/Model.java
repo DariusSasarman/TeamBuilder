@@ -242,4 +242,8 @@ public class Model {
         }
         return ret;
     }
+
+    public static int getActiveGroupId() {
+        return activeGroupId;
+    }
 }

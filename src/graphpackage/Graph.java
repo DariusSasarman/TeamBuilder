@@ -493,4 +493,89 @@ class Graph {
 
         return path;
     }
+
+    public double groupRating() {
+        double sum = 0;
+        for(Integer head : adjacencyMatrix.keySet())
+        {
+            for(Integer tail : adjacencyMatrix.get(head).keySet())
+            {
+                Integer add = getWeight(head,tail);
+                if(add != null)
+                {
+                    sum+=(11-add);
+                }
+            }
+        }
+        double count = getNodes().size();
+        double max = count * (count-1) * 5.0;
+        return sum/max*10;
+    }
+
+    private ArrayList<Integer> kCoreDecomposition(int k)
+    {
+        double cutOff = computeMean() - 0.5 * computeStandardDeviation();
+        HashMap<Integer,Integer> deg = new HashMap<>();
+        Queue<Integer> core = new LinkedList<>();
+        HashSet<Integer> ret = new HashSet<>();
+        for(Integer head : getNodes())
+        {
+             int count = 0;
+             for(Integer tail : adjacencyMatrix.get(head).keySet())
+             {
+                 Integer weight =getWeight(head,tail);
+
+                 if(weight!=null && weight >= cutOff)
+                 {
+                     count++;
+                 }
+             }
+             deg.put(head,count);
+             if(deg.get(head) < k) core.add(head);
+             ret.add(head);
+        }
+
+         while (!core.isEmpty())
+         {
+             Integer target = core.poll();
+             if(ret.contains(target))
+             {
+                 ret.remove(target);
+
+                 for(Integer adjacent : adjacencyMatrix.get(target).keySet())
+                 {
+                     Integer weight = getWeight(target,adjacent);
+                     if(ret.contains(adjacent))
+                     {
+                         if(weight != null && weight >= cutOff)
+                         {
+                             deg.put(adjacent,deg.get(adjacent)-1);
+                             if(deg.get(adjacent) < k) core.add(adjacent);
+                         }
+                     }
+                 }
+             }
+         }
+         return new ArrayList<>(ret);
+    }
+
+    public ArrayList<Integer> maxKCoreDecomposition() {
+        ArrayList<Integer> ret = new ArrayList<>(kCoreDecomposition(1));
+        ArrayList<Integer> copy = new ArrayList<>(kCoreDecomposition(2));
+        int k = 3;
+        while (!copy.isEmpty())
+        {
+            ret = copy;
+            k++;
+            copy = new ArrayList<>(kCoreDecomposition(k));
+        }
+        ret.sort((a,b) -> {
+            int scoreA = adjacencyMatrix.get(a).values().stream()
+                    .mapToInt(w -> 11 - w).sum();
+            int scoreB = adjacencyMatrix.get(b).values().stream()
+                    .mapToInt(w -> 11 - w).sum();
+            return Integer.compare(scoreB, scoreA);
+        });
+        return ret;
+    }
 }

@@ -51,4 +51,12 @@ public class GraphArea extends JPanel {
     public LinkedHashMap<Integer, String> getDijkstraRoute(int id1, int id2) {
         return graphDraw.dijkstraRoute(id1,id2);
     }
+
+    public double getActiveGroupRating() {
+        return graphDraw.activeGroupRating();
+    }
+
+    public LinkedHashMap<Integer, String> getKCoreDecomposition() {
+        return graphDraw.kCoreDecomposition();
+    }
 }

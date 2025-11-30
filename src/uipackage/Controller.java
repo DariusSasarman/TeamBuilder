@@ -14,10 +14,6 @@ import java.util.LinkedHashMap;
 
 public class Controller {
 
-    /*
-        CONTROLLER CLASS
-     */
-
     /// Person settings
     public void handleAddPersonRequest(BufferedImage img, String name, String notes)
     {
@@ -186,7 +182,7 @@ public class Controller {
     public void handleAddPersonToCurrentGroup(int newcomerId)
     {
         Model.addPersonToActiveGroup(newcomerId);
-        /// TODO: Persistance notify
+        Persistence.updateGroupPersonIds(Model.getActiveGroupId(),new ArrayList<>(handleGetPeopleInCurrentGroup().keySet()));
     }
 
     public HashMap<Integer, String> handleGetPeopleNotInCurrentGroup() {
@@ -196,7 +192,7 @@ public class Controller {
     public void handleRemovePersonFromCurrentGroup(int id)
     {
         Model.removePersonFromCurrentGroup(id);
-        /// TODO: Persistance notify
+        Persistence.updateGroupPersonIds(Model.getActiveGroupId(),new ArrayList<>(handleGetPeopleInCurrentGroup().keySet()));
     }
 
     public HashMap<Integer, String> handleGetBondsInCurrentGroup() {
@@ -206,13 +202,13 @@ public class Controller {
     public void handleRaiseBondInCurrentGroup(int bondId) {
        Bond target = Model.getBond(bondId);
        target.setRating(target.getRating() + 1);
-       /// TODO: Persistance notify
+       handleEditBondRequest(bondId,target.getRating(), target.getNotes());
     }
 
     public void handleLowerBondInCurrentGroup(int bondId) {
         Bond target = Model.getBond(bondId);
         target.setRating(target.getRating() - 1);
-        /// TODO : Persistance notify
+        handleEditBondRequest(bondId,target.getRating(), target.getNotes());
     }
 
     public void handleRaiseAllBondsInCurrentGroup() {
@@ -248,19 +244,9 @@ public class Controller {
         return graphArea.getClustering();
     }
 
-    public HashMap<Integer,String> handleGetKCoreDecomposition()
+    public LinkedHashMap<Integer,String> handleGetKCoreDecomposition(GraphArea graphArea)
     {
-        HashMap<Integer,String> list = new HashMap<>();
-        list.put(13,"Mary");
-        list.put(12,"Mark");
-        list.put(11,"Martin");
-        list.put(8,"Marcus");
-        list.put(10,"John");
-        list.put(9,"Peter");
-        list.put(7,"Quarkus");
-        list.put(6,"React");
-        list.put(5,"Angular");
-        return list;
+        return graphArea.getKCoreDecomposition();
     }
 
     public LinkedHashMap<Integer,String> handleGetDijkstraRoute(int id1, int id2, GraphArea graphArea)
@@ -268,9 +254,9 @@ public class Controller {
         return graphArea.getDijkstraRoute(id1,id2);
     }
 
-    public double handleGetActiveGroupRating()
+    public double handleGetActiveGroupRating(GraphArea graphArea)
     {
-        return 10;
+        return graphArea.getActiveGroupRating();
     }
 
 

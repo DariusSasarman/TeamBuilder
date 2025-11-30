@@ -123,4 +123,18 @@ class GraphDraw {
         }
         return ret;
     }
+
+    public double activeGroupRating() {
+        return graph.groupRating();
+    }
+
+    public LinkedHashMap<Integer, String> kCoreDecomposition() {
+        LinkedHashMap<Integer,String> ret = new LinkedHashMap<>();
+        ArrayList<Integer> group = graph.maxKCoreDecomposition();
+        for(int i =0; i<group.size();i++)
+        {
+            ret.put(i,Model.getPerson(group.get(i)).getName());
+        }
+        return ret;
+    }
 }

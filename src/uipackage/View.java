@@ -1287,10 +1287,10 @@ public class View {
 
         double rating = -1;
         try {
-            rating = handler.handleGetActiveGroupRating();
+            rating = handler.handleGetActiveGroupRating((GraphArea) graphArea);
         }
         catch (Exception ex) {
-            JOptionPane.showMessageDialog(dialog, "Error finding route: " + ex.getMessage());
+            JOptionPane.showMessageDialog(dialog, "Getting rating: " + ex.getMessage());
         }
 
         String displayedRating;
@@ -1322,7 +1322,7 @@ public class View {
     }
 
     private void getKCoreDecompositionUi() {
-        showList(handler.handleGetKCoreDecomposition(), "Here's who the og's are:", false);
+        showList(handler.handleGetKCoreDecomposition((GraphArea) graphArea), "Here's who the og's are:", false);
     }
 
     private Integer showList(HashMap<Integer, String> dataList, String titleText, boolean clickable) {
