@@ -1,4 +1,4 @@
-package datapackage;
+package main.java.datapackage;
 
 import java.awt.image.BufferedImage;
 

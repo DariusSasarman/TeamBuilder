@@ -1,4 +1,4 @@
-package datapackage;
+package main.java.datapackage;
 
 public class Bond extends Entity{
 

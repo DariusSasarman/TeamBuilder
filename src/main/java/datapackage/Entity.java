@@ -1,6 +1,4 @@
-package datapackage;
-
-import javax.swing.*;
+package main.java.datapackage;
 
 abstract class Entity {
     private int id;

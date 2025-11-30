@@ -1,18 +1,16 @@
-package persistencepackage;
+package main.java.persistencepackage;
 
 
-import datapackage.Bond;
-import datapackage.Group;
-import datapackage.Model;
-import datapackage.Person;
+import main.java.datapackage.Bond;
+import main.java.datapackage.Group;
+import main.java.datapackage.Model;
+import main.java.datapackage.Person;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Map;
 
 
 public  class Persistence {

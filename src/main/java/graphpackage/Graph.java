@@ -1,7 +1,7 @@
-package graphpackage;
+package main.java.graphpackage;
 
-import datapackage.Bond;
-import datapackage.Model;
+import main.java.datapackage.Bond;
+import main.java.datapackage.Model;
 
 import java.util.*;
 
@@ -102,11 +102,7 @@ class Graph {
     private double modulus(Pair pair)
     {
         double mod = Math.sqrt(pair.first()*pair.first() + pair.second()*pair.second());
-        if(mod < 0.00001)
-        {
-            return 0.00001;
-        }
-        return mod;
+        return Math.max(mod, 0.00001);
     }
 
 
@@ -331,8 +327,8 @@ class Graph {
         {
             for(Integer tail : adjacencyMatrix.get(head).keySet())
             {
-                if(counted.contains(Math.max(head,tail)+" "+Math.min(head,tail)))continue;
                 Integer add = getWeight(head,tail);
+                if(counted.contains(Math.max(head,tail)+" "+Math.min(head,tail)) || add == null)continue;
                 sum += add;
                 count++;
                 counted.add(Math.max(head,tail)+" "+Math.min(head,tail));
@@ -352,8 +348,8 @@ class Graph {
         {
             for(Integer tail : adjacencyMatrix.get(head).keySet())
             {
-                if(counted.contains(Math.max(head,tail)+" "+Math.min(head,tail)))continue;
                 Integer add = getWeight(head,tail);
+                if(counted.contains(Math.max(head,tail)+" "+Math.min(head,tail)) || add == null)continue;
                 counted.add(Math.max(head,tail)+" "+Math.min(head,tail));
                 sum+=(add-mean)*(add-mean);
                 count++;

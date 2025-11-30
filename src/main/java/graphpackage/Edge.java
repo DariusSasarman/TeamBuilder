@@ -1,9 +1,7 @@
-package graphpackage;
+package main.java.graphpackage;
 
-import datapackage.Bond;
-import datapackage.Model;
+import main.java.datapackage.Model;
 
-import javax.swing.*;
 import java.awt.*;
 
 class Edge extends DrawableElement{

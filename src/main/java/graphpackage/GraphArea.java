@@ -1,12 +1,10 @@
-package graphpackage;
+package main.java.graphpackage;
 
-import datapackage.Model;
+import main.java.datapackage.Model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class GraphArea extends JPanel {
 

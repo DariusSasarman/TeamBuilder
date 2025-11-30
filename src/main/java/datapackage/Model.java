@@ -1,6 +1,6 @@
-package datapackage;
+package main.java.datapackage;
 
-import persistencepackage.Persistence;
+import main.java.persistencepackage.Persistence;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

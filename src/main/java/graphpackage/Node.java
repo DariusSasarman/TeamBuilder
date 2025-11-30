@@ -1,7 +1,6 @@
-package graphpackage;
+package main.java.graphpackage;
 
-import datapackage.Model;
-import datapackage.Person;
+import main.java.datapackage.Model;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

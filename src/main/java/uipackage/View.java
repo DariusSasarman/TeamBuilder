@@ -1,6 +1,6 @@
-package uipackage;
+package main.java.uipackage;
 
-import graphpackage.GraphArea;
+import main.java.graphpackage.GraphArea;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -61,8 +61,6 @@ public class View {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("TeamBuilder");
             frame.setBackground(BG_COLOR);
-            ImageIcon img = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/icon_15.png")));
-            frame.setIconImage(img.getImage());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(this.contentPanel);
             frame.pack();
