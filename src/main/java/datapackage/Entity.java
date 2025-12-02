@@ -1,4 +1,4 @@
-package main.java.datapackage;
+package datapackage;
 
 abstract class Entity {
     private int id;

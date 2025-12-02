@@ -1,16 +1,22 @@
-package main.java.persistencepackage;
+package persistencepackage;
 
 
-import main.java.datapackage.Bond;
-import main.java.datapackage.Group;
-import main.java.datapackage.Model;
-import main.java.datapackage.Person;
+import datapackage.Bond;
+import datapackage.Group;
+import datapackage.Model;
+import datapackage.Person;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 
 public  class Persistence {
@@ -18,6 +24,8 @@ public  class Persistence {
     /**
      * ALL INTERACTIONS WITH DATABASE ARE DONE HERE
      */
+
+    private static Connection dataBaseConnection ;
 
     private static int nextPersonUID = 0;
     private static int nextBondUID = 0;
@@ -27,8 +35,7 @@ public  class Persistence {
     private static User currentUser;
 
     public Persistence() {
-        /// TODO: FIGURE OUT HOW TO STORE THE DATABASE CONNECTION
-
+        loadConnection();
         loginManager = new LoginManager();
         currentUser = loginManager.login();
         if(currentUser != null)
@@ -40,14 +47,8 @@ public  class Persistence {
     public static void queryDB() {
         Model.clearInfo();
         System.out.println("Logging in : " + currentUser.getUsername());
-        /// TODO: QUERY DB TO CAPTURE EXISTING DATA
-        System.out.println("Calling Database Connection...");
-        /// TODO: READ ALL DATA based on USER
-        System.out.println("Connection secured!");
-
 
         System.out.println("Loading all data in memory...");
-        /// TODO: UPLOAD ALL DATA in memory using Model.addXXXXX();
 
         BufferedImage img = null;
 
@@ -91,7 +92,34 @@ public  class Persistence {
         }
     }
 
-    /// Person queries
+    private static void loadConnection()
+    {
+        System.out.println("Calling Database Connection...");
+        try {
+            InputStream input = Persistence.class
+                .getClassLoader()
+                .getResourceAsStream("db/database.properties");
+
+            Properties prop = new Properties();
+            if (input == null) {
+                throw new RuntimeException("Unable to find database.properties");
+            }
+
+            prop.load(input);
+            String url = prop.getProperty("db.url");
+            String user = prop.getProperty("db.user");
+            String password = prop.getProperty("db.password");
+            dataBaseConnection = DriverManager.getConnection(url,user,password);
+            System.out.println("Connection secured!");
+            System.out.println(dataBaseConnection.getMetaData());
+
+            input.close();
+        } catch (IOException | RuntimeException | SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error connecting to database: " + e.getMessage());
+        }
+    }
+
+        /// Person queries
 
     private static void queryDBforNextPersonUID() {
         /// TODO: QUERY DB FOR THE NEXT PERSON UI

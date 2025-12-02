@@ -1,11 +1,11 @@
-package main.java.uipackage;
+package uipackage;
 
-import main.java.datapackage.Bond;
-import main.java.datapackage.Group;
-import main.java.datapackage.Model;
-import main.java.datapackage.Person;
-import main.java.graphpackage.GraphArea;
-import main.java.persistencepackage.Persistence;
+import  datapackage.Bond;
+import  datapackage.Group;
+import  datapackage.Model;
+import  datapackage.Person;
+import  graphpackage.GraphArea;
+import  persistencepackage.Persistence;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
-package main.java.uipackage;
+package uipackage;
 
-import main.java.graphpackage.GraphArea;
+import graphpackage.GraphArea;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

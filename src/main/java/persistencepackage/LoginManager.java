@@ -1,4 +1,4 @@
-package main.java.persistencepackage;
+package persistencepackage;
 
 import javax.swing.*;
 import java.awt.*;

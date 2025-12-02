@@ -1,7 +1,7 @@
-package main.java.graphpackage;
+package graphpackage;
 
-import main.java.datapackage.Bond;
-import main.java.datapackage.Model;
+import datapackage.Bond;
+import datapackage.Model;
 
 import java.util.*;
 

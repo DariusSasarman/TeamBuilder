@@ -1,4 +1,4 @@
-package main.java.persistencepackage;
+package persistencepackage;
 
 import java.io.Serial;
 import java.io.Serializable;

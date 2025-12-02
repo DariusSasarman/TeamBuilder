@@ -1,8 +1,7 @@
-package main.java;
 
-import main.java.persistencepackage.Persistence;
-import main.java.uipackage.View;
-import main.java.uipackage.Controller;
+import persistencepackage.Persistence;
+import uipackage.View;
+import uipackage.Controller;
 
 public class Main {
     public static void main(String[] args) {
