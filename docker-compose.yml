@@ -5,8 +5,8 @@ services:
     image: postgres:15
     container_name: teambuilder-db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: Ut09Q10h6kHqe9tMCstkdRzAajW
+      POSTGRES_PASSWORD: tOKyl6zx8HXsPpDbkVXPrJn5x7
       POSTGRES_DB: teambuilder
     volumes:
       - ./db:/docker-entrypoint-initdb.d
