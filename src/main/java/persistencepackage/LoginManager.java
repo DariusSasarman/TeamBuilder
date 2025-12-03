@@ -1,9 +1,18 @@
 package persistencepackage;
 
+import org.postgresql.PGStatement;
+import org.postgresql.jdbc.PgResultSet;
+import org.postgresql.jdbc.PgStatement;
+
+import javax.sql.StatementEvent;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.security.MessageDigest;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Base64;
 
 public class LoginManager {
@@ -11,14 +20,17 @@ public class LoginManager {
     private static final String CREDENTIALS_FILE = "credentials.dat";
     private static final Color BG_COLOR = new Color(0x2B2C30);
 
+    private Connection dataBaseConnection;
     private String credentialsPath;
     private User currentUser;
 
-    public LoginManager() {
+    public LoginManager(Connection connection) {
+        this.dataBaseConnection = connection;
         credentialsPath = getCredentialsPath();
     }
 
-    public User login() {
+    public User login() throws SQLException {
+
         File credFile = new File(credentialsPath);
 
         if (credFile.exists()) {
@@ -32,10 +44,11 @@ public class LoginManager {
         return currentUser;
     }
 
-    public User changeAccount(String username, String password) {
+    public User changeAccount(String username, String password) throws SQLException {
         if (authenticateWithDB(username, password)) {
-            logout(); // Delete old credentials
-            currentUser = new User(username, hashPassword(password));
+            logout();
+
+            currentUser = new User(username, hashPassword(password), getUUID(username,hashPassword(password)));
             saveCredentials(currentUser);
             return currentUser;
         }
@@ -120,12 +133,17 @@ public class LoginManager {
                 return;
             }
 
-            if (authenticateWithDB(username, password)) {
-                result[0] = new User(username, hashPassword(password));
-                saveCredentials(result[0]);
-                dialog.dispose();
-            } else {
-                JOptionPane.showMessageDialog(dialog, "Invalid username or password!");
+            try {
+                if (authenticateWithDB(username, password)) {
+
+                    result[0] = new User(username, hashPassword(password),getUUID(username,hashPassword(password)));
+                    saveCredentials(result[0]);
+                    dialog.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Invalid username or password!");
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
@@ -208,12 +226,16 @@ public class LoginManager {
                 return;
             }
 
-            if (createUserOnDB(username, password)) {
-                result[0] = new User(username, hashPassword(password));
-                saveCredentials(result[0]);
-                dialog.dispose();
-            } else {
-                JOptionPane.showMessageDialog(dialog, "Invalid username or password!");
+            try {
+                if (createUserOnDB(username, password)) {
+                    result[0] = new User(username, hashPassword(password),getUUID(username,hashPassword(password)));
+                    saveCredentials(result[0]);
+                    dialog.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Invalid username or password!");
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
@@ -235,24 +257,42 @@ public class LoginManager {
         button.setFont(font);
     }
 
-    private boolean authenticateWithDB(String username, String password) {
+    private boolean authenticateWithDB(String username, String password) throws SQLException {
         return authenticateWithDBHashed(username,hashPassword(password));
     }
 
-    private boolean authenticateWithDBHashed(String username, String hashedPassword) {
-        // TODO: Implement database authentication
-        System.out.println("Authenticating: " + username);
-        /// TODO: Replace with actual DB check
-        /// TODO: DB stores the hashed password (SHA-256 Base64)
-        return true;
+    private boolean authenticateWithDBHashed(String username, String hashedPassword) throws SQLException {
+        return getUUID(username,hashedPassword) != null;
     }
 
-    private boolean createUserOnDB(String username, String password) {
-        /// TODO: Implement database user Creation
-        System.out.println("Making new account: " + username);
-        /// TODO: Replace with actual DB check
-        return true;
+    private boolean createUserOnDB(String username, String password) throws SQLException {
+        String query = "INSERT INTO public.users (app_user_name,app_user_hashed_password) VALUES (?,?)";
+        PreparedStatement statement = this.dataBaseConnection.prepareStatement(query);
+
+        String hashedPassword = hashPassword(password);
+        statement.setString(1,username);
+        statement.setString(2,hashedPassword);
+        statement.executeUpdate();
+
+        return getUUID(username,hashedPassword) != null;
     }
+
+    private Integer getUUID(String username, String hashedPassword) throws SQLException {
+        String query = "SELECT app_user_id FROM public.users " +
+                "WHERE app_user_name = ? AND app_user_hashed_password = ?";
+
+        PreparedStatement statement = this.dataBaseConnection.prepareStatement(query);
+        statement.setString(1, username);
+        statement.setString(2, hashedPassword);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getInt("app_user_id");
+        }
+        return null; // No match found
+    }
+
 
     private void saveCredentials(User user) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(credentialsPath))) {

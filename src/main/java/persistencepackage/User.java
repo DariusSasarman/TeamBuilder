@@ -9,10 +9,12 @@ public class User implements Serializable {
 
     private String username;
     private String passwordHash;
+    private Integer UID;
 
-    public User(String username, String passwordHash) {
+    public User(String username, String passwordHash, Integer UID) {
         this.username = username;
         this.passwordHash = passwordHash;
+        this.UID = UID;
     }
 
     public String getUsername() {
@@ -29,5 +31,13 @@ public class User implements Serializable {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public Integer getUID() {
+        return UID;
+    }
+
+    public void setUID(Integer UID) {
+        this.UID = UID;
     }
 }

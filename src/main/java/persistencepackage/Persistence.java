@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 
-public  class Persistence {
+public class Persistence {
 
     /**
      * ALL INTERACTIONS WITH DATABASE ARE DONE HERE
@@ -36,11 +36,36 @@ public  class Persistence {
 
     public Persistence() {
         loadConnection();
-        loginManager = new LoginManager();
-        currentUser = loginManager.login();
-        if(currentUser != null)
+        while(currentUser == null)
         {
-            queryDB();
+            loginManager = new LoginManager(dataBaseConnection);
+            try
+            {
+                currentUser = loginManager.login();
+            }
+            catch (SQLException e)
+            {
+                JOptionPane.showMessageDialog(null,"Error connecting to database:" + e.getMessage());
+            }
+        }
+        queryDB();
+    }
+
+    public static void changeAccount(String username, String password) {
+        try
+        {
+            User newUser = loginManager.changeAccount(username, password);
+            if (newUser != null) {
+                currentUser = newUser;
+                queryDB();
+            }
+            else {
+                throw new SQLException("Account doesn't exist.");
+            }
+        }
+        catch (SQLException e)
+        {
+            JOptionPane.showMessageDialog(null,"Couldn't change account: " + e.getMessage());
         }
     }
 
@@ -84,14 +109,6 @@ public  class Persistence {
         System.out.println("Done! Information loaded.");
     }
 
-    public static void changeAccount(String username, String password) {
-        User newUser = loginManager.changeAccount(username, password);
-        if (newUser != null) {
-            currentUser = newUser;
-            queryDB();
-        }
-    }
-
     private static void loadConnection()
     {
         System.out.println("Calling Database Connection...");
@@ -110,8 +127,7 @@ public  class Persistence {
             String user = prop.getProperty("db.user");
             String password = prop.getProperty("db.password");
             dataBaseConnection = DriverManager.getConnection(url,user,password);
-            System.out.println("Connection secured!");
-            System.out.println(dataBaseConnection.getMetaData());
+            System.out.println("Connection secured! " + dataBaseConnection.getMetaData());
 
             input.close();
         } catch (IOException | RuntimeException | SQLException e) {
