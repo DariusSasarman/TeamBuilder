@@ -1,6 +1,6 @@
 # TeamBuilder
 
-Readme.md isn't done yet. I'll handle it after I'm done.
+Readme.md isn't done yet. I'll handle it later after I'm done.
 
 ## What is it?
 
