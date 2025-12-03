@@ -1,4 +1,7 @@
 # TeamBuilder
+
+Readme.md isn't done yet. I'll handle it after I'm done.
+
 ## What is it?
 
 A software application meant to **help** group **psychologists** in building a consistent team. 
