@@ -14,3 +14,13 @@ CREATE TABLE public.users (
 	CONSTRAINT app_users_unique UNIQUE (app_user_name)
 );
 
+CREATE TABLE public.persons (
+	person_id serial NOT NULL,
+	person_name varchar NOT NULL,
+	person_image bytea NOT NULL,
+	person_notes varchar NULL,
+	person_owner_id serial NOT NULL,
+	CONSTRAINT person_pk PRIMARY KEY (person_id),
+	CONSTRAINT person_users_fk FOREIGN KEY (person_owner_id) REFERENCES public.users(app_user_id)
+);
+

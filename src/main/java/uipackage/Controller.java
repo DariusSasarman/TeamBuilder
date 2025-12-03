@@ -8,6 +8,8 @@ import  graphpackage.GraphArea;
 import  persistencepackage.Persistence;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -15,20 +17,18 @@ import java.util.LinkedHashMap;
 public class Controller {
 
     /// Person settings
-    public void handleAddPersonRequest(BufferedImage img, String name, String notes)
-    {
+    public void handleAddPersonRequest(BufferedImage img, String name, String notes) throws SQLException, IOException {
         Person newcomer = new Person(Persistence.getNextPersonUID(),img,name,notes);
         Model.addPerson(newcomer);
         Persistence.createPersonOnDb(newcomer);
     }
 
-    public void handleDeletePersonRequest(int id) {
+    public void handleDeletePersonRequest(int id) throws SQLException {
         Model.deletePerson(id);
         Persistence.deletePersonOnDb(id);
     }
 
-    public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes)
-    {
+    public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes) throws SQLException, IOException {
         Person target = Model.getPerson(id);
 
         if(!target.getImage().equals(img))

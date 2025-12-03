@@ -9,12 +9,13 @@ import datapackage.Person;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.nio.ByteBuffer;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -48,7 +49,13 @@ public class Persistence {
                 JOptionPane.showMessageDialog(null,"Error connecting to database:" + e.getMessage());
             }
         }
-        queryDB();
+        try
+        {
+            queryDB();
+        } catch (SQLException | IOException e) {
+            JOptionPane.showMessageDialog(null,"Error connecting to database: " + e.getMessage());
+        }
+
     }
 
     public static void changeAccount(String username, String password) {
@@ -63,50 +70,10 @@ public class Persistence {
                 throw new SQLException("Account doesn't exist.");
             }
         }
-        catch (SQLException e)
+        catch (SQLException | IOException e)
         {
             JOptionPane.showMessageDialog(null,"Couldn't change account: " + e.getMessage());
         }
-    }
-
-    public static void queryDB() {
-        Model.clearInfo();
-        System.out.println("Logging in : " + currentUser.getUsername());
-
-        System.out.println("Loading all data in memory...");
-
-        BufferedImage img = null;
-
-
-        // Define person data
-        String[] names = {"Alex", "Jordan", "Maya", "Sam", "Taylor", "Casey", "Riley", "Morgan", "Cameron", "Drew"};
-        String[] colors = {"ff6b6b", "4ecdc4", "ffe66d", "a8e6cf", "dda15e", "bc6c25", "b8b8ff", "ffaaa5", "95e1d3", "f38181"};
-
-        // Create all persons
-        for (int i = 0; i < names.length; i++) {
-            try {
-                URL url = new URL("https://api.dicebear.com/7.x/adventurer/png?seed=" + names[i] + "&backgroundColor=" + colors[i]);
-                img = ImageIO.read(url);
-                Model.addPerson(new Person(getNextPersonUID(), img, names[i]));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Add all bonds
-        for (int i = 0; i<11; i++) {
-            Model.addBond(new Bond(getNextBondUID(), (int) (Math.random()*names.length), (int)(Math.random()* names.length), (int)(Math.random()*10)));
-        }
-
-        // Create group with all members
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < names.length; i++) {
-            list.add(i);
-        }
-        Model.addGroup(new Group(getNextGroupUID(), "Adventure Squad", list));
-        Model.setActiveGroupId(0);
-
-        System.out.println("Done! Information loaded.");
     }
 
     private static void loadConnection()
@@ -114,8 +81,8 @@ public class Persistence {
         System.out.println("Calling Database Connection...");
         try {
             InputStream input = Persistence.class
-                .getClassLoader()
-                .getResourceAsStream("db/database.properties");
+                    .getClassLoader()
+                    .getResourceAsStream("db/database.properties");
 
             Properties prop = new Properties();
             if (input == null) {
@@ -135,45 +102,158 @@ public class Persistence {
         }
     }
 
-        /// Person queries
+    public static void queryDB() throws SQLException, IOException {
+        Model.clearInfo();
+        System.out.println("Logging in : " + currentUser.getUsername());
+        System.out.println("Loading all data in memory...");
+        loadPersonInfo();
+        loadBondInfo();
+        loadGroupInfo();
 
-    private static void queryDBforNextPersonUID() {
-        /// TODO: QUERY DB FOR THE NEXT PERSON UI
-        nextPersonUID++;
+        System.out.println("Done! Information loaded.");
     }
 
-    public static int getNextPersonUID() {
+
+    /// Person queries
+
+    private static void loadPersonInfo() throws SQLException, IOException {
+        String query = "SELECT * FROM public.persons WHERE person_owner_id=?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,currentUser.getUID());
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next())
+        {
+            Integer id = resultSet.getInt("person_id");
+            String name= resultSet.getString("person_name");
+            String notes = resultSet.getString("person_notes");
+            byte[] imageBytes = resultSet.getBytes("person_image");
+            BufferedImage image = null;
+            if (imageBytes != null) {
+                try (ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes)) {
+                    image = ImageIO.read(bais);
+                }
+            }
+            Person add = new Person(id,image,name,notes);
+            Model.addPerson(add);
+        }
+    }
+
+    private static void queryDBforNextPersonUID() throws SQLException {
+        String query = "SELECT nextval(pg_get_serial_sequence('public.persons','person_id')) AS new_id";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        ResultSet resultSet = statement.executeQuery();
+        if(resultSet.next())
+        {
+            nextPersonUID = resultSet.getInt("new_id");
+        }
+    }
+
+    public static int getNextPersonUID() throws SQLException {
         int returnValue = nextPersonUID;
         queryDBforNextPersonUID();
         return returnValue;
     }
 
-    public static void createPersonOnDb(Person P) {
-        /// TODO: Query DB for CRUD create Operation
+    public static void createPersonOnDb(Person P) throws SQLException, IOException {
+        String query = "INSERT INTO public.persons " +
+                "(person_id,person_name,person_image,person_notes,person_owner_id)" +
+                "VALUES (?,?,?,?,?)";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,P.getId());
+        statement.setString(2,P.getName());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(P.getImage(),"png",baos);
+        byte[] bytes = baos.toByteArray();
+        statement.setBytes(3,bytes);
+        statement.setString(4,P.getNotes());
+        statement.setInt(5,currentUser.getUID());
+        statement.executeUpdate();
     }
 
-    public static void deletePersonOnDb(int id) {
-        /// TODO: Query DB for CRUD delete Operation
+    public static void deletePersonOnDb(int id) throws SQLException {
+        String query = "DELETE FROM public.persons " +
+                " WHERE person_id = ? AND person_owner_id = ?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,id);
+        statement.setInt(2,currentUser.getUID());
+        statement.executeUpdate();
     }
 
     public static Person readPerson(int id) {
-        /// TODO : Query DB for CRUD read Operation
-        return new Person(-1, new BufferedImage(10, 10, 10), new String("Not yet"));
+        String query = "SELECT * FROM public.persons WHERE person_owner_id=? AND person_id=?";
+        Person ret = null;
+        try
+        {
+            PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+            statement.setInt(1,currentUser.getUID());
+            statement.setInt(2, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next())
+            {
+                String name= resultSet.getString("person_name");
+                String notes = resultSet.getString("person_notes");
+                byte[] imageBytes = resultSet.getBytes("person_image");
+                BufferedImage image = null;
+                if (imageBytes != null) {
+                    try (ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes)) {
+                        image = ImageIO.read(bais);
+                    }
+                }
+                ret = new Person(id,image,name,notes);
+            }
+        }
+        catch (SQLException | IOException e)
+        {
+            JOptionPane.showMessageDialog(null,"Error loading person: "+e.getMessage());
+        }
+        return ret;
     }
 
-    public static void updatePersonName(int id, String newName) {
-        /// TODO: Query DB for CRUD update Operation
+    public static void updatePersonName(int id, String newName) throws SQLException {
+        String query = "UPDATE public.persons " +
+                "SET person_name=? " +
+                "WHERE person_id=? " +
+                "AND person_owner_id=?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setString(1,newName);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+        statement.executeUpdate();
     }
 
-    public static void updatePersonNotes(int id, String newNotes) {
-        /// TODO: Query DB for CRUD update Operation
+    public static void updatePersonNotes(int id, String newNotes) throws SQLException {
+        String query = "UPDATE public.persons " +
+                "SET person_notes=? " +
+                "WHERE person_id=? " +
+                "AND person_owner_id=?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setString(1,newNotes);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+        statement.executeUpdate();
     }
 
-    public static void updatePersonImage(int id, BufferedImage newImage) {
-        /// TODO: Query DB for CRUD update Operation
+    public static void updatePersonImage(int id, BufferedImage newImage) throws SQLException, IOException {
+        String query = "UPDATE public.persons " +
+                "SET person_image=? " +
+                "WHERE person_id=? " +
+                "AND person_owner_id=?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(newImage,"png",baos);
+        byte[] bytes = baos.toByteArray();
+        statement.setBytes(1,bytes);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+        statement.executeUpdate();
     }
 
     /// Bond queries
+
+
+    private static void loadBondInfo() {
+
+    }
 
     private static void queryDBforNextBondUID() {
         /// TODO: Query db for this
@@ -209,6 +289,11 @@ public class Persistence {
     }
 
     /// Group queries
+
+
+    private static void loadGroupInfo() {
+    }
+
     private static void queryDBforNextGroupUID() {
         /// TODO: Query db for this
         nextGroupUID++;

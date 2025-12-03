@@ -2,7 +2,10 @@ package datapackage;
 
 import persistencepackage.Persistence;
 
+import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -16,9 +19,12 @@ public class Model {
     private static int activeGroupId;
 
 
-    public Model()
-    {
-        Persistence.queryDB();
+    public Model() {
+        try{
+            Persistence.queryDB();
+        } catch (SQLException | IOException e) {
+            JOptionPane.showMessageDialog(null,"Error loading data into memory:" + e.getMessage());
+        }
     }
 
     public static void clearInfo()
