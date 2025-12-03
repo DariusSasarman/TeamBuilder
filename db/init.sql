@@ -24,3 +24,18 @@ CREATE TABLE public.persons (
 	CONSTRAINT person_users_fk FOREIGN KEY (person_owner_id) REFERENCES public.users(app_user_id)
 );
 
+CREATE TABLE public.bonds (
+	bond_id serial NOT NULL,
+	bond_head_id int NOT NULL,
+	bond_tail_id int NOT NULL,
+	bond_rating int NOT NULL,
+	bond_notes varchar NULL,
+	bond_owner_id int NOT NULL,
+	CONSTRAINT bond_pk PRIMARY KEY (bond_id),
+	CONSTRAINT bond_rating_check CHECK ((bond_rating >=1 AND bond_rating<=10)),
+	CONSTRAINT bond_check CHECK ((bond_head_id > bond_tail_id)),
+	CONSTRAINT bond_unique UNIQUE (bond_head_id,bond_tail_id),
+	CONSTRAINT bond_head_fk FOREIGN KEY (bond_head_id) REFERENCES public.persons(person_id),
+	CONSTRAINT bond_tail_fk FOREIGN KEY (bond_tail_id) REFERENCES public.persons(person_id),
+	CONSTRAINT bond_owner_fk FOREIGN KEY (bond_owner_id) REFERENCES public.users(app_user_id)
+);

@@ -252,6 +252,7 @@ public class Persistence {
 
 
     private static void loadBondInfo() {
+
     }
 
     private static void queryDBforNextBondUID() {

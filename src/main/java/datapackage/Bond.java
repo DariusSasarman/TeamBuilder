@@ -9,6 +9,12 @@ public class Bond extends Entity{
     public Bond (int bondId, int headId, int tailId, int rating, String notes)
     {
         super(bondId,notes);
+        if(headId <= bondId)
+        {
+            int aux = headId;
+            headId = tailId;
+            tailId = aux;
+        }
         this.headId = headId;
         this.tailId = tailId;
         this.rating = rating;
@@ -25,6 +31,12 @@ public class Bond extends Entity{
     public Bond (int bondId, int headId, int tailId, int rating)
     {
         super(bondId);
+        if(headId <= bondId)
+        {
+            int aux = headId;
+            headId = tailId;
+            tailId = aux;
+        }
         this.headId = headId;
         this.tailId = tailId;
         this.rating = rating;
