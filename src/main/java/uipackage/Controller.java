@@ -123,7 +123,7 @@ public class Controller {
     }
 
     /// Group Settings
-    public void handleAddGroupRequest(String title, ArrayList<Integer> personIds) {
+    public void handleAddGroupRequest(String title, ArrayList<Integer> personIds) throws SQLException {
         Group group = new Group(Persistence.getNextGroupUID(),title,personIds);
         Model.addGroup(group);
         Persistence.createGroupOnDB(group);
@@ -137,22 +137,22 @@ public class Controller {
         return Model.getGroup(id).getPersonIdList();
     }
 
-    public void handleEditGroupRequest(int id, String title, ArrayList<Integer> personIds) {
+    public void handleEditGroupRequest(int id, String title, ArrayList<Integer> personIds) throws SQLException {
         Group target = Model.getGroup(id);
         if(!target.getTitle().equals(title))
         {
             Model.setGroupTitle(id,title);
             Persistence.updateGroupTitle(id,title);
-
         }
         if(!target.getPersonIdList().equals(personIds))
         {
-            Model.setGroupPersonIds(id,personIds);
+            /// Server first so the function can do GROUP OLD\NEW remove and GROUP NEW\OLD insert.
             Persistence.updateGroupPersonIds(id,personIds);
+            Model.setGroupPersonIds(id,personIds);
         }
     }
 
-    public void handleDeleteGroupRequest(int id) {
+    public void handleDeleteGroupRequest(int id) throws SQLException {
         Model.deleteGroup(id);
         Persistence.deleteGroupOnDb(id);
     }
@@ -178,20 +178,20 @@ public class Controller {
         return Model.getPeopleInActiveGroup();
     }
 
-    public void handleAddPersonToCurrentGroup(int newcomerId)
-    {
-        Model.addPersonToActiveGroup(newcomerId);
+    public void handleAddPersonToCurrentGroup(int newcomerId) throws SQLException {
+        /// Server first so the function can do GROUP OLD\NEW remove and GROUP NEW\OLD insert.
         Persistence.updateGroupPersonIds(Model.getActiveGroupId(),new ArrayList<>(handleGetPeopleInCurrentGroup().keySet()));
+        Model.addPersonToActiveGroup(newcomerId);
     }
 
     public HashMap<Integer, String> handleGetPeopleNotInCurrentGroup() {
         return Model.getPeopleNotInActiveGroup();
     }
 
-    public void handleRemovePersonFromCurrentGroup(int id)
-    {
-        Model.removePersonFromCurrentGroup(id);
+    public void handleRemovePersonFromCurrentGroup(int id) throws SQLException {
+        /// Server first so the function can do GROUP OLD\NEW remove and GROUP NEW\OLD insert.
         Persistence.updateGroupPersonIds(Model.getActiveGroupId(),new ArrayList<>(handleGetPeopleInCurrentGroup().keySet()));
+        Model.removePersonFromCurrentGroup(id);
     }
 
     public HashMap<Integer, String> handleGetBondsInCurrentGroup() {

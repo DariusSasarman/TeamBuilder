@@ -21,7 +21,7 @@ CREATE TABLE public.persons (
 	person_notes varchar NULL,
 	person_owner_id int NOT NULL,
 	CONSTRAINT person_pk PRIMARY KEY (person_id),
-	CONSTRAINT person_users_fk FOREIGN KEY (person_owner_id) REFERENCES public.users(app_user_id)
+	CONSTRAINT person_users_fk FOREIGN KEY (person_owner_id) REFERENCES public.users(app_user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.bonds (
@@ -35,17 +35,17 @@ CREATE TABLE public.bonds (
 	CONSTRAINT bond_rating_check CHECK ((bond_rating >=1 AND bond_rating<=10)),
 	CONSTRAINT bond_check CHECK ((bond_head_id > bond_tail_id)),
 	CONSTRAINT bond_unique UNIQUE (bond_head_id,bond_tail_id),
-	CONSTRAINT bond_head_fk FOREIGN KEY (bond_head_id) REFERENCES public.persons(person_id),
-	CONSTRAINT bond_tail_fk FOREIGN KEY (bond_tail_id) REFERENCES public.persons(person_id),
-	CONSTRAINT bond_owner_fk FOREIGN KEY (bond_owner_id) REFERENCES public.users(app_user_id)
+	CONSTRAINT bond_head_fk FOREIGN KEY (bond_head_id) REFERENCES public.persons(person_id) ON DELETE CASCADE,
+	CONSTRAINT bond_tail_fk FOREIGN KEY (bond_tail_id) REFERENCES public.persons(person_id) ON DELETE CASCADE,
+	CONSTRAINT bond_owner_fk FOREIGN KEY (bond_owner_id) REFERENCES public.users(app_user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.groups_table (
 	group_id serial NOT NULL,
 	group_title varchar NOT NULL,
 	group_owner_id int NOT NULL,
-	CONSTRAINT groups_pk PRIMARY KEY (group_id)
-	CONSTRAINT groups_table_users_fk FOREIGN KEY (group_owner_id) REFERENCES public.users(app_user_id);
+	CONSTRAINT groups_pk PRIMARY KEY (group_id),
+	CONSTRAINT groups_table_users_fk FOREIGN KEY (group_owner_id) REFERENCES public.users(app_user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.person_in_group (
@@ -55,8 +55,8 @@ CREATE TABLE public.person_in_group (
 	owner_id int NOT NULL,
 	CONSTRAINT person_in_group_pk PRIMARY KEY (person_in_group_pk),
 	CONSTRAINT person_in_group_unique UNIQUE (person_id,group_id),
-	CONSTRAINT person_in_group_persons_fk FOREIGN KEY (person_id) REFERENCES public.persons(person_id),
-	CONSTRAINT person_in_group_groups_table_fk FOREIGN KEY (group_id) REFERENCES public.groups_table(group_id),
-	CONSTRAINT person_in_group_users_fk FOREIGN KEY (owner_id) REFERENCES public.users(app_user_id)
+	CONSTRAINT person_in_group_persons_fk FOREIGN KEY (person_id) REFERENCES public.persons(person_id) ON DELETE CASCADE,
+	CONSTRAINT person_in_group_groups_table_fk FOREIGN KEY (group_id) REFERENCES public.groups_table(group_id) ON DELETE CASCADE,
+	CONSTRAINT person_in_group_users_fk FOREIGN KEY (owner_id) REFERENCES public.users(app_user_id) ON DELETE CASCADE
 );
 

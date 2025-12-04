@@ -13,11 +13,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.nio.ByteBuffer;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.*;
 
 
 public class Persistence {
@@ -123,7 +120,7 @@ public class Persistence {
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next())
         {
-            Integer id = resultSet.getInt("person_id");
+            int id = resultSet.getInt("person_id");
             String name= resultSet.getString("person_name");
             String notes = resultSet.getString("person_notes");
             byte[] imageBytes = resultSet.getBytes("person_image");
@@ -257,10 +254,10 @@ public class Persistence {
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next())
         {
-            Integer id = resultSet.getInt("bond_id");
-            Integer headId = resultSet.getInt("bond_head_id");
-            Integer tailId = resultSet.getInt("bond_tail_id");
-            Integer rating = resultSet.getInt("bond_rating");
+            int id = resultSet.getInt("bond_id");
+            int headId = resultSet.getInt("bond_head_id");
+            int tailId = resultSet.getInt("bond_tail_id");
+            int rating = resultSet.getInt("bond_rating");
             String notes = resultSet.getString("bond_notes");
             Bond bond = new Bond(id,headId,tailId,rating,notes);
             Model.addBond(bond);
@@ -273,7 +270,7 @@ public class Persistence {
         ResultSet resultSet = statement.executeQuery();
         if(resultSet.next())
         {
-            nextPersonUID = resultSet.getInt("new_id");
+            nextBondUID = resultSet.getInt("new_id");
         }
     }
 
@@ -295,9 +292,9 @@ public class Persistence {
 
             if(resultSet.next())
             {
-                Integer headId = resultSet.getInt("bond_head_id");
-                Integer tailId = resultSet.getInt("bond_tail_id");
-                Integer rating = resultSet.getInt("bond_rating");
+                int headId = resultSet.getInt("bond_head_id");
+                int tailId = resultSet.getInt("bond_tail_id");
+                int rating = resultSet.getInt("bond_rating");
                 String notes = resultSet.getString("bond_notes");
                 ret = new Bond(id,headId,tailId,rating,notes);
             }
@@ -357,40 +354,141 @@ public class Persistence {
 
     /// Group queries
 
-
-    private static void loadGroupInfo() {
+    private static void loadGroupInfo() throws SQLException {
+        String query = "SELECT group_id FROM public.groups_table WHERE group_owner_id = ?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,currentUser.getUID());
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next())
+        {
+            int id = resultSet.getInt("group_id");
+            Model.addGroup(readGroup(id));
+        }
     }
 
-    private static void queryDBforNextGroupUID() {
-        /// TODO: Query db for this
-        nextGroupUID++;
+    private static void queryDBforNextGroupUID() throws SQLException {
+        String query = "SELECT nextval(pg_get_serial_sequence('public.groups_table','group_id')) AS new_id";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        ResultSet resultSet = statement.executeQuery();
+        if(resultSet.next())
+        {
+            nextGroupUID = resultSet.getInt("new_id");
+        }
     }
 
-    public static int getNextGroupUID() {
+    public static int getNextGroupUID() throws SQLException {
         int returnValue = nextGroupUID;
         queryDBforNextGroupUID();
         return returnValue;
     }
 
-    public static void createGroupOnDB(Group group) {
-        /// TODO : This.
+    public static void createGroupOnDB(Group group) throws SQLException {
+        String query = "INSERT INTO public.groups_table " +
+                "(group_id,group_title,group_owner_id) " +
+                "VALUES (?,?,?)";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,group.getId());
+        statement.setString(2,group.getTitle());
+        statement.setInt(3,currentUser.getUID());
+        statement.executeUpdate();
+        query = "INSERT INTO public.person_in_group " +
+                "(person_id,group_id,owner_id) " +
+                "VALUES (?,?,?)";
+        statement = dataBaseConnection.prepareStatement(query);
+        for(Integer id : group.getPersonIdList())
+        {
+            statement.setInt(1,id);
+            statement.setInt(2,group.getId());
+            statement.setInt(3,currentUser.getUID());
+            statement.executeUpdate();
+        }
     }
 
     public static Group readGroup(int id) {
-        /// TODO : This.
-        return new Group(-1,"");
+
+        Group ret = new Group(id,"");
+        try{
+            String query = "SELECT person_id FROM person_in_group WHERE group_id = ? AND owner_id = ?";
+            PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+            statement.setInt(1,id);
+            statement.setInt(2,currentUser.getUID());
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next())
+            {
+                ret.addPersonToGroup(resultSet.getInt("person_id"));
+            }
+            query = "SELECT group_title FROM groups_table WHERE group_id = ? AND group_owner_id = ?";
+            statement = dataBaseConnection.prepareStatement(query);
+            statement.setInt(1,id);
+            statement.setInt(2,currentUser.getUID());
+            resultSet = statement.executeQuery();
+            if(resultSet.next())
+            {
+                ret.setTitle(resultSet.getString("group_title"));
+            }
+        }
+        catch (SQLException e)
+        {
+            JOptionPane.showMessageDialog(null,"Error loading groups from database: " + e.getMessage());
+        }
+        return ret;
     }
 
-    public static void updateGroupTitle(int id, String title) {
-        /// TODO : This.
+    public static void updateGroupTitle(int id, String title) throws SQLException {
+        String query = "UPDATE public.groups_table " +
+                "SET group_title = ? " +
+                "WHERE group_id = ? AND group_owner_id = ?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setString(1,title);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+        statement.executeUpdate();
     }
 
-    public static void updateGroupPersonIds(int id, ArrayList<Integer> personIds) {
-        /// TODO: This
+    public static void updateGroupPersonIds(int id, ArrayList<Integer> personIds) throws SQLException {
+        /// THIS FUNCTION STARTS FROM THE IDEA THAT
+        /// THE OLD GROUP CONFIGURATION IS IN 'MODEL'
+        Set<Integer> oldSet = new HashSet<>(Model.getGroup(id).getPersonIdList());
+        Set<Integer> newSet = new HashSet<>(personIds);
+
+        Set<Integer> insert = new HashSet<>(newSet);
+        insert.removeAll(oldSet);
+        String query = "INSERT INTO person_in_group " +
+                "(person_id, group_id, owner_id) VALUES" +
+                "(?,?,?)";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+
+        for(Integer ins : insert)
+        {
+            statement.setInt(1,ins);
+            statement.executeUpdate();
+        }
+
+        Set<Integer> delete = new HashSet<>(oldSet);
+        delete.removeAll(newSet);
+        query = "DELETE FROM person_in_group " +
+                "WHERE person_id = ? AND " +
+                "group_id = ? AND " +
+                "owner_id = ?";
+        statement= dataBaseConnection.prepareStatement(query);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+        for(Integer del : delete)
+        {
+            statement.setInt(1,del);
+            statement.executeUpdate();
+        }
     }
 
-    public static void deleteGroupOnDb(int id) {
-        /// TODO: This
+    public static void deleteGroupOnDb(int id) throws SQLException {
+        String query = "DELETE FROM public.groups_table " +
+                "WHERE group_id = ? AND group_owner_id = ?;";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,id);
+        statement.setInt(2,currentUser.getUID());
+        statement.executeUpdate();
     }
 
 }
