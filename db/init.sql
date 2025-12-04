@@ -19,7 +19,7 @@ CREATE TABLE public.persons (
 	person_name varchar NOT NULL,
 	person_image bytea NOT NULL,
 	person_notes varchar NULL,
-	person_owner_id serial NOT NULL,
+	person_owner_id int NOT NULL,
 	CONSTRAINT person_pk PRIMARY KEY (person_id),
 	CONSTRAINT person_users_fk FOREIGN KEY (person_owner_id) REFERENCES public.users(app_user_id)
 );
@@ -39,3 +39,24 @@ CREATE TABLE public.bonds (
 	CONSTRAINT bond_tail_fk FOREIGN KEY (bond_tail_id) REFERENCES public.persons(person_id),
 	CONSTRAINT bond_owner_fk FOREIGN KEY (bond_owner_id) REFERENCES public.users(app_user_id)
 );
+
+CREATE TABLE public.groups_table (
+	group_id serial NOT NULL,
+	group_title varchar NOT NULL,
+	group_owner_id int NOT NULL,
+	CONSTRAINT groups_pk PRIMARY KEY (group_id)
+	CONSTRAINT groups_table_users_fk FOREIGN KEY (group_owner_id) REFERENCES public.users(app_user_id);
+);
+
+CREATE TABLE public.person_in_group (
+	person_in_group_pk serial NOT NULL,
+	person_id int NOT NULL,
+	group_id int NOT NULL,
+	owner_id int NOT NULL,
+	CONSTRAINT person_in_group_pk PRIMARY KEY (person_in_group_pk),
+	CONSTRAINT person_in_group_unique UNIQUE (person_id,group_id),
+	CONSTRAINT person_in_group_persons_fk FOREIGN KEY (person_id) REFERENCES public.persons(person_id),
+	CONSTRAINT person_in_group_groups_table_fk FOREIGN KEY (group_id) REFERENCES public.groups_table(group_id),
+	CONSTRAINT person_in_group_users_fk FOREIGN KEY (owner_id) REFERENCES public.users(app_user_id)
+);
+
