@@ -14,17 +14,21 @@ class GraphDraw {
     HashMap<Integer,Node> nodes;
     HashMap<Integer,Edge> edges;
     Graph graph;
+    int panelWidth = 0;
+    int panelHeight = 0;
 
     public GraphDraw(Set<Integer>nodes, Set<Integer> bonds, int panelWidth, int panelHeight)
     {
         this.graph = new Graph(nodes,bonds);
         this.nodes = new HashMap<>();
         this.edges = new HashMap<>();
-        ArrayList<Triple> positions = graph.getNodePositions(panelWidth,panelHeight,calculatePhotoRadius(panelWidth,panelHeight,graph.getNodes().size()));
+        this.panelHeight = panelHeight;
+        this.panelWidth = panelWidth;
+        ArrayList<Triple> positions = graph.getNodePositions(panelWidth,panelHeight,calculatePhotoRadius(graph.getNodes().size()));
 
         for (Triple t : positions)
         {
-            int radiusPhoto=calculatePhotoRadius(panelWidth,panelHeight,positions.size());
+            int radiusPhoto=calculatePhotoRadius(positions.size());
             int nameWidth=2*radiusPhoto;
             Node newNode = new Node(t.first(),t.second(),t.third(),radiusPhoto,nameWidth);
             this.nodes.put(t.first(),newNode);
@@ -54,7 +58,42 @@ class GraphDraw {
         }
     }
 
-    private int calculatePhotoRadius(int panelWidth, int panelHeight, int nodeCount)
+    public void onClick(int x, int y) {
+        int nodeRadius = calculatePhotoRadius(nodes.size());
+        for(Node node : nodes.values())
+        {
+            if( node.getX() - nodeRadius <= x && node.getX()+nodeRadius >= x &&
+                node.getY() - nodeRadius <= y && node.getY()+nodeRadius >= y)
+            {
+                node.onClick();
+                return;
+            }
+        }
+        for(Edge edge : edges.values())
+        {
+            /// Distance from a point to a line
+            /// y = mx + n;
+            double distance;
+            if(edge.getX1() == edge.getX2())
+            {
+                distance = Math.abs( x - edge.getX1());
+            }
+            else
+            {
+                double m = ((double) edge.getY1() - edge.getY2()) / ((double)edge.getX1() - edge.getX2());
+                double n = edge.getY2() - edge.getX2() * m;
+                distance = Math.abs((-1)*m*x + y - n)/Math.sqrt((double)(m*m) + 1);
+            }
+            int lineWidth = 30/ Math.max(1, 5 * edge.getBondId() / 10);
+            if(distance <= ((double) lineWidth /2) + 5)
+            {
+                edge.onClick();
+                return;
+            }
+        }
+    }
+
+    private int calculatePhotoRadius( int nodeCount)
     {
         return (int) (Math.min(panelHeight,panelWidth)/(5* Math.sqrt(nodeCount)));
     }
