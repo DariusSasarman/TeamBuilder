@@ -231,7 +231,14 @@ public class Model {
 
     public static void removePersonFromCurrentGroup(int id) {
         if(groupList.get(activeGroupId) != null) {
-            groupList.get(activeGroupId).getPersonIdList().remove(id);
+            if(groupList.get(activeGroupId).getPersonIdList().size() == 1)
+            {
+                groupList.get(activeGroupId).setPersonIdList(new ArrayList<>());
+            }
+            else
+            {
+                groupList.get(activeGroupId).getPersonIdList().remove(id);
+            }
         }
     }
 
