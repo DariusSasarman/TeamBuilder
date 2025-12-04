@@ -25,7 +25,7 @@ public class GraphArea extends JPanel {
 
     private void initializeGraph()
     {
-        graphDraw = new GraphDraw(Model.getBondsInCurrentGroup().keySet(),
+        graphDraw = new GraphDraw(Model.getPeopleInActiveGroup().keySet(),Model.getBondsInCurrentGroup().keySet(),
                 getWidth(),
                 getHeight());
     }

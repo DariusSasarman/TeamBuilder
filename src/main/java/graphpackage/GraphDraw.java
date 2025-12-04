@@ -15,15 +15,11 @@ class GraphDraw {
     HashMap<Integer,Edge> edges;
     Graph graph;
 
-    public GraphDraw(Set<Integer> bonds, int panelWidth, int panelHeight)
+    public GraphDraw(Set<Integer>nodes, Set<Integer> bonds, int panelWidth, int panelHeight)
     {
-        graph = new Graph(bonds);
-        nodes = new HashMap<>();
-        edges = new HashMap<>();
-        if(bonds == null)
-        {
-            return;
-        }
+        this.graph = new Graph(nodes,bonds);
+        this.nodes = new HashMap<>();
+        this.edges = new HashMap<>();
         ArrayList<Triple> positions = graph.getNodePositions(panelWidth,panelHeight,calculatePhotoRadius(panelWidth,panelHeight,graph.getNodes().size()));
 
         for (Triple t : positions)
@@ -31,17 +27,17 @@ class GraphDraw {
             int radiusPhoto=calculatePhotoRadius(panelWidth,panelHeight,positions.size());
             int nameWidth=2*radiusPhoto;
             Node newNode = new Node(t.first(),t.second(),t.third(),radiusPhoto,nameWidth);
-            nodes.put(t.first(),newNode);
+            this.nodes.put(t.first(),newNode);
         }
 
         for(Integer bondId : bonds)
         {
             Bond bond = Model.getBond(bondId);
             Edge newEdge = new Edge(bondId,
-                                nodes.get(bond.getHeadId()).getX(),
-                                nodes.get(bond.getTailId()).getX(),
-                                nodes.get(bond.getHeadId()).getY(),
-                                nodes.get(bond.getTailId()).getY());
+                                this.nodes.get(bond.getHeadId()).getX(),
+                                this.nodes.get(bond.getTailId()).getX(),
+                                this.nodes.get(bond.getHeadId()).getY(),
+                                this.nodes.get(bond.getTailId()).getY());
             edges.put(bondId,newEdge);
         }
     }

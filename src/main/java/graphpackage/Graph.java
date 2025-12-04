@@ -7,7 +7,7 @@ import java.util.*;
 
 class Graph {
     HashMap<Integer, HashMap<Integer,Integer>> adjacencyMatrix;
-    public Graph(Set<Integer> bonds)
+    public Graph(Set<Integer> nodes, Set<Integer> bonds)
     {
         adjacencyMatrix = new HashMap<>();
         for(Integer i : bonds)
@@ -17,6 +17,10 @@ class Graph {
             adjacencyMatrix.computeIfAbsent(bond.getTailId(), k -> new HashMap<>());
             adjacencyMatrix.get(bond.getHeadId()).put(bond.getTailId(),11 - bond.getRating());
             adjacencyMatrix.get(bond.getTailId()).put(bond.getHeadId(),11 - bond.getRating());
+        }
+        for(Integer i : nodes)
+        {
+            adjacencyMatrix.computeIfAbsent(i,k->new HashMap<>());
         }
     }
 
