@@ -4,6 +4,8 @@ import datapackage.Model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedHashMap;
 
 public class GraphArea extends JPanel {
@@ -14,6 +16,14 @@ public class GraphArea extends JPanel {
         setMinimumSize(new Dimension(400, 400));
         setPreferredSize(new Dimension(600, 600));
         initializeGraph();
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int x = e.getX();
+                int y = e.getY();
+                graphDraw.onClick(x,y);
+            }
+        });
     }
 
     @Override

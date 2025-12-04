@@ -25,6 +25,7 @@ public class Model {
         } catch (SQLException | IOException e) {
             JOptionPane.showMessageDialog(null,"Error loading data into memory:" + e.getMessage());
         }
+        activeGroupId = groupList.get(0).getId();
     }
 
     public static void clearInfo()
@@ -192,11 +193,14 @@ public class Model {
     public static HashMap<Integer,String> getPeopleInActiveGroup()
     {
         HashMap<Integer,String> ret = new HashMap<>();
-        if(groupList.get(activeGroupId) == null)
+        Group target = groupList.get(activeGroupId);
+        if(target == null)
         {
-            return ret;
+            activeGroupId = 0;
+            while (target==null && activeGroupId < Integer.MAX_VALUE) target = groupList.get(activeGroupId++);
+            if(target==null) throw new RuntimeException("No active group found");
         }
-        for(Integer i : groupList.get(activeGroupId).getPersonIdList())
+        for(Integer i : target.getPersonIdList())
         {
             ret.put(i,peopleList.get(i).getName());
         }
