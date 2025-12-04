@@ -31,19 +31,19 @@ public class Controller {
     public void handleEditPersonRequest(int id, BufferedImage img, String name, String notes) throws SQLException, IOException {
         Person target = Model.getPerson(id);
 
-        if(!target.getImage().equals(img))
+        if(target.getImage() == null || !target.getImage().equals(img))
         {
             Model.setPersonImage(id, img);
             Persistence.updatePersonImage(id, img);
         }
 
-        if(!target.getName().equals(name))
+        if(target.getName() == null || !target.getName().equals(name))
         {
             Model.setPersonName(id, name);
             Persistence.updatePersonName(id, name);
         }
 
-        if(!target.getNotes().equals(notes))
+        if(target.getName() == null || !target.getNotes().equals(notes))
         {
             Model.setPersonNotes(id, notes);
             Persistence.updatePersonNotes(id, notes);
