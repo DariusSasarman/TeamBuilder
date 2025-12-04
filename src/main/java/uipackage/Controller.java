@@ -71,8 +71,7 @@ public class Controller {
     }
 
     /// Bond settings
-    public void handleAddBondRequest(int headId, int tailId, int rating)
-    {
+    public void handleAddBondRequest(int headId, int tailId, int rating) throws SQLException {
         Integer check = Model.findBondByHeads(headId,tailId);
         if(check != null)
         {
@@ -100,7 +99,7 @@ public class Controller {
         return Model.getBond(id).getNotes();
     }
 
-    public void handleEditBondRequest(int id, int newRating, String notes) {
+    public void handleEditBondRequest(int id, int newRating, String notes) throws SQLException {
         Bond edited = Model.getBond(id);
         if(edited.getRating() != newRating)
         {
@@ -114,7 +113,7 @@ public class Controller {
         }
     }
 
-    public void handleDeleteBondRequest(int id) {
+    public void handleDeleteBondRequest(int id) throws SQLException {
         Model.deleteBond(id);
         Persistence.deleteBondOnDb(id);
     }
@@ -199,26 +198,26 @@ public class Controller {
         return Model.getBondsInCurrentGroup();
     }
 
-    public void handleRaiseBondInCurrentGroup(int bondId) {
+    public void handleRaiseBondInCurrentGroup(int bondId) throws SQLException {
        Bond target = Model.getBond(bondId);
        target.setRating(target.getRating() + 1);
        handleEditBondRequest(bondId,target.getRating(), target.getNotes());
     }
 
-    public void handleLowerBondInCurrentGroup(int bondId) {
+    public void handleLowerBondInCurrentGroup(int bondId) throws SQLException {
         Bond target = Model.getBond(bondId);
         target.setRating(target.getRating() - 1);
         handleEditBondRequest(bondId,target.getRating(), target.getNotes());
     }
 
-    public void handleRaiseAllBondsInCurrentGroup() {
+    public void handleRaiseAllBondsInCurrentGroup() throws SQLException {
         for( Integer id : handleGetBondsInCurrentGroup().keySet())
         {
             handleRaiseBondInCurrentGroup(id);
         }
     }
 
-    public void handleLowerAllBondsInCurrentGroup() {
+    public void handleLowerAllBondsInCurrentGroup() throws SQLException {
         for( Integer id : handleGetBondsInCurrentGroup().keySet())
         {
             handleLowerBondInCurrentGroup(id);

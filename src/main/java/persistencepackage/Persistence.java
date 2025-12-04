@@ -117,7 +117,7 @@ public class Persistence {
     /// Person queries
 
     private static void loadPersonInfo() throws SQLException, IOException {
-        String query = "SELECT * FROM public.persons WHERE person_owner_id=?";
+        String query = "SELECT * FROM public.persons WHERE person_owner_id = ?";
         PreparedStatement statement = dataBaseConnection.prepareStatement(query);
         statement.setInt(1,currentUser.getUID());
         ResultSet resultSet = statement.executeQuery();
@@ -250,42 +250,109 @@ public class Persistence {
 
     /// Bond queries
 
-
-    private static void loadBondInfo() {
-
+    private static void loadBondInfo() throws SQLException {
+        String query = "SELECT * FROM public.bonds WHERE bond_owner_id=?";
+        PreparedStatement statement =dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,currentUser.getUID());
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next())
+        {
+            Integer id = resultSet.getInt("bond_id");
+            Integer headId = resultSet.getInt("bond_head_id");
+            Integer tailId = resultSet.getInt("bond_tail_id");
+            Integer rating = resultSet.getInt("bond_rating");
+            String notes = resultSet.getString("bond_notes");
+            Bond bond = new Bond(id,headId,tailId,rating,notes);
+            Model.addBond(bond);
+        }
     }
 
-    private static void queryDBforNextBondUID() {
-        /// TODO: Query db for this
-        nextBondUID++;
+    private static void queryDBforNextBondUID() throws SQLException {
+        String query = "SELECT nextval(pg_get_serial_sequence('public.bonds','bond_id')) AS new_id";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        ResultSet resultSet = statement.executeQuery();
+        if(resultSet.next())
+        {
+            nextPersonUID = resultSet.getInt("new_id");
+        }
     }
 
-    public static int getNextBondUID() {
+    public static int getNextBondUID() throws SQLException {
         int returnValue = nextBondUID;
         queryDBforNextBondUID();
         return returnValue;
     }
 
     public static Bond readBond(int id) {
-        /// TODO: this.
-        return new Bond(-1, -1, -1, -1);
+        String query = "SELECT * FROM public.bonds WHERE bond_id = ? AND bond_owner_id = ?";
+        Bond ret = null;
+        try
+        {
+            PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+            statement.setInt(1,id);
+            statement.setInt(2,currentUser.getUID());
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next())
+            {
+                Integer headId = resultSet.getInt("bond_head_id");
+                Integer tailId = resultSet.getInt("bond_tail_id");
+                Integer rating = resultSet.getInt("bond_rating");
+                String notes = resultSet.getString("bond_notes");
+                ret = new Bond(id,headId,tailId,rating,notes);
+            }
+        }
+        catch (SQLException e)
+        {
+            JOptionPane.showMessageDialog(null,"Error loading bond from database : " + e.getMessage());
+        }
+        return ret;
     }
 
-    public static void createBondOnDb(Bond b)
-    {
-        /// TODO: guess what
+    public static void createBondOnDb(Bond b) throws SQLException {
+        String query = "INSERT INTO public.bonds " +
+                "(bond_id,bond_head_id,bond_tail_id,bond_rating,bond_notes,bond_owner_id) " +
+                "VALUES (?,?,?,?,?,?)";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,b.getId());
+        statement.setInt(2,b.getHeadId());
+        statement.setInt(3,b.getTailId());
+        statement.setInt(4,b.getRating());
+        statement.setString(5,b.getNotes());
+        statement.setInt(6,currentUser.getUID());
+        statement.executeUpdate();
     }
 
-    public static void updateBondRating(int id, int newRating) {
-        /// TODO:....
+    public static void updateBondRating(int id, int newRating) throws SQLException {
+        String query = "UPDATE public.bonds " +
+                "SET bond_rating = ? " +
+                "WHERE bond_id = ? AND bond_owner_id = ?";
+        PreparedStatement statement= dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,newRating);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+        statement.executeUpdate();
     }
 
-    public static void updateBondNotes(int id, String notes) {
-        /// TODO: hihihi
+    public static void updateBondNotes(int id, String notes) throws SQLException {
+        String query = "UPDATE public.bonds " +
+                "SET bond_notes = ? " +
+                "WHERE bond_id = ? AND bond_owner_id = ?";
+
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setString(1,notes);
+        statement.setInt(2,id);
+        statement.setInt(3,currentUser.getUID());
+        statement.executeUpdate();
     }
 
-    public static void deleteBondOnDb(int id) {
-        /// TODO: hahaha
+    public static void deleteBondOnDb(int id) throws SQLException {
+        String query = "DELETE FROM public.bonds " +
+                "WHERE bond_id = ? AND bond_owner_id = ?";
+        PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+        statement.setInt(1,id);
+        statement.setInt(2,currentUser.getUID());
+        statement.executeUpdate();
     }
 
     /// Group queries
