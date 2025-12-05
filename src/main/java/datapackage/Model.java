@@ -194,11 +194,14 @@ public class Model {
     {
         HashMap<Integer,String> ret = new HashMap<>();
         Group target = groupList.get(activeGroupId);
-        if(target == null)
+        if(target == null && !groupList.values().isEmpty())
         {
-            activeGroupId = 0;
-            while (target==null && activeGroupId < Integer.MAX_VALUE) target = groupList.get(activeGroupId++);
-            if(target==null) throw new RuntimeException("No active group found");
+            target = groupList.values().stream().findFirst().get();
+            activeGroupId = target.getId();
+        }
+        if(target==null)
+        {
+            return new HashMap<>();
         }
         for(Integer i : target.getPersonIdList())
         {

@@ -56,6 +56,18 @@ class GraphDraw {
         {
             node.onDraw(g);
         }
+        if(edges.isEmpty() && nodes.isEmpty())
+        {
+            Color originalColor = g.getColor();
+            g.setColor(Color.WHITE);
+            String message = "No active group found. Try making one!";
+            FontMetrics fm = g.getFontMetrics();
+            int textWidth = fm.stringWidth(message);
+            int x = (this.panelWidth - textWidth) / 2;
+            int y = this.panelHeight / 2;
+            g.drawString(message, x, y);
+            g.setColor(originalColor);
+        }
     }
 
     public void onClick(int x, int y) {

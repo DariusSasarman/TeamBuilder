@@ -1,11 +1,13 @@
 package graphpackage;
 
+import datapackage.Group;
 import datapackage.Model;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class GraphArea extends JPanel {
