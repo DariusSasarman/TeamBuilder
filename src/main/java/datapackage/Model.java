@@ -213,7 +213,8 @@ public class Model {
     public static void addPersonToActiveGroup(int newcomerId) {
         if(groupList.get(activeGroupId) != null)
         {
-            groupList.get(activeGroupId).getPersonIdList().add(newcomerId);
+            Person added = getPerson(newcomerId);
+            groupList.get(activeGroupId).getPersonIdList().add(added.getId());
         }
         else {
             throw new RuntimeException("No active group is set.");
@@ -244,7 +245,8 @@ public class Model {
             }
             else
             {
-                groupList.get(activeGroupId).getPersonIdList().remove(id);
+                Person eliminated = getPerson(id);
+                groupList.get(activeGroupId).getPersonIdList().remove(eliminated.getId());
             }
         }
     }
