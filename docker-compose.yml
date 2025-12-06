@@ -7,6 +7,6 @@ services:
       POSTGRES_PASSWORD: tOKyl6zx8HXsPpDbkVXPrJn5x7
       POSTGRES_DB: teambuilder
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
+      - ./database_files:/docker-entrypoint-initdb.d
     ports:
       - "5433:5432"
