@@ -1,7 +1,5 @@
 # TeamBuilder
 
-(*WIP*)
-
 ## What is it?
 
 A software application meant to **help** in keeping track of **teams' structures** and finding ways to make **said teams better**.
@@ -22,7 +20,8 @@ Using this perspective, this software application employs several **algorithms**
 
 ## Live demo
 
-///TODO: Add a video of it working later.
+[Screencast from 2025-12-06 15-02-39.webm](https://github.com/user-attachments/assets/f8491ece-f9ea-4e3b-9a6f-3ffea0d222a9)
+
 
 ## What technologies did I use?
 
@@ -33,6 +32,7 @@ For the front-end, I used **the Swing library** from inside the standard JDK.
 For the persistence part of this software, I've used a **PostgresSQL** instance containerized with **Docker**.
 
 After all this, I tied it all up using **Maven**.
+
 
 
 
