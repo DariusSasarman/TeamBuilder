@@ -187,8 +187,8 @@ class Graph {
         {
             Pair newPosition = positions.get(id);
             newPosition = new Pair(
-                    Math.min(maxWidth-radius,Math.max(newPosition.first(),radius)),
-                    Math.min(maxHeight-radius,Math.max(newPosition.second(),radius))
+                    Math.min(maxWidth-radius-10,Math.max(newPosition.first(),radius+10)),
+                    Math.min(maxHeight-radius-10,Math.max(newPosition.second(),radius+10))
             );
             ret.add(new Triple( id,(int)newPosition.first(),(int)newPosition.second()));
         }
