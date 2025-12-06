@@ -372,6 +372,10 @@ public class View {
                 }
 
                 Integer rating = (Integer) dropdown3.getSelectedItem();
+                if(rating == null)
+                {
+                    rating = 1;
+                }
                 handler.handleAddBondRequest(id1, id2, rating);
                 graphPanel.repaint();
                 graphArea.repaint();
