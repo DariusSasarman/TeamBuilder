@@ -96,7 +96,7 @@ class Node extends DrawableElement{
 
         JDialog dialog = new JDialog();
         dialog.setLayout(new BorderLayout(0, 0));
-        dialog.setSize(550, 400);
+        dialog.setSize(900, 550);
         dialog.setLocationRelativeTo(null);
         dialog.setTitle("Profile");
         dialog.setBackground(BG_COLOR);
