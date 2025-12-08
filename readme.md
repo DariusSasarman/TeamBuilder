@@ -34,5 +34,18 @@ For the persistence part of this software, I've used a **PostgresSQL** instance 
 After all this, I tied it all up using **Maven**.
 
 
+## Other capabilities
+
+### 1. Live information checking directly from the graph
+
+The user can click on the graphical interface and obtain instant information about the target ( be it a relation, or a person).
+
+[Screencast from 2025-12-08 20-37-08.webm](https://github.com/user-attachments/assets/8a456e6f-6c64-4b9b-ae6d-efdafc4e9589)
+
+### 2. Live graphical update
+
+When the user updates the information about the active group, the visual information is dynamically updated.
+
+[Screencast from 2025-12-08 20-41-26.webm](https://github.com/user-attachments/assets/7af64e4a-e332-4518-bda7-b1556301fec8)
 
 
