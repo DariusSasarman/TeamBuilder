@@ -138,6 +138,10 @@ class GraphDraw {
             for(Integer id : list)
             {
                 peopleInGroup = peopleInGroup + Model.getPerson(id).getName() + " ";
+                if(!list.get(list.size()-1).equals(id))
+                {
+                    peopleInGroup = peopleInGroup + ',';
+                }
             }
             ret.put(index++,peopleInGroup);
         }
@@ -154,7 +158,12 @@ class GraphDraw {
             for(Integer id : list)
             {
                 peopleInGroup = peopleInGroup + Model.getPerson(id).getName() + " ";
+                if(!list.get(list.size()-1).equals(id))
+                {
+                    peopleInGroup = peopleInGroup + ',';
+                }
             }
+
             ret.put(index++,peopleInGroup);
         }
         return ret;
