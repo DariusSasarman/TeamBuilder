@@ -51,3 +51,8 @@ When the user updates the information about the active group, the visual informa
 ## Intended behaviour 
 
 <img width="621" height="1531" alt="SoftwareBehaviour" src="https://github.com/user-attachments/assets/691fd857-4d2e-4ee4-8332-4b643519029a" />
+
+## UML Diagram
+
+![UMLDiagram](https://github.com/user-attachments/assets/83081332-adba-48eb-96e1-b34e1c73417c)
+
