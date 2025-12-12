@@ -54,5 +54,6 @@ When the user updates the information about the active group, the visual informa
 
 ## UML Diagram
 
-![UMLDiagram](https://github.com/user-attachments/assets/83081332-adba-48eb-96e1-b34e1c73417c)
+![UMLDiagram](https://github.com/user-attachments/assets/11ed1b13-511c-4960-a40c-9966e6f367b6)
+
 
