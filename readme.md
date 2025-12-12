@@ -49,6 +49,9 @@ When the user updates the information about the active group, the visual informa
 
 [Screencast from 2025-12-08 20-41-26.webm](https://github.com/user-attachments/assets/7af64e4a-e332-4518-bda7-b1556301fec8)
 
+### And more! 
+Plugging a video with each feature in would make this readme too long and I wouldn't dare to steal your curiosity to find out more.
+
 ## Intended behaviour 
 
 <img width="621" height="1531" alt="SoftwareBehaviour" src="https://github.com/user-attachments/assets/691fd857-4d2e-4ee4-8332-4b643519029a" />
@@ -56,6 +59,7 @@ When the user updates the information about the active group, the visual informa
 ## UML Diagram
 
 ![UMLDiagram](https://github.com/user-attachments/assets/11ed1b13-511c-4960-a40c-9966e6f367b6)
+
 
 
 
