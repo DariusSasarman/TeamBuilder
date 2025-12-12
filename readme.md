@@ -48,4 +48,6 @@ When the user updates the information about the active group, the visual informa
 
 [Screencast from 2025-12-08 20-41-26.webm](https://github.com/user-attachments/assets/7af64e4a-e332-4518-bda7-b1556301fec8)
 
+## Intended behaviour 
 
+<img width="621" height="1531" alt="SoftwareBehaviour" src="https://github.com/user-attachments/assets/691fd857-4d2e-4ee4-8332-4b643519029a" />
