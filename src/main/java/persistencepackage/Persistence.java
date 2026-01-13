@@ -133,6 +133,7 @@ public class Persistence {
             Person add = new Person(id,image,name,notes);
             Model.addPerson(add);
         }
+        queryDBforNextPersonUID();
     }
 
     private static void queryDBforNextPersonUID() throws SQLException {
@@ -262,6 +263,7 @@ public class Persistence {
             Bond bond = new Bond(id,headId,tailId,rating,notes);
             Model.addBond(bond);
         }
+        queryDBforNextBondUID();
     }
 
     private static void queryDBforNextBondUID() throws SQLException {
@@ -312,8 +314,8 @@ public class Persistence {
                 "VALUES (?,?,?,?,?,?)";
         PreparedStatement statement = dataBaseConnection.prepareStatement(query);
         statement.setInt(1,b.getId());
-        statement.setInt(2,b.getHeadId());
-        statement.setInt(3,b.getTailId());
+        statement.setInt(2,Math.max(b.getHeadId(),b.getTailId()));
+        statement.setInt(3,Math.min(b.getTailId(),b.getHeadId()));
         statement.setInt(4,b.getRating());
         statement.setString(5,b.getNotes());
         statement.setInt(6,currentUser.getUID());
@@ -364,6 +366,7 @@ public class Persistence {
             int id = resultSet.getInt("group_id");
             Model.addGroup(readGroup(id));
         }
+        queryDBforNextGroupUID();
     }
 
     private static void queryDBforNextGroupUID() throws SQLException {
