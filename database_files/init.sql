@@ -17,7 +17,7 @@ CREATE TABLE public.users (
 CREATE TABLE public.persons (
 	person_id serial NOT NULL,
 	person_name varchar NOT NULL,
-	person_image bytea NOT NULL,
+	person_image bytea,
 	person_notes varchar NULL,
 	person_owner_id int NOT NULL,
 	CONSTRAINT person_pk PRIMARY KEY (person_id),
