@@ -205,6 +205,7 @@ public class Model {
         }
         for(Integer i : target.getPersonIdList())
         {
+            if(peopleList.get(i) == null) continue;
             ret.put(i,peopleList.get(i).getName());
         }
         return ret;
