@@ -180,7 +180,9 @@ public class Controller {
 
     public void handleAddPersonToCurrentGroup(int newcomerId) throws SQLException {
         /// Server first so the function can do GROUP OLD\NEW remove and GROUP NEW\OLD insert.
-        Persistence.updateGroupPersonIds(Model.getActiveGroupId(),new ArrayList<>(handleGetPeopleInCurrentGroup().keySet()));
+        ArrayList<Integer> list = new ArrayList<>(handleGetPeopleInCurrentGroup().keySet());
+        list.add(newcomerId);
+        Persistence.updateGroupPersonIds(Model.getActiveGroupId(),list);
         Model.addPersonToActiveGroup(newcomerId);
     }
 
@@ -190,7 +192,9 @@ public class Controller {
 
     public void handleRemovePersonFromCurrentGroup(int id) throws SQLException {
         /// Server first so the function can do GROUP OLD\NEW remove and GROUP NEW\OLD insert.
-        Persistence.updateGroupPersonIds(Model.getActiveGroupId(),new ArrayList<>(handleGetPeopleInCurrentGroup().keySet()));
+        ArrayList<Integer> list = new ArrayList<>(handleGetPeopleInCurrentGroup().keySet());
+        list.remove(Integer.valueOf(id));
+        Persistence.updateGroupPersonIds(Model.getActiveGroupId(),list);
         Model.removePersonFromCurrentGroup(id);
     }
 
