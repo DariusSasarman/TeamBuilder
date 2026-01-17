@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -69,6 +70,19 @@ public class Model {
 
     public static void deletePerson(int id)
     {
+        ArrayDeque<Integer> q = new ArrayDeque<>();
+        for(Bond b : bondList.values())
+        {
+            if(b.getHeadId() == id || b.getTailId() == id)
+            {
+                q.push(b.getId());
+            }
+        }
+        while(!q.isEmpty())
+        {
+            deleteBond(q.peek());
+            q.pop();
+        }
         peopleList.remove(Integer.valueOf(getPerson(id).getId()));
     }
 
