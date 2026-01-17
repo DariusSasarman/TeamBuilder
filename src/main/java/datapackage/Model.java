@@ -16,7 +16,7 @@ public class Model {
     private static HashMap<Integer,Group> groupList = new HashMap<Integer,Group>();
     private static HashMap<Integer,Bond> bondList = new HashMap<Integer,Bond>();
     private static HashMap<String, Integer> bondCheckList = new HashMap<>();
-    private static int activeGroupId;
+    private static int activeGroupId = -1;
 
 
     public Model() {
@@ -69,7 +69,7 @@ public class Model {
 
     public static void deletePerson(int id)
     {
-        peopleList.remove(getPerson(id).getId());
+        peopleList.remove(Integer.valueOf(getPerson(id).getId()));
     }
 
     public static void setPersonName(int id, String newName)
@@ -128,7 +128,7 @@ public class Model {
     public static void deleteBond(int id) {
         Bond bond = bondList.get(id);
         bondCheckList.remove(Math.max(bond.getHeadId(), bond.getTailId()) + "-" + Math.min(bond.getHeadId(), bond.getTailId()));
-        bondList.remove(id);
+        bondList.remove(Integer.valueOf(id));
     }
 
     public static HashMap<Integer, String> getBondList() {
@@ -164,7 +164,7 @@ public class Model {
     }
 
     public static void deleteGroup(int id) {
-        groupList.remove(id);
+        groupList.remove(Integer.valueOf(id));
     }
 
     public static HashMap<Integer, String> getGroupList() {
@@ -232,7 +232,7 @@ public class Model {
         {
             for(Integer i : groupList.get(activeGroupId).getPersonIdList())
             {
-                ret.remove(i);
+                ret.remove(Integer.valueOf(i));
             }
         }
         return ret;
@@ -246,8 +246,7 @@ public class Model {
             }
             else
             {
-                Person eliminated = getPerson(id);
-                groupList.get(activeGroupId).getPersonIdList().remove(eliminated.getId());
+                groupList.get(activeGroupId).getPersonIdList().remove(Integer.valueOf(id));
             }
         }
     }
