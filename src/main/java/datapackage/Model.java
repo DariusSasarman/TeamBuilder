@@ -41,7 +41,7 @@ public class Model {
 
     public static Person getPerson(int id)
     {
-        Person searched = peopleList.get(id);
+        Person searched = peopleList.get(Integer.valueOf(id));
         if(searched == null)
         {
             searched = Persistence.readPerson(id);

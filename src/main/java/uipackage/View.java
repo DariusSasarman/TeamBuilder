@@ -1080,7 +1080,7 @@ public class View {
 
         JComboBox<Integer> options = new JComboBox<>();
         int count = handler.handleGetPeopleInCurrentGroup().size();
-        for (int i = 2; i <= count/2; i++) {
+        for (int i = 2; i < count; i++) {
             options.addItem(i);
         }
         options.setFont(new Font("Dialog", Font.BOLD, 32));

@@ -137,6 +137,7 @@ class GraphDraw {
             String peopleInGroup = "";
             for(Integer id : list)
             {
+                if(id==-1) continue;
                 peopleInGroup = peopleInGroup + Model.getPerson(id).getName() + " ";
                 if(!list.get(list.size()-1).equals(id))
                 {
