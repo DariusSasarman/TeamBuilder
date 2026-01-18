@@ -273,7 +273,7 @@ class Graph {
     }
 
     public ArrayList<ArrayList<Integer>> groupPartitions(int groupCount) {
-        Set<Integer> nodes = getNodes();
+        List<Integer> nodes = new LinkedList<>(directCentrality().reversed());
         ArrayList<ArrayList<Integer>> ret = new ArrayList<>();
         TreeSet<Integer> inAGroup = new TreeSet<>();
         /// Remove edge cases
