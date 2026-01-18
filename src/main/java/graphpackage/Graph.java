@@ -509,7 +509,8 @@ class Graph {
         }
         double count = getNodes().size();
         double max = count * (count-1) * 5.0;
-        return sum/max*10;
+        /// Double counting
+        return (sum/2)/max*10;
     }
 
     private ArrayList<Integer> kCoreDecomposition(int k)

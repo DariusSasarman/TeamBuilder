@@ -204,12 +204,14 @@ public class Controller {
 
     public void handleRaiseBondInCurrentGroup(int bondId) throws SQLException {
        Bond target = Model.getBond(bondId);
+       if(target.getRating()+1 >= 11) return;
        handleEditBondRequest(bondId,target.getRating()+1, target.getNotes());
        target.setRating(target.getRating() + 1);
     }
 
     public void handleLowerBondInCurrentGroup(int bondId) throws SQLException {
         Bond target = Model.getBond(bondId);
+        if(target.getRating()-1 <= 0) return;
         handleEditBondRequest(bondId,target.getRating()-1, target.getNotes());
         target.setRating(target.getRating() - 1);
     }
