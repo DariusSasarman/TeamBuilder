@@ -1038,7 +1038,7 @@ public class View {
     private void raiseAllBondsFromCurrentGroupUi() {
         try {
             handler.handleRaiseAllBondsInCurrentGroup();
-            JOptionPane.showMessageDialog(null, "Raised all bonds by 1/10!");
+            JOptionPane.showMessageDialog(null, "Raised all bonds by 2/10!");
             graphPanel.repaint();
             graphArea.repaint();
         } catch (Exception ex) {
@@ -1049,7 +1049,7 @@ public class View {
     private void lowerAllBondsFromCurrentGroupUi() {
         try {
             handler.handleLowerAllBondsInCurrentGroup();
-            JOptionPane.showMessageDialog(null, "Lowered all bonds by 1/10!");
+            JOptionPane.showMessageDialog(null, "Lowered all bonds by 2/10!");
             graphPanel.repaint();
             graphArea.repaint();
         } catch (Exception ex) {
