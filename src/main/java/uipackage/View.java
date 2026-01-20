@@ -276,7 +276,7 @@ public class View {
         setButtonStyle(saveButton);
         saveButton.addActionListener(e -> {
             try {
-                if(selectedImage[0]==null || nameField.getText()==null) throw new RuntimeException(" Please make sure to add an image AND a name!");
+                if(selectedImage[0]==null || nameField.getText()==null || nameField.getText().equals("")) throw new RuntimeException(" Please make sure to add an image AND a name!");
                 handler.handleAddPersonRequest(selectedImage[0], nameField.getText(), notesField.getText());
             } catch (Exception error) {
                 JOptionPane.showMessageDialog(null, "An error occurred :" + error.getMessage());
